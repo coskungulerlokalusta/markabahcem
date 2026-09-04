@@ -152,7 +152,7 @@ function renderQuickIcons(stores) {
   const allIcon = `
     <a href="index.html" class="ty-quick-icon">
       <div class="circle">🛍️</div>
-      <span class="label">Tümü</span>
+      <span class="label">Markalar</span>
     </a>`;
 
   container.innerHTML =

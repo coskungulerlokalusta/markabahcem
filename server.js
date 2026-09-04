@@ -30,6 +30,6 @@ app.use((req, res) => {
   res.status(404).sendFile(path.join(__dirname, "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`markabahçem ${PORT} portunda çalışıyor`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`markabahçem ${PORT} portunda çalışıyor (0.0.0.0)`);
 });
