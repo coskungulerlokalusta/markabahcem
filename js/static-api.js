@@ -85,9 +85,21 @@
       { id: "u-demo", name: "Demo Kullanıcı", email: "demo@markabahcem.com", password: "123456" }
     ],
     partners: [
-      // store sahiplerinin giriş bilgileri — demo amaçlı düz metin şifre
+      // Her markanın giriş bilgisi: {marka-id}@markabahcem.com / 123456
       { storeId: "beymen", email: "beymen@markabahcem.com", password: "123456" },
-      { storeId: "koton", email: "koton@markabahcem.com", password: "123456" }
+      { storeId: "vakko", email: "vakko@markabahcem.com", password: "123456" },
+      { storeId: "koton", email: "koton@markabahcem.com", password: "123456" },
+      { storeId: "adil-isik", email: "adil-isik@markabahcem.com", password: "123456" },
+      { storeId: "altinyildiz", email: "altinyildiz@markabahcem.com", password: "123456" },
+      { storeId: "lcw", email: "lcw@markabahcem.com", password: "123456" },
+      { storeId: "arcelik", email: "arcelik@markabahcem.com", password: "123456" },
+      { storeId: "mediamarkt", email: "mediamarkt@markabahcem.com", password: "123456" },
+      { storeId: "zara", email: "zara@markabahcem.com", password: "123456" },
+      { storeId: "hm", email: "hm@markabahcem.com", password: "123456" },
+      { storeId: "atasay", email: "atasay@markabahcem.com", password: "123456" },
+      { storeId: "atasun", email: "atasun@markabahcem.com", password: "123456" },
+      { storeId: "starbucks", email: "starbucks@markabahcem.com", password: "123456" },
+      { storeId: "kahve-dunyasi", email: "kahve-dunyasi@markabahcem.com", password: "123456" }
     ],
     admin: { email: "admin@markabahcem.com", password: "admin123" },
     session: null,        // { type: "customer", userId }
@@ -158,6 +170,15 @@
         });
         if(!Array.isArray(parsed.products) || parsed.products.length === 0){
           parsed.products = seedProducts(); healed = true;
+        }
+        // partners listesine SEED'de olup henüz kayıtlı veride bulunmayan
+        // marka hesaplarını (storeId bazlı) otomatik ekler.
+        if(Array.isArray(parsed.partners)){
+          defaults.partners.forEach(p => {
+            if(!parsed.partners.some(existing => existing.storeId === p.storeId)){
+              parsed.partners.push(p); healed = true;
+            }
+          });
         }
         if(healed) saveDB(parsed);
         return parsed;

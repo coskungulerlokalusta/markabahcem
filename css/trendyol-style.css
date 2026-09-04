@@ -59,14 +59,14 @@ h1,h2,h3,h4{ margin:0; font-weight:700; }
 .ty-header{ background:#fff; border-bottom:1px solid var(--ty-border); position: sticky; top:0; z-index: 60; }
 .ty-header-top{
   max-width: var(--ty-maxw); margin:0 auto; padding:14px 20px;
-  display:flex; align-items:center; gap:24px;
+  display:flex; align-items:center; gap:28px; justify-content: space-between;
 }
-.ty-logo{ display:flex; align-items:center; gap:8px; font-size:20px; font-weight:800; color: var(--ty-dark); white-space:nowrap; }
+.ty-logo{ display:flex; align-items:center; gap:8px; font-size:20px; font-weight:800; color: var(--ty-dark); white-space:nowrap; flex-shrink:0; }
 .ty-logo .leaf{ font-size:22px; }
 .ty-logo span.brand{ color: var(--ty-orange-dark); }
 .ty-logo img.site-logo{ height:34px; width:auto; display:block; }
 
-.ty-searchbar{ flex:1; display:flex; max-width:640px; }
+.ty-searchbar{ flex:1; display:flex; }
 .ty-searchbar input{
   flex:1; border:2px solid var(--ty-orange); border-right:none; border-radius: var(--ty-radius-sm) 0 0 var(--ty-radius-sm);
   padding:10px 14px; font-size:14px;
@@ -76,7 +76,7 @@ h1,h2,h3,h4{ margin:0; font-weight:700; }
   padding:0 18px; border-radius:0 var(--ty-radius-sm) var(--ty-radius-sm) 0; font-size:16px;
 }
 
-.ty-header-actions{ display:flex; align-items:center; gap:22px; }
+.ty-header-actions{ display:flex; align-items:center; gap:22px; flex-shrink:0; }
 .ty-header-actions a{ display:flex; flex-direction:column; align-items:center; font-size:11px; color: var(--ty-gray); gap:2px; min-width:44px; }
 .ty-header-actions a .ico{ font-size:19px; }
 .ty-header-actions a:hover{ color: var(--ty-orange-dark); }
