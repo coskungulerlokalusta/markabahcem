@@ -10,11 +10,11 @@ async function loadHero(){
   const banners = await res.json();
   heroSlideCount = banners.length;
   track.innerHTML = banners.map((b,i) => `
-    <div class="ty-hero-slide ${i===0?"active":""}" style="background:${b.color}" data-i="${i}">
+    <div class="ty-hero-slide ${i===0?"active":""}" style="background:${b.color || "#f27a1a"}" data-i="${i}">
       <div>
-        <h2>${b.title}</h2>
-        <p>${b.sub}</p>
-        <a href="${b.link}" class="btn btn-primary">${b.cta}</a>
+        <h2>${b.title || ""}</h2>
+        ${b.sub ? `<p>${b.sub}</p>` : ""}
+        <a href="${b.link || "index.html"}" class="btn btn-primary">${b.cta || "İncele"}</a>
       </div>
     </div>
   `).join("") + `
