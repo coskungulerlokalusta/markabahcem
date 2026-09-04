@@ -180,6 +180,17 @@
             }
           });
         }
+        // Eksik/bozuk mağaza kayıtlarını (ör. categories alanı olmayan,
+        // eski/manuel oluşturulmuş bir mağaza) güvenli varsayılanlarla onarır.
+        if(Array.isArray(parsed.stores)){
+          parsed.stores.forEach(s => {
+            if(!Array.isArray(s.categories)){ s.categories = []; healed = true; }
+            if(typeof s.commissionRate !== "number"){ s.commissionRate = 10; healed = true; }
+            if(!s.status){ s.status = "active"; healed = true; }
+            if(!s.emoji){ s.emoji = "🏬"; healed = true; }
+            if(!s.desc){ s.desc = ""; healed = true; }
+          });
+        }
         if(healed) saveDB(parsed);
         return parsed;
       }

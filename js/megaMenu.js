@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const stores = await storesRes.json();
 
     menu.innerHTML = `<div class="ty-megamenu-inner">` + cats.map(cat => {
-      const catStores = stores.filter(s => s.categories.includes(cat.id)).slice(0,6);
+      const catStores = stores.filter(s => (s.categories||[]).includes(cat.id)).slice(0,6);
       return `
         <div class="ty-megamenu-col">
           <h4>${cat.emoji} ${cat.name}</h4>

@@ -130,7 +130,7 @@ async function renderStores(wrap){
             ${stores.map(s => `
               <tr data-id="${s.id}">
                 <td style="display:flex;align-items:center;gap:8px">${s.emoji} ${s.name}</td>
-                <td style="font-size:12px;color:var(--ty-gray)">${s.categories.join(", ")}</td>
+                <td style="font-size:12px;color:var(--ty-gray)">${(s.categories||[]).join(", ")}</td>
                 <td><input type="number" class="commissionInput" value="${s.commissionRate}" style="width:56px;padding:5px;border:1px solid var(--ty-border);border-radius:5px"> %</td>
                 <td><span class="pill ${s.status==='active'?'pill-active':'pill-paused'}">${s.status==='active'?'Aktif':'Durduruldu'}</span></td>
                 <td class="icon-btn-row">

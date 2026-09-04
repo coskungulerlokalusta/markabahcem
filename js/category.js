@@ -15,7 +15,7 @@ async function loadCategoryFilters(){
     CAT_STATE.cat = inp.value; CAT_STATE.store = null; syncUrl(); refresh();
   }));
 
-  const relevantStores = CAT_STATE.cat ? stores.filter(s => s.categories.includes(CAT_STATE.cat)) : stores;
+  const relevantStores = CAT_STATE.cat ? stores.filter(s => (s.categories||[]).includes(CAT_STATE.cat)) : stores;
   const storeList = document.getElementById("storeFilterList");
   storeList.innerHTML = `<label><input type="radio" name="storeFilter" value="" ${!CAT_STATE.store?"checked":""}> Tüm Mağazalar</label>` +
     relevantStores.map(s => `
