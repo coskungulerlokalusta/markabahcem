@@ -270,7 +270,10 @@ function renderSettings(wrap){
 document.addEventListener("DOMContentLoaded", async () => {
   PD_STORE = await requireSession();
   if(!PD_STORE) return;
-  document.getElementById("panelWho").textContent = PD_STORE.name + " mağazası olarak giriş yaptınız";
+  const isAdminMode = new URLSearchParams(location.search).get("admin") === "1";
+  document.getElementById("panelWho").innerHTML = isAdminMode
+    ? `${PD_STORE.name} mağazasını <strong>admin olarak</strong> yönetiyorsunuz — <a href="admin.html" style="color:var(--ty-orange-dark);font-weight:600">← Admin Paneline Dön</a>`
+    : `${PD_STORE.name} mağazası olarak giriş yaptınız`;
 
   document.querySelectorAll("#sideNav a").forEach(a => a.addEventListener("click", (e) => {
     e.preventDefault(); switchTab(a.dataset.tab);

@@ -134,6 +134,7 @@ async function renderStores(wrap){
                 <td><input type="number" class="commissionInput" value="${s.commissionRate}" style="width:56px;padding:5px;border:1px solid var(--ty-border);border-radius:5px"> %</td>
                 <td><span class="pill ${s.status==='active'?'pill-active':'pill-paused'}">${s.status==='active'?'Aktif':'Durduruldu'}</span></td>
                 <td class="icon-btn-row">
+                  <button class="manageBtn">Yönet</button>
                   <button class="saveCommBtn">Kaydet</button>
                   ${s.status==='active' ? `<button class="no toggleBtn" data-status="paused">Durdur</button>` : `<button class="ok toggleBtn" data-status="active">Aktive Et</button>`}
                 </td>
@@ -144,6 +145,15 @@ async function renderStores(wrap){
       </div>
     </div>
   `;
+  wrap.querySelectorAll(".manageBtn").forEach(btn => btn.addEventListener("click", (e) => {
+    const row = e.target.closest("tr");
+    const id = row.dataset.id;
+    const store = stores.find(s => s.id === id);
+    // Admin, ayrı bir mağaza girişi yapmadan doğrudan o mağazanın panelini
+    // yönetebilsin diye partner oturumunu admin adına geçici olarak açar.
+    PartnerAuth.setSession({ storeId: id, storeName: store ? store.name : id });
+    location.href = "partner-dashboard.html?admin=1";
+  }));
   wrap.querySelectorAll(".saveCommBtn").forEach(btn => btn.addEventListener("click", async (e) => {
     const row = e.target.closest("tr");
     const id = row.dataset.id;
