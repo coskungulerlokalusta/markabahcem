@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Platform Özeti — markabahcem.com</title>
+<link rel="stylesheet" href="style.css" />
+<style>
+  .biz-table-wrap { margin-bottom: 36px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .biz-table-wrap table { min-width: 640px; }
+  .biz-status { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .biz-status.active { background: #e6f4ec; color: #0d7a4f; }
+  .biz-status.pending { background: #fff4e0; color: #b26a00; }
+  .biz-status.rejected { background: #fde7e9; color: #c0392b; }
+  .biz-status.paused { background: #eee; color: #666; }
+  .biz-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+  .biz-btn { border: none; border-radius: 6px; padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .biz-btn.approve { background: #0d7a4f; color: white; }
+  .biz-btn.reject { background: #c0392b; color: white; }
+  .biz-btn.pause { background: #eee; color: #333; }
+  .biz-commission-input { width: 50px; padding: 4px 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; }
+  .biz-section-title { font-size: 18px; font-weight: 700; margin: 30px 0 14px; }
+
+  .promo-zone-title { font-size: 13px; font-weight: 700; color: #666; margin: 18px 0 8px; text-transform: uppercase; }
+  .promo-card { background: white; border: 1px solid #eee; border-radius: 10px; padding: 16px; margin-bottom: 12px; display: grid; grid-template-columns: 90px 1fr; gap: 16px; }
+  .promo-card .preview { width: 90px; height: 90px; border-radius: 8px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-size: 32px; color: white; overflow: hidden; }
+  .promo-card .preview img { width: 100%; height: 100%; object-fit: cover; }
+  .promo-card .fields { display: flex; flex-direction: column; gap: 8px; }
+  .promo-card input[type="text"] { padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; width: 100%; box-sizing: border-box; }
+  .promo-card .row { display: flex; gap: 8px; }
+  .promo-card .row > * { flex: 1; }
+  .promo-card .actions { display: flex; gap: 8px; margin-top: 4px; }
+  .promo-add-btn { background: #0d7a4f; color: white; border: none; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; margin-bottom: 14px; }
+
+  @media (max-width: 600px) {
+    .promo-card { grid-template-columns: 1fr; }
+    .promo-card .preview { width: 100%; height: 140px; }
+    .biz-section-title { font-size: 15px; margin: 22px 0 10px; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">markabahçem<span>.com</span></div>
+    <nav>
+      <a href="index.html">Vitrin</a>
+      <a href="partner-login.html">İşletme Paneli</a>
+      <a href="admin.html" class="active">Platform Özeti</a>
+    </nav>
+    <div></div>
+  </header>
+
+  <div class="panel-container">
+    <h1>Platform Özeti</h1>
+    <p class="subtitle">Sen (markabahcem.com) bu ekranı görürsün — tüm işletmeleri ve mali özeti buradan yönetirsin.</p>
+
+    <div class="biz-section-title">🏢 İşletme Başvuruları ve Yönetimi</div>
+    <div class="biz-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>İşletme</th>
+            <th>Yetkili / E-posta</th>
+            <th>Komisyon</th>
+            <th>Durum</th>
+            <th>Başvuru Tarihi</th>
+            <th>İşlemler</th>
+          </tr>
+        </thead>
+        <tbody id="businessesBody"></tbody>
+      </table>
+    </div>
+
+    <div class="biz-section-title">🎨 Görünüm Yönetimi (Logo & Bannerlar)</div>
+    <div class="biz-table-wrap">
+      <div style="background:white;border:1px solid #eee;border-radius:10px;padding:20px;margin-bottom:20px;">
+        <h3 style="margin:0 0 12px;font-size:14px;">Site Logosu</h3>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div id="logoPreviewBox" style="width:60px;height:60px;border-radius:8px;overflow:hidden;background:#fafafa;border:1px solid #eee;display:flex;align-items:center;justify-content:center;font-size:24px;">🌿</div>
+          <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)" />
+          <button class="biz-btn pause" onclick="resetLogo()">Varsayılana Dön</button>
+        </div>
+      </div>
+
+      <div id="promoManagerZones"></div>
+    </div>
+
+    <div class="biz-section-title">💰 Mali Özet</div>
+    <div class="summary-cards" id="summaryCards"></div>
+
+    <div class="biz-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Mağaza</th>
+            <th>Sipariş Sayısı</th>
+            <th>Toplam Ciro</th>
+            <th>Kazandığın Komisyon</th>
+            <th>Mağazaya Borç (Payout)</th>
+          </tr>
+        </thead>
+        <tbody id="storeBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

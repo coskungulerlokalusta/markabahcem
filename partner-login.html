@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>İşletme Paneli Girişi — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<style>
+  body { background: var(--ty-bg); }
+  .pl-wrap { max-width: 440px; margin: 60px auto; padding: 0 20px; }
+  .pl-logo { text-align: center; margin-bottom: 28px; }
+  .pl-logo .leaf { font-size: 30px; }
+  .pl-logo .name { font-weight: 800; font-size: 22px; color: var(--ty-orange); }
+  .pl-logo .tag { font-size: 12px; color: var(--ty-gray); margin-top: 4px; }
+  .pl-card { background: white; border: 1px solid var(--ty-border); border-radius: 12px; padding: 28px; }
+  .pl-card h1 { font-size: 17px; margin: 0 0 6px; }
+  .pl-card .sub { font-size: 12px; color: var(--ty-gray); margin-bottom: 20px; }
+  .pl-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ty-gray); margin-bottom: 6px; }
+  .pl-field select, .pl-field input { width: 100%; padding: 11px 12px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; margin-bottom: 16px; font-family: inherit; }
+  .pl-btn { width: 100%; background: var(--ty-orange); color: white; border: none; padding: 13px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; }
+  .pl-btn:hover { background: var(--ty-orange-dark); }
+  .pl-divider { display: flex; align-items: center; gap: 10px; margin: 20px 0; color: var(--ty-gray); font-size: 11px; }
+  .pl-divider::before, .pl-divider::after { content: ""; flex: 1; height: 1px; background: var(--ty-border); }
+  .pl-apply-link { display: block; text-align: center; font-size: 13px; font-weight: 700; color: var(--ty-orange); border: 1.5px solid var(--ty-orange); border-radius: 6px; padding: 12px; }
+  .pl-note { font-size: 11px; color: var(--ty-gray); text-align: center; margin-top: 16px; line-height: 1.6; }
+  .pl-back { display: block; text-align: center; margin-top: 20px; font-size: 12px; color: var(--ty-gray); }
+  @media (max-width: 480px) {
+    .pl-wrap { margin: 32px auto; }
+    .pl-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+  <div class="pl-wrap">
+    <div class="pl-logo">
+      <div><span class="leaf">🌿</span></div>
+      <div class="name">markabahçem<span style="color:var(--ty-dark);">.com</span></div>
+      <div class="tag">İşletme Paneli</div>
+    </div>
+
+    <div class="pl-card">
+      <h1>İşletmenizle giriş yapın</h1>
+      <div class="sub">Bu bir prototiptir — gerçek şifre sistemi yerine, kayıtlı işletmenizi seçerek demo giriş yapabilirsiniz.</div>
+
+      <div class="pl-field">
+        <label>İşletmeniz</label>
+        <select id="storeSelect"></select>
+      </div>
+      <button class="pl-btn" onclick="login()">Giriş Yap</button>
+
+      <div class="pl-divider">veya</div>
+
+      <a href="partner-apply.html" class="pl-apply-link">Yeni İşletme Başvurusu Yap</a>
+
+      <div class="pl-note">Başvurunuz markabahçem ekibi tarafından incelenir; onaylandığında bu ekrandan giriş yapabilirsiniz.</div>
+    </div>
+    <a href="index.html" class="pl-back">&larr; markabahçem müşteri sitesine dön</a>
+  </div>
+
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+  <script>
+    async function loadStores() {
+      const res = await fetch('/api/partner/stores');
+      const stores = await res.json();
+      const select = document.getElementById('storeSelect');
+      select.innerHTML = stores.map(s => `<option value="${s.id}">${s.name}${s.status === 'paused' ? ' (Askıya Alındı)' : ''}</option>`).join('');
+    }
+    function login() {
+      const storeId = document.getElementById('storeSelect').value;
+      window.location.href = `partner-dashboard.html?storeId=${storeId}`;
+    }
+    loadStores();
+  </script>
+</body>
+</html>

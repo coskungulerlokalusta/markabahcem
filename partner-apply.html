@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>İşletme Başvurusu — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<style>
+  body { background: var(--ty-bg); }
+  .pa-wrap { max-width: 520px; margin: 50px auto; padding: 0 20px; }
+  .pa-logo { text-align: center; margin-bottom: 24px; }
+  .pa-logo .name { font-weight: 800; font-size: 22px; color: var(--ty-orange); }
+  .pa-card { background: white; border: 1px solid var(--ty-border); border-radius: 12px; padding: 28px; }
+  .pa-card h1 { font-size: 18px; margin: 0 0 6px; }
+  .pa-card .sub { font-size: 12px; color: var(--ty-gray); margin-bottom: 22px; }
+  .pa-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ty-gray); margin-bottom: 6px; }
+  .pa-field input, .pa-field textarea { width: 100%; padding: 11px 12px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; margin-bottom: 16px; font-family: inherit; }
+  .pa-btn { width: 100%; background: var(--ty-orange); color: white; border: none; padding: 13px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; }
+  .pa-btn:hover { background: var(--ty-orange-dark); }
+  .pa-back { display: block; text-align: center; margin-top: 20px; font-size: 12px; color: var(--ty-gray); }
+  @media (max-width: 480px) {
+    .pa-wrap { margin: 32px auto; }
+    .pa-card { padding: 20px; }
+  }
+  .pa-success { text-align: center; padding: 20px 0; }
+  .pa-success .check { font-size: 44px; }
+  .pa-success h2 { font-size: 17px; margin: 10px 0 8px; }
+  .pa-success p { font-size: 13px; color: var(--ty-gray); line-height: 1.6; }
+</style>
+</head>
+<body>
+  <div class="pa-wrap">
+    <div class="pa-logo"><div class="name">markabahçem<span style="color:var(--ty-dark);">.com</span></div></div>
+
+    <div class="pa-card" id="formCard">
+      <h1>İşletmenizle markabahçem'e Katılın</h1>
+      <div class="sub">Formu doldurun, ekibimiz başvurunuzu inceleyip size dönüş yapsın. Onaylandıktan sonra ürünlerinizi ekleyip satışa başlayabilirsiniz.</div>
+
+      <div class="pa-field"><label>İşletme / Marka Adı</label><input id="fName" type="text" placeholder="Örn: LC Waikiki" /></div>
+      <div class="pa-field"><label>Yetkili Adı Soyadı</label><input id="fContactName" type="text" placeholder="Ahmet Yılmaz" /></div>
+      <div class="pa-field"><label>E-posta</label><input id="fEmail" type="email" placeholder="magaza@sirket.com" /></div>
+      <div class="pa-field"><label>Beklenen Komisyon Oranı (%)</label><input id="fCommission" type="number" value="15" min="5" max="30" /></div>
+
+      <button class="pa-btn" onclick="submitApplication()">Başvuruyu Gönder</button>
+    </div>
+
+    <div class="pa-card" id="successCard" style="display:none;">
+      <div class="pa-success">
+        <div class="check">✅</div>
+        <h2>Başvurunuz Alındı</h2>
+        <p>markabahçem ekibi başvurunuzu inceleyecek. Onaylandığında işletme paneline giriş yapabileceksiniz.
+        <br /><br />
+        <strong>Demo notu:</strong> Bu bir prototip olduğu için başvurunuz otomatik olarak "beklemede" listesine düştü — admin panelinden onaylayabilirsin.</p>
+      </div>
+    </div>
+
+    <a href="partner-login.html" class="pa-back">&larr; İşletme girişine dön</a>
+  </div>
+
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+  <script>
+    async function submitApplication() {
+      const name = document.getElementById('fName').value.trim();
+      const contactName = document.getElementById('fContactName').value.trim();
+      const contactEmail = document.getElementById('fEmail').value.trim();
+      const commissionRate = document.getElementById('fCommission').value;
+
+      if (!name || !contactEmail) {
+        alert('Lütfen işletme adı ve e-posta girin.');
+        return;
+      }
+
+      const res = await fetch('/api/partner/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, contactName, contactEmail, commissionRate }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('formCard').style.display = 'none';
+        document.getElementById('successCard').style.display = 'block';
+      } else {
+        alert('Hata: ' + (data.error || 'Bilinmeyen hata'));
+      }
+    }
+  </script>
+</body>
+</html>

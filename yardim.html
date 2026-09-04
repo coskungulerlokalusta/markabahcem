@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yardım & Destek — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<style>
+  .info-wrap { max-width: 800px; margin: 0 auto; padding: 40px 32px 60px; }
+  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
+  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 30px; }
+  .faq-item { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; }
+  .faq-item .q { font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; justify-content: space-between; }
+  .faq-item .a { font-size: 13px; color: var(--ty-gray); margin-top: 10px; line-height: 1.7; display: none; }
+  .faq-item.open .a { display: block; }
+
+  @media (max-width: 600px) {
+    .info-wrap { padding: 24px 16px 40px; }
+    .info-wrap h1 { font-size: 21px; }
+    .faq-item { padding: 14px; }
+  }
+  .contact-box { background: var(--ty-orange-light); border-radius: 10px; padding: 20px; margin-top: 24px; text-align: center; }
+  .contact-box a { color: var(--ty-orange-dark); font-weight: 700; }
+</style>
+</head>
+<body>
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+
+  <header class="ty-header">
+    <a href="index.html" class="ty-logo" style="text-decoration:none;">
+      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
+    </a>
+    <div style="flex:1;"></div>
+    <div class="ty-header-actions">
+      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    </div>
+  </header>
+
+  <div class="info-wrap">
+    <h1>Yardım & Destek</h1>
+    <p class="lead">Sık sorulan sorular ve bize ulaşma yolları.</p>
+
+    <div class="faq-item">
+      <div class="q" onclick="this.parentElement.classList.toggle('open')">Siparişim farklı mağazalardan geliyorsa kargo nasıl işler? <span>+</span></div>
+      <div class="a">Sepetinizde birden fazla mağazadan ürün varsa, tek ödeme yaparsınız ama her mağaza kendi ürününü kendi kargo şirketiyle ayrı ayrı gönderir. Her alt sipariş için ayrı bir takip numarası alırsınız.</div>
+    </div>
+    <div class="faq-item">
+      <div class="q" onclick="this.parentElement.classList.toggle('open')">İade nasıl yapılır? <span>+</span></div>
+      <div class="a">İade talebinizi ilgili mağazanın ürün sayfasından ya da sipariş detayından başlatabilirsiniz. Her mağazanın kendi iade süresi ve koşulu, ürün sayfasında belirtilir.</div>
+    </div>
+    <div class="faq-item">
+      <div class="q" onclick="this.parentElement.classList.toggle('open')">Ödeme bilgilerim güvende mi? <span>+</span></div>
+      <div class="a">Ödemeleriniz platformumuz üzerinden değil, lisanslı ödeme kuruluşları aracılığıyla işlenir. Kart bilgileriniz markabahçem'de saklanmaz.</div>
+    </div>
+    <div class="faq-item">
+      <div class="q" onclick="this.parentElement.classList.toggle('open')">Mağazam markabahçem'e nasıl katılabilir? <span>+</span></div>
+      <div class="a"><a href="partner-apply.html" style="color:var(--ty-orange);font-weight:700;">İşletme başvuru formunu</a> doldurarak başvurunuzu iletebilirsiniz. Ekibimiz inceleyip size dönüş yapar.</div>
+    </div>
+
+    <div class="contact-box">
+      Başka bir sorunuz mu var? <a href="mailto:destek@markabahcem.com">destek@markabahcem.com</a> adresinden bize ulaşabilirsiniz.
+    </div>
+  </div>
+</body>
+</html>

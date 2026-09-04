@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hakkımızda — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<style>
+  .info-wrap { max-width: 800px; margin: 0 auto; padding: 40px 32px 60px; }
+  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
+  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 30px; }
+  .info-wrap h2 { font-size: 17px; margin: 28px 0 10px; }
+  .info-wrap p { font-size: 14px; line-height: 1.8; color: var(--ty-dark); margin-bottom: 14px; }
+  .info-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin: 24px 0; }
+  .info-stat { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 18px; text-align: center; }
+  .info-stat .num { font-size: 24px; font-weight: 800; color: var(--ty-orange); }
+  .info-stat .label { font-size: 12px; color: var(--ty-gray); margin-top: 4px; }
+
+  @media (max-width: 600px) {
+    .info-wrap { padding: 24px 16px 40px; }
+    .info-wrap h1 { font-size: 21px; }
+    .info-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+
+  <header class="ty-header">
+    <a href="index.html" class="ty-logo" style="text-decoration:none;">
+      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
+    </a>
+    <div style="flex:1;"></div>
+    <div class="ty-header-actions">
+      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    </div>
+  </header>
+
+  <div class="info-wrap">
+    <h1>Hakkımızda</h1>
+    <p class="lead">Farklı markaları tek çatı altında, tek ödemede buluşturan alışveriş platformu.</p>
+
+    <p>markabahçem.com, birbirinden farklı markaların ve mağazaların ürünlerini tek bir vitrinde toplayan, çok mağazalı bir pazaryeri platformudur. Amacımız; alışveriş yapan kişinin birden fazla markadan ürün seçtiğinde tek bir ödeme yapmasını, her mağazanın ise kendi ürününü kendi kargosuyla, kendi hızında gönderebilmesini sağlamaktır.</p>
+
+    <div class="info-stats">
+      <div class="info-stat"><div class="num">4+</div><div class="label">Ortak Mağaza</div></div>
+      <div class="info-stat"><div class="num">10</div><div class="label">Ana Kategori</div></div>
+      <div class="info-stat"><div class="num">2026</div><div class="label">Kuruluş Yılı</div></div>
+    </div>
+
+    <h2>Nasıl Çalışıyoruz</h2>
+    <p>Mağazalar platformumuza başvurur, onaylandıktan sonra kendi işletme panelinden ürünlerini ekler ve stoklarını yönetir. Müşteri sepetine farklı mağazalardan ürün eklediğinde bile ödeme tek seferde alınır; arka planda otomatik olarak ilgili mağazalara bölünür ve her mağaza kendi siparişini kendi sistemine göre işler.</p>
+
+    <h2>Neden markabahçem?</h2>
+    <p>Küçük ve orta ölçekli markaların büyük pazaryerlerinde kaybolmadan, kendi kimlikleriyle var olabileceği; müşterilerin ise güvenilir, tek noktadan yönetilen bir alışveriş deneyimi yaşayabileceği bir platform kurmayı hedefliyoruz.</p>
+  </div>
+</body>
+</html>

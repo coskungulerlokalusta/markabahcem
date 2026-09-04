@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ödeme — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .co-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 32px 60px; display: grid; grid-template-columns: 1fr 360px; gap: 24px; align-items: start; }
+
+  .co-steps-nav { display: flex; gap: 0; margin-bottom: 20px; background: white; border: 1px solid var(--ty-border); border-radius: 8px; overflow: hidden; }
+  .co-step-tab { flex: 1; text-align: center; padding: 14px; font-size: 13px; font-weight: 700; color: var(--ty-gray); border-bottom: 3px solid var(--ty-border); position: relative; }
+  .co-step-tab.active { color: var(--ty-orange); border-bottom-color: var(--ty-orange); }
+  .co-step-tab.done { color: var(--ty-green); }
+  .co-step-tab .num { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; background: var(--ty-border); color: white; font-size: 11px; margin-right: 6px; }
+  .co-step-tab.active .num { background: var(--ty-orange); }
+  .co-step-tab.done .num { background: var(--ty-green); }
+
+  .co-panel { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 28px; }
+  .co-panel h2 { font-size: 17px; margin: 0 0 18px; }
+  .co-panel.hidden { display: none; }
+
+  .co-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .co-form-row.full { grid-template-columns: 1fr; }
+  .co-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ty-gray); margin-bottom: 6px; }
+  .co-field input, .co-field select, .co-field textarea {
+    width: 100%; padding: 11px 12px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; font-family: inherit;
+  }
+  .co-field input:focus, .co-field textarea:focus { outline: none; border-color: var(--ty-orange); }
+
+  .co-next-btn, .co-pay-btn {
+    margin-top: 8px; background: var(--ty-orange); color: white; border: none; padding: 14px 24px;
+    border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; width: 100%;
+  }
+  .co-next-btn:hover, .co-pay-btn:hover { background: var(--ty-orange-dark); }
+  .co-back-link { display: inline-block; margin-top: 12px; font-size: 12px; color: var(--ty-gray); cursor: pointer; }
+
+  .co-card-visual {
+    background: linear-gradient(135deg, #2d2d2d, #4a4a4a); color: white; border-radius: 12px; padding: 20px;
+    margin-bottom: 20px; font-family: monospace; font-size: 16px; letter-spacing: 2px; min-height: 110px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .co-card-visual .top { display:flex; justify-content: space-between; font-size:11px; letter-spacing:1px; opacity:0.7; font-family: inherit;}
+  .co-card-visual .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .co-card-visual .name { font-size: 12px; letter-spacing: 1px; }
+  .co-card-visual .exp { font-size: 12px; }
+
+  .co-security-note { font-size: 11px; color: var(--ty-gray); margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+
+  /* Sağ özet panel */
+  .co-summary { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 22px; position: sticky; top: 20px; }
+  .co-summary h3 { font-size: 15px; margin: 0 0 14px; }
+  .co-summary-store { border-bottom: 1px solid var(--ty-border); padding-bottom: 12px; margin-bottom: 12px; }
+  .co-summary-store:last-of-type { border-bottom: none; }
+  .co-summary-store-name { font-size: 12px; font-weight: 800; color: var(--ty-orange); margin-bottom: 6px; }
+  .co-summary-item { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--ty-dark); margin-bottom: 4px; }
+  .co-summary-item span:last-child { color: var(--ty-gray); }
+
+  .co-summary-total-row { display: flex; justify-content: space-between; font-size: 17px; font-weight: 800; margin-top: 14px; padding-top: 14px; border-top: 2px solid var(--ty-border); }
+  .co-multistore-note { background: var(--ty-orange-light); color: var(--ty-orange-dark); font-size: 11px; padding: 10px 12px; border-radius: 6px; margin-top: 14px; line-height: 1.5; }
+
+  @media (max-width: 800px) {
+    .co-wrap { grid-template-columns: 1fr; padding: 16px 16px 40px; gap: 16px; }
+    .co-summary { position: static; order: -1; }
+    .co-panel { padding: 18px; }
+  }
+  @media (max-width: 480px) {
+    .co-form-row { grid-template-columns: 1fr; gap: 10px; }
+    .co-step-tab { font-size: 11px; padding: 11px 4px; }
+    .co-card-visual { font-size: 13px; padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="ty-header">
+    <a href="index.html" class="ty-logo" style="text-decoration:none;">
+      <span class="leaf">🌿</span>
+      <div>markabahçem<span class="sub">.com</span></div>
+    </a>
+    <div style="flex:1;"></div>
+    <div class="ty-header-actions">
+      <div class="action-item"><span class="icon">🔒</span>Güvenli Ödeme</div>
+    </div>
+  </header>
+
+  <div class="co-wrap">
+    <div>
+      <div class="co-steps-nav">
+        <div class="co-step-tab active" id="tabAddress"><span class="num">1</span>Teslimat Adresi</div>
+        <div class="co-step-tab" id="tabPayment"><span class="num">2</span>Ödeme</div>
+        <div class="co-step-tab" id="tabDone"><span class="num">3</span>Sipariş Onayı</div>
+      </div>
+
+      <!-- ADIM 1: ADRES -->
+      <div class="co-panel" id="panelAddress">
+        <h2>Teslimat Adresi</h2>
+        <div class="co-form-row">
+          <div class="co-field"><label>Ad</label><input id="fName" type="text" value="Ahmet" /></div>
+          <div class="co-field"><label>Soyad</label><input id="fLastName" type="text" value="Yılmaz" /></div>
+        </div>
+        <div class="co-form-row">
+          <div class="co-field"><label>E-posta</label><input id="fEmail" type="email" value="ahmet@example.com" /></div>
+          <div class="co-field"><label>Telefon</label><input id="fPhone" type="text" value="0532 000 00 00" /></div>
+        </div>
+        <div class="co-form-row">
+          <div class="co-field"><label>İl</label><input id="fCity" type="text" value="İstanbul" /></div>
+          <div class="co-field"><label>İlçe</label><input id="fDistrict" type="text" value="Kadıköy" /></div>
+        </div>
+        <div class="co-form-row full">
+          <div class="co-field"><label>Açık Adres</label><textarea id="fAddress" rows="3">Örnek Mah. Test Sk. No:1 D:4</textarea></div>
+        </div>
+        <button class="co-next-btn" onclick="goToPayment()">Ödemeye Geç</button>
+      </div>
+
+      <!-- ADIM 2: ÖDEME -->
+      <div class="co-panel hidden" id="panelPayment">
+        <h2>Ödeme Bilgileri</h2>
+        <div class="co-card-visual">
+          <div class="top"><span>markabahçem güvenli ödeme</span><span>💳</span></div>
+          <div style="font-size:18px;" id="cardNumberPreview">•••• •••• •••• ••••</div>
+          <div class="bottom">
+            <div class="name" id="cardNamePreview">AD SOYAD</div>
+            <div class="exp" id="cardExpPreview">AA/YY</div>
+          </div>
+        </div>
+        <div class="co-form-row full">
+          <div class="co-field"><label>Kart Üzerindeki İsim</label><input id="pName" type="text" placeholder="AHMET YILMAZ" oninput="updateCardPreview()" /></div>
+        </div>
+        <div class="co-form-row full">
+          <div class="co-field"><label>Kart Numarası</label><input id="pNumber" type="text" placeholder="0000 0000 0000 0000" maxlength="19" oninput="updateCardPreview()" /></div>
+        </div>
+        <div class="co-form-row">
+          <div class="co-field"><label>Son Kullanma Tarihi</label><input id="pExpiry" type="text" placeholder="AA/YY" maxlength="5" oninput="updateCardPreview()" /></div>
+          <div class="co-field"><label>CVV</label><input id="pCvv" type="text" placeholder="123" maxlength="3" /></div>
+        </div>
+        <button class="co-pay-btn" id="payBtn" onclick="submitPayment()">Ödemeyi Onayla</button>
+        <div class="co-security-note">🔒 Bu bir prototiptir; gerçek kart bilgisi işlenmez, sunucuda simüle edilir.</div>
+        <div class="co-back-link" onclick="goToAddress()">&larr; Adres bilgisine dön</div>
+      </div>
+
+      <!-- ADIM 3: SONUÇ -->
+      <div class="co-panel hidden" id="panelDone"></div>
+    </div>
+
+    <!-- SAĞ: SİPARİŞ ÖZETİ -->
+    <div class="co-summary" id="orderSummary">
+      <h3>Sipariş Özeti</h3>
+      <div id="summaryStores"></div>
+      <div class="co-summary-total-row"><span>Toplam</span><span id="summaryTotal">0 ₺</span></div>
+      <div class="co-multistore-note" id="multiStoreNote" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+  <script src="cartStore.js"></script>
+  <script src="checkout.js"></script>
+</body>
+</html>

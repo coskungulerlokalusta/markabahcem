@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mağaza Profili — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<link rel="stylesheet" href="style.css" />
+<style>
+  .sp-cover {
+    height: 220px;
+    background: #eee;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  .sp-header-wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .sp-header-inner { position: relative; }
+  .sp-logo-box {
+    position: absolute;
+    top: -55px;
+    left: 0;
+    width: 110px;
+    height: 110px;
+    border-radius: 12px;
+    background: white;
+    border: 4px solid white;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    overflow: hidden;
+  }
+  .sp-logo-box img { width: 100%; height: 100%; object-fit: contain; }
+  .sp-info-row { padding: 65px 0 20px 130px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
+  .sp-name { font-size: 24px; font-weight: 800; margin: 0; }
+  .sp-stats { display: flex; gap: 18px; margin-top: 8px; font-size: 12.5px; color: var(--ty-gray); }
+  .sp-stats strong { color: var(--ty-dark); }
+  .sp-desc-box { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 18px 22px; margin: 20px 0 30px; font-size: 13.5px; line-height: 1.7; color: var(--ty-dark); max-width: 1200px; margin-left:auto; margin-right:auto; }
+  .sp-products-wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px 60px; }
+  .sp-products-wrap h2 { font-size: 17px; margin-bottom: 14px; }
+
+  @media (max-width: 600px) {
+    .sp-cover { height: 130px; }
+    .sp-header-wrap { padding: 0 16px; }
+    .sp-logo-box { width: 76px; height: 76px; top: -38px; font-size: 28px; }
+    .sp-info-row { padding: 46px 0 16px 0; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .sp-name { font-size: 19px; }
+    .sp-stats { flex-wrap: wrap; gap: 10px; font-size: 11.5px; }
+    .sp-desc-box { margin: 14px 0 20px; padding: 14px 16px; }
+    .sp-products-wrap { padding: 0 16px 40px; }
+  }
+</style>
+</head>
+<body>
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+
+  <header class="ty-header">
+    <a href="index.html" class="ty-logo" style="text-decoration:none;">
+      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
+    </a>
+    <div class="ty-search"><input type="text" placeholder="Ürün, kategori veya marka ara" /><button>🔍</button></div>
+    <div class="ty-header-actions">
+      <a href="index.html" class="action-item" style="cursor:pointer;">
+        <span class="icon">🛒<span class="ty-cart-count" id="cartCount">0</span></span>Sepetim
+      </a>
+    </div>
+  </header>
+
+  <div class="sp-cover" id="spCover"></div>
+  <div class="sp-header-wrap">
+    <div class="sp-header-inner">
+      <div class="sp-logo-box" id="spLogo">🏪</div>
+      <div class="sp-info-row">
+        <div>
+          <h1 class="sp-name" id="spName">Yükleniyor...</h1>
+          <div class="sp-stats" id="spStats"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sp-desc-box" id="spDesc"></div>
+
+  <div class="sp-products-wrap">
+    <h2>Mağazadaki Ürünler</h2>
+    <div id="productGrid" class="ty-product-grid"></div>
+  </div>
+
+  <script src="mockMeta.js"></script>
+  <script src="cartStore.js"></script>
+  <script src="store-profile.js"></script>
+</body>
+</html>

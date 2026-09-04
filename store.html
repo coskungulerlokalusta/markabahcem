@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mağaza Paneli — markabahcem.com</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">markabahçem<span>.com</span></div>
+    <nav>
+      <a href="index.html">Vitrin</a>
+      <a href="store.html" class="active">Mağaza Paneli</a>
+      <a href="admin.html">Platform Özeti</a>
+    </nav>
+    <div></div>
+  </header>
+
+  <div class="panel-container">
+    <h1>Mağaza Paneli</h1>
+    <p class="subtitle">Bir mağaza olarak sadece kendi siparişlerinizi görürsünüz — diğer mağazaların bilgisine erişemezsiniz.</p>
+
+    <select id="storeSelect" class="store-select"></select>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Alt Sipariş No</th>
+            <th>Ürünler</th>
+            <th>Ciro</th>
+            <th>Komisyon</th>
+            <th>Net Ödenecek</th>
+            <th>Durum</th>
+            <th>Dış Sipariş ID</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+    <p id="emptyMsg" class="hint" style="display:none;">Bu mağaza için henüz sipariş yok. Vitrinden alışveriş yapıp buraya geri dönün.</p>
+  </div>
+
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+  <script src="store.js"></script>
+</body>
+</html>

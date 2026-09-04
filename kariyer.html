@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kariyer — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<style>
+  .info-wrap { max-width: 800px; margin: 0 auto; padding: 40px 32px 60px; }
+  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
+  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 30px; }
+  .info-wrap p { font-size: 14px; line-height: 1.8; color: var(--ty-dark); margin-bottom: 14px; }
+  .job-card { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+  .job-card .title { font-weight: 700; font-size: 14px; }
+  .job-card .meta { font-size: 12px; color: var(--ty-gray); margin-top: 4px; }
+  .job-card .apply { background: var(--ty-orange); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .info-wrap { padding: 24px 16px 40px; }
+    .info-wrap h1 { font-size: 21px; }
+    .job-card { flex-wrap: wrap; gap: 10px; }
+    .job-card .apply { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+
+  <header class="ty-header">
+    <a href="index.html" class="ty-logo" style="text-decoration:none;">
+      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
+    </a>
+    <div style="flex:1;"></div>
+    <div class="ty-header-actions">
+      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    </div>
+  </header>
+
+  <div class="info-wrap">
+    <h1>Kariyer</h1>
+    <p class="lead">Büyüyen ekibimize katılmak ister misin?</p>
+    <p>markabahçem.com olarak teknoloji, operasyon ve iş geliştirme alanlarında büyüyen bir ekip kuruyoruz. Açık pozisyonlarımız aşağıda listelenmiştir.</p>
+
+    <div class="job-card">
+      <div><div class="title">Backend Geliştirici</div><div class="meta">İstanbul (Hibrit) · Tam Zamanlı</div></div>
+      <a class="apply" href="mailto:kariyer@markabahcem.com">Başvur</a>
+    </div>
+    <div class="job-card">
+      <div><div class="title">İş Geliştirme Uzmanı (Mağaza Ortaklıkları)</div><div class="meta">İstanbul · Tam Zamanlı</div></div>
+      <a class="apply" href="mailto:kariyer@markabahcem.com">Başvur</a>
+    </div>
+    <div class="job-card">
+      <div><div class="title">Ürün Tasarımcısı (UI/UX)</div><div class="meta">Uzaktan · Tam Zamanlı</div></div>
+      <a class="apply" href="mailto:kariyer@markabahcem.com">Başvur</a>
+    </div>
+
+    <p style="margin-top:24px;">Listelenen pozisyonlar dışında da özgeçmişini <a href="mailto:kariyer@markabahcem.com" style="color:var(--ty-orange);font-weight:700;">kariyer@markabahcem.com</a> adresine gönderebilirsin.</p>
+  </div>
+</body>
+</html>

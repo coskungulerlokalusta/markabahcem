@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>İade & İptal — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+<style>
+  .info-wrap { max-width: 800px; margin: 0 auto; padding: 40px 32px 60px; }
+  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
+  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 30px; }
+  .info-wrap h2 { font-size: 16px; margin: 24px 0 8px; }
+  .info-wrap p, .info-wrap li { font-size: 14px; line-height: 1.8; color: var(--ty-dark); }
+  .info-wrap ul { padding-left: 20px; margin-bottom: 14px; }
+  .step-list { counter-reset: step; list-style: none; padding: 0; margin: 16px 0; }
+  .step-list li { counter-increment: step; padding: 12px 0 12px 40px; position: relative; border-bottom: 1px solid var(--ty-border); }
+  .step-list li::before { content: counter(step); position: absolute; left: 0; top: 10px; width: 26px; height: 26px; background: var(--ty-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
+
+  @media (max-width: 600px) {
+    .info-wrap { padding: 24px 16px 40px; }
+    .info-wrap h1 { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+
+  <header class="ty-header">
+    <a href="index.html" class="ty-logo" style="text-decoration:none;">
+      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
+    </a>
+    <div style="flex:1;"></div>
+    <div class="ty-header-actions">
+      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    </div>
+  </header>
+
+  <div class="info-wrap">
+    <h1>İade & İptal</h1>
+    <p class="lead">Sipariş verdiğin her mağaza kendi iade sürecini yönetir; genel akış aşağıdaki gibidir.</p>
+
+    <h2>İade Süreci Nasıl İşler</h2>
+    <ol class="step-list">
+      <li>Sipariş detayından iade etmek istediğiniz ürünü ve mağazayı seçin.</li>
+      <li>İade nedeninizi belirtin (beden uymadı, hasarlı geldi, fikrim değişti vb.)</li>
+      <li>Kargo firması ürünü adresinizden alır ve ilgili mağazaya ulaştırır.</li>
+      <li>Mağaza ürünü kontrol ettikten sonra ücret iadeniz, ödeme yönteminize 3-7 iş günü içinde yansır.</li>
+    </ol>
+
+    <h2>İptal Koşulları</h2>
+    <p>Siparişiniz henüz kargoya verilmediyse, sipariş detay sayfasından tek tıkla iptal edebilirsiniz. Kargoya verildikten sonra iptal yerine iade süreci işletilir.</p>
+
+    <h2>Önemli Notlar</h2>
+    <ul>
+      <li>Bir siparişte birden fazla mağazadan ürün varsa, her mağaza için iade süreci ayrı ayrı yürütülür.</li>
+      <li>İç giyim, kozmetik gibi bazı ürün kategorilerinde hijyen nedeniyle iade kabul edilmeyebilir — bu bilgi ürün sayfasında belirtilir.</li>
+      <li>İade kargo ücreti, iade nedenine göre değişebilir.</li>
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arama Sonuçları — markabahçem.com</title>
+<link rel="stylesheet" href="trendyol-style.css" />
+</head>
+<body>
+
+  <div class="utility-bar">
+    <span>Trendyol'da Satış Yap gibi: Bize Katıl</span>
+    <span><a href="yardim.html" style="color:inherit;">Yardım & Destek</a></span>
+  </div>
+
+  <header class="ty-header">
+    <a href="index.html" class="ty-logo" style="text-decoration:none;">
+      <span class="leaf">🌿</span>
+      <div>markabahçem<span class="sub">.com</span></div>
+    </a>
+    <div class="ty-search">
+      <input type="text" id="searchInput" placeholder="Beymen tişört, Koton pantolon, telefon ara..." />
+      <button id="searchBtn">🔍</button>
+    </div>
+    <div class="ty-header-actions">
+      <a href="login.html" class="action-item" id="authAction"><span class="icon">👤</span>Giriş Yap</a>
+      <a href="favorites.html" class="action-item">
+        <span class="icon">♡<span class="ty-cart-count" id="favCount">0</span></span>Favorilerim
+      </a>
+      <a href="index.html" class="action-item">
+        <span class="icon">🛒<span class="ty-cart-count" id="cartCount">0</span></span>Sepetim
+      </a>
+    </div>
+  </header>
+
+  <nav class="ty-categories">
+    <a href="index.html">Tüm Mağazalar</a>
+    <a href="index.html?store=beymen">Beymen</a>
+    <a href="index.html?store=koton">Koton</a>
+    <a href="index.html?store=adilisik">Adil Işık</a>
+    <a href="index.html?store=altinyildiz">Altınyıldız Classics</a>
+  </nav>
+
+  <section class="ty-section">
+    <div class="ty-section-header">
+      <h2 id="resultsTitle">Arama Sonuçları</h2>
+    </div>
+    <div id="resultsGrid" class="ty-product-grid"></div>
+    <p id="noResults" style="display:none;color:var(--ty-gray);font-size:13px;">
+      Aramanızla eşleşen ürün bulunamadı. Farklı bir kelime deneyin veya
+      <a href="index.html" style="color:var(--ty-orange);">tüm ürünlere göz atın</a>.
+    </p>
+  </section>
+
+  <script src="static-api.js"></script>
+  <script src="siteBranding.js"></script>
+  <script src="mockMeta.js"></script>
+  <script src="cartStore.js"></script>
+  <script src="favoritesStore.js"></script>
+  <script src="auth.js"></script>
+  <script src="headerSearch.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>
