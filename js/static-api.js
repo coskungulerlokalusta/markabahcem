@@ -145,7 +145,23 @@
   function loadDB(){
     try{
       const raw = localStorage.getItem(DB_KEY);
-      if(raw) return JSON.parse(raw);
+      if(raw){
+        const parsed = JSON.parse(raw);
+        // Kendi kendini onarma: SEED'de olup kayıtlı veride eksik olan
+        // üst seviye alanları (ör. admin, partners) otomatik tamamlar.
+        // Bu, eski/eksik bir localStorage durumunda (ör. önceki bir test
+        // sürümünden kalan veri) sitenin kırılmasını engeller.
+        const defaults = JSON.parse(JSON.stringify(SEED));
+        let healed = false;
+        Object.keys(defaults).forEach(key => {
+          if(parsed[key] === undefined || parsed[key] === null){ parsed[key] = defaults[key]; healed = true; }
+        });
+        if(!Array.isArray(parsed.products) || parsed.products.length === 0){
+          parsed.products = seedProducts(); healed = true;
+        }
+        if(healed) saveDB(parsed);
+        return parsed;
+      }
     }catch(e){ console.warn("markabahçem: DB okunamadı, sıfırlanıyor.", e); }
     const fresh = JSON.parse(JSON.stringify(SEED));
     fresh.products = seedProducts();
