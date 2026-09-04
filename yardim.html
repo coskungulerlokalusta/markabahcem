@@ -1,66 +1,97 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Yardım & Destek — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  .info-wrap { max-width: 800px; margin: 0 auto; padding: 40px 32px 60px; }
-  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
-  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 30px; }
-  .faq-item { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 16px 18px; margin-bottom: 10px; }
-  .faq-item .q { font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; justify-content: space-between; }
-  .faq-item .a { font-size: 13px; color: var(--ty-gray); margin-top: 10px; line-height: 1.7; display: none; }
-  .faq-item.open .a { display: block; }
-
-  @media (max-width: 600px) {
-    .info-wrap { padding: 24px 16px 40px; }
-    .info-wrap h1 { font-size: 21px; }
-    .faq-item { padding: 14px; }
-  }
-  .contact-box { background: var(--ty-orange-light); border-radius: 10px; padding: 20px; margin-top: 24px; text-align: center; }
-  .contact-box a { color: var(--ty-orange-dark); font-weight: 700; }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yardım Merkezi — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-
   <header class="ty-header">
-    <a href="index.html" class="ty-logo" style="text-decoration:none;">
-      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
-    </a>
-    <div style="flex:1;"></div>
-    <div class="ty-header-actions">
-      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
+      </div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
   </header>
-
-  <div class="info-wrap">
-    <h1>Yardım & Destek</h1>
-    <p class="lead">Sık sorulan sorular ve bize ulaşma yolları.</p>
-
-    <div class="faq-item">
-      <div class="q" onclick="this.parentElement.classList.toggle('open')">Siparişim farklı mağazalardan geliyorsa kargo nasıl işler? <span>+</span></div>
-      <div class="a">Sepetinizde birden fazla mağazadan ürün varsa, tek ödeme yaparsınız ama her mağaza kendi ürününü kendi kargo şirketiyle ayrı ayrı gönderir. Her alt sipariş için ayrı bir takip numarası alırsınız.</div>
-    </div>
-    <div class="faq-item">
-      <div class="q" onclick="this.parentElement.classList.toggle('open')">İade nasıl yapılır? <span>+</span></div>
-      <div class="a">İade talebinizi ilgili mağazanın ürün sayfasından ya da sipariş detayından başlatabilirsiniz. Her mağazanın kendi iade süresi ve koşulu, ürün sayfasında belirtilir.</div>
-    </div>
-    <div class="faq-item">
-      <div class="q" onclick="this.parentElement.classList.toggle('open')">Ödeme bilgilerim güvende mi? <span>+</span></div>
-      <div class="a">Ödemeleriniz platformumuz üzerinden değil, lisanslı ödeme kuruluşları aracılığıyla işlenir. Kart bilgileriniz markabahçem'de saklanmaz.</div>
-    </div>
-    <div class="faq-item">
-      <div class="q" onclick="this.parentElement.classList.toggle('open')">Mağazam markabahçem'e nasıl katılabilir? <span>+</span></div>
-      <div class="a"><a href="partner-apply.html" style="color:var(--ty-orange);font-weight:700;">İşletme başvuru formunu</a> doldurarak başvurunuzu iletebilirsiniz. Ekibimiz inceleyip size dönüş yapar.</div>
-    </div>
-
-    <div class="contact-box">
-      Başka bir sorunuz mu var? <a href="mailto:destek@markabahcem.com">destek@markabahcem.com</a> adresinden bize ulaşabilirsiniz.
-    </div>
+  <div class="ty-static-page">
+    <h1>Yardım Merkezi</h1>
+    <h2>Sipariş Nasıl Verilir?</h2>
+    <p>Beğendiğiniz ürünü sepete ekleyin, sepetinizi onaylayın ve adres/ödeme adımlarını tamamlayın. Sepetinizde birden fazla mağazadan ürün olsa bile tek bir ödeme yaparsınız.</p>
+    <h2>Kargo Süresi Ne Kadar?</h2>
+    <p>Her ürün, ilgili markanın kendi kargo süreciyle gönderilir; teslimat süresi mağazadan mağazaya değişebilir.</p>
+    <h2>İade Nasıl Yapılır?</h2>
+    <p>İade ve iptal süreçleri için <a href="iade-iptal.html">İade & İptal</a> sayfamıza göz atabilirsiniz.</p>
+    <h2>Başka Bir Sorum Var</h2>
+    <p>Bize destek@markabahcem.com üzerinden ulaşabilirsiniz (demo iletişim adresi — bu bir prototip sitedir).</p>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
+
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
 </body>
 </html>

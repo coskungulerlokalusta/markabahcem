@@ -1,76 +1,112 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>İşletme Paneli Girişi — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  body { background: var(--ty-bg); }
-  .pl-wrap { max-width: 440px; margin: 60px auto; padding: 0 20px; }
-  .pl-logo { text-align: center; margin-bottom: 28px; }
-  .pl-logo .leaf { font-size: 30px; }
-  .pl-logo .name { font-weight: 800; font-size: 22px; color: var(--ty-orange); }
-  .pl-logo .tag { font-size: 12px; color: var(--ty-gray); margin-top: 4px; }
-  .pl-card { background: white; border: 1px solid var(--ty-border); border-radius: 12px; padding: 28px; }
-  .pl-card h1 { font-size: 17px; margin: 0 0 6px; }
-  .pl-card .sub { font-size: 12px; color: var(--ty-gray); margin-bottom: 20px; }
-  .pl-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ty-gray); margin-bottom: 6px; }
-  .pl-field select, .pl-field input { width: 100%; padding: 11px 12px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; margin-bottom: 16px; font-family: inherit; }
-  .pl-btn { width: 100%; background: var(--ty-orange); color: white; border: none; padding: 13px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; }
-  .pl-btn:hover { background: var(--ty-orange-dark); }
-  .pl-divider { display: flex; align-items: center; gap: 10px; margin: 20px 0; color: var(--ty-gray); font-size: 11px; }
-  .pl-divider::before, .pl-divider::after { content: ""; flex: 1; height: 1px; background: var(--ty-border); }
-  .pl-apply-link { display: block; text-align: center; font-size: 13px; font-weight: 700; color: var(--ty-orange); border: 1.5px solid var(--ty-orange); border-radius: 6px; padding: 12px; }
-  .pl-note { font-size: 11px; color: var(--ty-gray); text-align: center; margin-top: 16px; line-height: 1.6; }
-  .pl-back { display: block; text-align: center; margin-top: 20px; font-size: 12px; color: var(--ty-gray); }
-  @media (max-width: 480px) {
-    .pl-wrap { margin: 32px auto; }
-    .pl-card { padding: 20px; }
-  }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mağaza Girişi — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-  <div class="pl-wrap">
-    <div class="pl-logo">
-      <div><span class="leaf">🌿</span></div>
-      <div class="name">markabahçem<span style="color:var(--ty-dark);">.com</span></div>
-      <div class="tag">İşletme Paneli</div>
-    </div>
-
-    <div class="pl-card">
-      <h1>İşletmenizle giriş yapın</h1>
-      <div class="sub">Bu bir prototiptir — gerçek şifre sistemi yerine, kayıtlı işletmenizi seçerek demo giriş yapabilirsiniz.</div>
-
-      <div class="pl-field">
-        <label>İşletmeniz</label>
-        <select id="storeSelect"></select>
+  <header class="ty-header">
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
       </div>
-      <button class="pl-btn" onclick="login()">Giriş Yap</button>
-
-      <div class="pl-divider">veya</div>
-
-      <a href="partner-apply.html" class="pl-apply-link">Yeni İşletme Başvurusu Yap</a>
-
-      <div class="pl-note">Başvurunuz markabahçem ekibi tarafından incelenir; onaylandığında bu ekrandan giriş yapabilirsiniz.</div>
     </div>
-    <a href="index.html" class="pl-back">&larr; markabahçem müşteri sitesine dön</a>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="ty-auth-box">
+      <h2>Mağaza Girişi</h2>
+      <p class="sub">markabahçem partner paneline giriş yapın</p>
+      <form id="partnerLoginForm">
+        <div class="ty-field"><label>E-posta</label><input type="email" id="pEmail" required value="beymen@markabahcem.com"></div>
+        <div class="ty-field"><label>Şifre</label><input type="password" id="pPassword" required value="123456"></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Giriş Yap</button>
+        <p class="ty-hint" style="text-align:center;margin-top:12px">Demo hesap: beymen@markabahcem.com / 123456 (ya da koton@markabahcem.com)</p>
+      </form>
+      <p style="text-align:center;font-size:13px;margin-top:16px">Henüz markanız yok mu? <a href="partner-apply.html" style="color:var(--ty-orange-dark);font-weight:600">Başvuru yapın</a></p>
+    </div>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
 
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
   <script>
-    async function loadStores() {
-      const res = await fetch('/api/partner/stores');
-      const stores = await res.json();
-      const select = document.getElementById('storeSelect');
-      select.innerHTML = stores.map(s => `<option value="${s.id}">${s.name}${s.status === 'paused' ? ' (Askıya Alındı)' : ''}</option>`).join('');
-    }
-    function login() {
-      const storeId = document.getElementById('storeSelect').value;
-      window.location.href = `partner-dashboard.html?storeId=${storeId}`;
-    }
-    loadStores();
+    document.addEventListener("DOMContentLoaded", () => { if(PartnerAuth.isLoggedIn()) location.href = "partner-dashboard.html"; });
+    document.getElementById("partnerLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("pEmail").value;
+      const password = document.getElementById("pPassword").value;
+      const res = await fetch("/api/partner/login", { method:"POST", body: JSON.stringify({ email, password }) });
+      const data = await res.json();
+      if(!res.ok){ showToast(data.error || "Giriş başarısız."); return; }
+      PartnerAuth.setSession(data);
+      location.href = "partner-dashboard.html";
+    });
   </script>
 </body>
 </html>

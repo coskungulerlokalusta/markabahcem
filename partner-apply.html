@@ -1,90 +1,134 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>İşletme Başvurusu — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  body { background: var(--ty-bg); }
-  .pa-wrap { max-width: 520px; margin: 50px auto; padding: 0 20px; }
-  .pa-logo { text-align: center; margin-bottom: 24px; }
-  .pa-logo .name { font-weight: 800; font-size: 22px; color: var(--ty-orange); }
-  .pa-card { background: white; border: 1px solid var(--ty-border); border-radius: 12px; padding: 28px; }
-  .pa-card h1 { font-size: 18px; margin: 0 0 6px; }
-  .pa-card .sub { font-size: 12px; color: var(--ty-gray); margin-bottom: 22px; }
-  .pa-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ty-gray); margin-bottom: 6px; }
-  .pa-field input, .pa-field textarea { width: 100%; padding: 11px 12px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; margin-bottom: 16px; font-family: inherit; }
-  .pa-btn { width: 100%; background: var(--ty-orange); color: white; border: none; padding: 13px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; }
-  .pa-btn:hover { background: var(--ty-orange-dark); }
-  .pa-back { display: block; text-align: center; margin-top: 20px; font-size: 12px; color: var(--ty-gray); }
-  @media (max-width: 480px) {
-    .pa-wrap { margin: 32px auto; }
-    .pa-card { padding: 20px; }
-  }
-  .pa-success { text-align: center; padding: 20px 0; }
-  .pa-success .check { font-size: 44px; }
-  .pa-success h2 { font-size: 17px; margin: 10px 0 8px; }
-  .pa-success p { font-size: 13px; color: var(--ty-gray); line-height: 1.6; }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>markabahçem'de Satış Yap</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-  <div class="pa-wrap">
-    <div class="pa-logo"><div class="name">markabahçem<span style="color:var(--ty-dark);">.com</span></div></div>
-
-    <div class="pa-card" id="formCard">
-      <h1>İşletmenizle markabahçem'e Katılın</h1>
-      <div class="sub">Formu doldurun, ekibimiz başvurunuzu inceleyip size dönüş yapsın. Onaylandıktan sonra ürünlerinizi ekleyip satışa başlayabilirsiniz.</div>
-
-      <div class="pa-field"><label>İşletme / Marka Adı</label><input id="fName" type="text" placeholder="Örn: LC Waikiki" /></div>
-      <div class="pa-field"><label>Yetkili Adı Soyadı</label><input id="fContactName" type="text" placeholder="Ahmet Yılmaz" /></div>
-      <div class="pa-field"><label>E-posta</label><input id="fEmail" type="email" placeholder="magaza@sirket.com" /></div>
-      <div class="pa-field"><label>Beklenen Komisyon Oranı (%)</label><input id="fCommission" type="number" value="15" min="5" max="30" /></div>
-
-      <button class="pa-btn" onclick="submitApplication()">Başvuruyu Gönder</button>
-    </div>
-
-    <div class="pa-card" id="successCard" style="display:none;">
-      <div class="pa-success">
-        <div class="check">✅</div>
-        <h2>Başvurunuz Alındı</h2>
-        <p>markabahçem ekibi başvurunuzu inceleyecek. Onaylandığında işletme paneline giriş yapabileceksiniz.
-        <br /><br />
-        <strong>Demo notu:</strong> Bu bir prototip olduğu için başvurunuz otomatik olarak "beklemede" listesine düştü — admin panelinden onaylayabilirsin.</p>
+  <header class="ty-header">
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
       </div>
     </div>
-
-    <a href="partner-login.html" class="pa-back">&larr; İşletme girişine dön</a>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="ty-auth-box" style="max-width:520px">
+      <h2>markabahçem'de Satış Yap</h2>
+      <p class="sub">Sadece gerçek ve bilinen markalar başvurabilir. Başvurunuz platform ekibi tarafından incelenir.</p>
+      <form id="applyForm">
+        <div class="ty-field"><label>Marka / Mağaza Adı</label><input type="text" id="brandName" required></div>
+        <div class="ty-field"><label>Yetkili Ad Soyad</label><input type="text" id="contactName" required></div>
+        <div class="ty-field"><label>E-posta</label><input type="email" id="email" required></div>
+        <div class="ty-field"><label>Telefon</label><input type="tel" id="phone" required></div>
+        <div class="ty-field">
+          <label>Ana Kategori</label>
+          <select id="category" required>
+            <option value="kadin">Kadın</option>
+            <option value="erkek">Erkek</option>
+            <option value="ayakkabi-canta">Ayakkabı & Çanta</option>
+            <option value="elektronik">Elektronik</option>
+            <option value="ev-yasam">Ev & Yaşam</option>
+            <option value="kozmetik">Kozmetik & Parfüm</option>
+            <option value="saat-aksesuar">Saat & Aksesuar</option>
+            <option value="supermarket">Süpermarket & Kafe</option>
+          </select>
+        </div>
+        <div class="ty-field"><label>Kısa Mesaj</label><textarea id="message" rows="4" placeholder="Markanız hakkında kısaca bilgi verin"></textarea></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Başvuruyu Gönder</button>
+        <p class="ty-hint" style="text-align:center;margin-top:10px">Onaylanan başvurular mağaza paneli erişimi kazanır (demo şifre: 123456).</p>
+      </form>
+      <div id="applySuccess" style="display:none;text-align:center;padding:20px 0">
+        <div style="font-size:40px;margin-bottom:10px">✅</div>
+        <p><strong>Başvurunuz alındı!</strong><br>markabahçem ekibi başvurunuzu inceleyip size dönüş yapacak.</p>
+      </div>
+    </div>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
 
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
   <script>
-    async function submitApplication() {
-      const name = document.getElementById('fName').value.trim();
-      const contactName = document.getElementById('fContactName').value.trim();
-      const contactEmail = document.getElementById('fEmail').value.trim();
-      const commissionRate = document.getElementById('fCommission').value;
-
-      if (!name || !contactEmail) {
-        alert('Lütfen işletme adı ve e-posta girin.');
-        return;
-      }
-
-      const res = await fetch('/api/partner/apply', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, contactName, contactEmail, commissionRate }),
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        document.getElementById('formCard').style.display = 'none';
-        document.getElementById('successCard').style.display = 'block';
-      } else {
-        alert('Hata: ' + (data.error || 'Bilinmeyen hata'));
-      }
-    }
+    document.getElementById("applyForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const body = {
+        brandName: document.getElementById("brandName").value,
+        contactName: document.getElementById("contactName").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        category: document.getElementById("category").value,
+        message: document.getElementById("message").value
+      };
+      await fetch("/api/applications", { method:"POST", body: JSON.stringify(body) });
+      document.getElementById("applyForm").style.display = "none";
+      document.getElementById("applySuccess").style.display = "block";
+    });
   </script>
 </body>
 </html>

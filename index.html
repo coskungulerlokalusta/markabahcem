@@ -1,161 +1,119 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>markabahçem — Karmaşa Yok, Sadece Bildiğin Markalar</title>
-<link rel="stylesheet" href="trendyol-style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>markabahçem — karmaşa yok, sadece bildiğin markalar</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-
-  <div class="ty-tagline-strip">🌿 markabahçem — karmaşa yok, sadece bildiğin markalar.</div>
-
-  <div class="utility-bar">
-    <span><a href="partner-login.html" style="color:inherit;">İşletme Paneli</a></span>
-    <span><a href="admin.html" style="color:inherit;">Platform Özeti</a></span>
-    <span><a href="yardim.html" style="color:inherit;">Yardım & Destek</a></span>
-  </div>
-
   <header class="ty-header">
-    <div class="ty-logo">
-      <span class="leaf">🌿</span>
-      <div>markabahçem<span class="sub">.com</span></div>
-    </div>
-    <div class="ty-search">
-      <input type="text" id="searchInput" placeholder="Beymen tişört, Koton pantolon, telefon ara..." />
-      <button id="searchBtn">🔍</button>
-    </div>
-    <div class="ty-header-actions">
-      <a href="login.html" class="action-item" id="authAction"><span class="icon">👤</span>Giriş Yap</a>
-      <a href="favorites.html" class="action-item">
-        <span class="icon">♡<span class="ty-cart-count" id="favCount">0</span></span>Favorilerim
-      </a>
-      <div class="action-item" id="cartOpenBtn" style="cursor:pointer;">
-        <span class="icon">🛒<span class="ty-cart-count" id="cartCount">0</span></span>Sepetim
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
       </div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
   </header>
+  <section class="ty-hero">
+    <div class="ty-hero-track" id="heroTrack"></div>
+  </section>
 
-  <nav class="ty-categories">
-    <div class="ty-cat-trigger" id="megaTrigger">
-      <span class="hamburger">☰</span> Kategoriler
-    </div>
-    <a href="category.html?cat=kadin">Kadın</a>
-    <a href="category.html?cat=erkek">Erkek</a>
-    <a href="category.html?cat=anne-cocuk">Anne & Çocuk</a>
-    <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
-    <a href="category.html?cat=supermarket">Süpermarket</a>
-    <a href="category.html?cat=kozmetik">Kozmetik</a>
-    <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
-    <a href="category.html?cat=elektronik">Elektronik</a>
-    <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
-    <a href="category.html?cat=spor-outdoor">Spor & Outdoor</a>
-    <a href="index.html#dealsGrid" class="active" style="color:var(--ty-red);">Flaş Ürünler</a>
-
-    <div class="ty-mega-menu" id="megaMenu">
-      <div class="ty-mega-left" id="megaLeft"></div>
-      <div class="ty-mega-right" id="megaRight"></div>
-    </div>
-  </nav>
-
-  <div class="ty-hero-carousel" id="heroCarousel"></div>
-  <div class="ty-hero-dots" id="heroDots"></div>
-
-  <div class="ty-quick-icons" id="quickIcons"></div>
+  <section class="ty-brandstrip">
+    <h3>Markalar</h3>
+    <div class="ty-brandstrip-row" id="brandStrip"></div>
+  </section>
 
   <section class="ty-section">
-    <div class="ty-section-header">
-      <h2>Popüler Ürünler</h2>
-      <a href="#">Tümünü Gör &rsaquo;</a>
-    </div>
-    <div id="productGrid" class="ty-carousel"></div>
+    <div class="ty-section-head"><h3>Kategorilerde İndirim</h3></div>
+    <div class="ty-discount-row" id="discountRow"></div>
   </section>
-
-  <div class="ty-discount-tier-row" id="discountTierRow"></div>
-
-  <section class="ty-section" style="padding-top:10px;">
-    <div class="ty-section-header">
-      <h2>Kategorilerdeki İndirimleri Keşfet</h2>
-    </div>
-  </section>
-  <div class="ty-category-discount-row" id="categoryDiscountRow"></div>
-
-  <div class="ty-strip3" id="stripPromos"></div>
 
   <section class="ty-section">
-    <div class="ty-flash-header">
-      <h2>⚡ Flaş Ürünler</h2>
-      <div class="ty-flash-timer" id="flashTimer">05:00:00</div>
+    <div class="ty-flash">
+      <div><strong>⚡ Flaş Ürünler</strong> — Fırsatlar sona ermeden yakala</div>
+      <div class="ty-flash-timer" id="flashTimer">
+        <div class="box" id="flashH">08</div><div class="box" id="flashM">24</div><div class="box" id="flashS">10</div>
+      </div>
     </div>
-    <div id="dealsGrid" class="ty-carousel"></div>
+    <div class="ty-grid" id="flashGrid"></div>
   </section>
 
-  <div class="ty-midpromo" id="midPromo"></div>
-
-  <section class="ty-section" style="padding-bottom:0;">
-    <div class="ty-section-header">
-      <h2>Sana Özel Kategoriler</h2>
+  <section class="ty-section" style="margin-bottom:40px">
+    <div class="ty-section-head">
+      <h3 id="gridTitle">Tüm Ürünler</h3>
     </div>
+    <div class="ty-grid" id="productGrid"></div>
   </section>
-  <div class="ty-chip-row" id="chipRow"></div>
 
   <footer class="ty-footer">
-    <div>
-      <h4>markabahçem Hakkında</h4>
-      <a href="hakkimizda.html">Hakkımızda</a>
-      <a href="kariyer.html">Kariyer</a>
-      <a href="partner-apply.html">markabahçem'de Satış Yap</a>
-    </div>
-    <div>
-      <h4>İletişim</h4>
-      <a href="yardim.html">Yardım & Destek</a>
-      <a href="iade-iptal.html">İade & İptal</a>
-      <a href="kargo-takip.html">Kargo Takip</a>
-    </div>
-    <div>
-      <h4>Mağazalar</h4>
-      <div id="footerStoreLinks">
-        <a href="index.html?store=beymen">Beymen</a>
-        <a href="index.html?store=koton">Koton</a>
-        <a href="index.html?store=adilisik">Adil Işık</a>
-        <a href="index.html?store=altinyildiz">Altınyıldız Classics</a>
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
       </div>
     </div>
-    <div>
-      <h4>Platform</h4>
-      <a href="partner-login.html">İşletme Paneli</a>
-      <a href="admin.html">Platform Özeti</a>
-    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
   </footer>
-  <div class="ty-footer-bottom">markabahçem.com — prototip sürüm</div>
 
-  <div class="ty-overlay" id="overlay"></div>
-  <div class="ty-cart-drawer" id="cartDrawer">
-    <div class="ty-cart-drawer-header">
-      <span>Sepetim</span>
-      <button id="cartCloseBtn">✕</button>
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
     </div>
-    <div class="ty-cart-drawer-items" id="cartItems"></div>
-    <div class="ty-cart-drawer-footer">
-      <div class="ty-cart-total-row"><span>Toplam</span><span id="cartTotal">0 ₺</span></div>
-      <button id="checkoutBtn" class="ty-checkout-btn" disabled>Ödemeyi Tamamla</button>
-    </div>
-  </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
 
-  <div id="resultModal" class="modal hidden">
-    <div class="modal-content" id="resultContent"></div>
-  </div>
-
-  <link rel="stylesheet" href="style.css" />
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-  <script src="mockMeta.js"></script>
-  <script src="cartStore.js"></script>
-  <script src="favoritesStore.js"></script>
-  <script src="auth.js"></script>
-  <script src="headerSearch.js"></script>
-  <script src="megaMenu.js"></script>
-  <script src="storefront-content.js"></script>
-  <script src="app.js"></script>
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
+  <script src="js/storefront-content.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

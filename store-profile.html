@@ -1,96 +1,94 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mağaza Profili — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<link rel="stylesheet" href="style.css" />
-<style>
-  .sp-cover {
-    height: 220px;
-    background: #eee;
-    background-size: cover;
-    background-position: center;
-    position: relative;
-  }
-  .sp-header-wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
-  .sp-header-inner { position: relative; }
-  .sp-logo-box {
-    position: absolute;
-    top: -55px;
-    left: 0;
-    width: 110px;
-    height: 110px;
-    border-radius: 12px;
-    background: white;
-    border: 4px solid white;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    overflow: hidden;
-  }
-  .sp-logo-box img { width: 100%; height: 100%; object-fit: contain; }
-  .sp-info-row { padding: 65px 0 20px 130px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
-  .sp-name { font-size: 24px; font-weight: 800; margin: 0; }
-  .sp-stats { display: flex; gap: 18px; margin-top: 8px; font-size: 12.5px; color: var(--ty-gray); }
-  .sp-stats strong { color: var(--ty-dark); }
-  .sp-desc-box { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 18px 22px; margin: 20px 0 30px; font-size: 13.5px; line-height: 1.7; color: var(--ty-dark); max-width: 1200px; margin-left:auto; margin-right:auto; }
-  .sp-products-wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px 60px; }
-  .sp-products-wrap h2 { font-size: 17px; margin-bottom: 14px; }
-
-  @media (max-width: 600px) {
-    .sp-cover { height: 130px; }
-    .sp-header-wrap { padding: 0 16px; }
-    .sp-logo-box { width: 76px; height: 76px; top: -38px; font-size: 28px; }
-    .sp-info-row { padding: 46px 0 16px 0; flex-direction: column; align-items: flex-start; gap: 8px; }
-    .sp-name { font-size: 19px; }
-    .sp-stats { flex-wrap: wrap; gap: 10px; font-size: 11.5px; }
-    .sp-desc-box { margin: 14px 0 20px; padding: 14px 16px; }
-    .sp-products-wrap { padding: 0 16px 40px; }
-  }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mağaza — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-
   <header class="ty-header">
-    <a href="index.html" class="ty-logo" style="text-decoration:none;">
-      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
-    </a>
-    <div class="ty-search"><input type="text" placeholder="Ürün, kategori veya marka ara" /><button>🔍</button></div>
-    <div class="ty-header-actions">
-      <a href="index.html" class="action-item" style="cursor:pointer;">
-        <span class="icon">🛒<span class="ty-cart-count" id="cartCount">0</span></span>Sepetim
-      </a>
-    </div>
-  </header>
-
-  <div class="sp-cover" id="spCover"></div>
-  <div class="sp-header-wrap">
-    <div class="sp-header-inner">
-      <div class="sp-logo-box" id="spLogo">🏪</div>
-      <div class="sp-info-row">
-        <div>
-          <h1 class="sp-name" id="spName">Yükleniyor...</h1>
-          <div class="sp-stats" id="spStats"></div>
-        </div>
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
       </div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="ty-store-banner" id="storeBanner"></div>
+    <div class="ty-store-head" id="storeHead"></div>
+    <p id="storeDesc" style="max-width:640px; color:var(--ty-gray); font-size:14px; margin:16px 0 30px"></p>
+    <div class="ty-section-head"><h3>Ürünler</h3></div>
+    <div class="ty-grid" id="productGrid" style="margin-bottom:50px"></div>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
 
-  <div class="sp-desc-box" id="spDesc"></div>
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
 
-  <div class="sp-products-wrap">
-    <h2>Mağazadaki Ürünler</h2>
-    <div id="productGrid" class="ty-product-grid"></div>
-  </div>
-
-  <script src="mockMeta.js"></script>
-  <script src="cartStore.js"></script>
-  <script src="store-profile.js"></script>
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
+  <script src="js/store-profile.js"></script>
 </body>
 </html>

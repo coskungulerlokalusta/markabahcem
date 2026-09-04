@@ -1,49 +1,25 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mağaza Paneli — markabahcem.com</title>
-<link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mağaza Paneli (Eski Sürüm) — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="logo">markabahçem<span>.com</span></div>
-    <nav>
-      <a href="index.html">Vitrin</a>
-      <a href="store.html" class="active">Mağaza Paneli</a>
-      <a href="admin.html">Platform Özeti</a>
-    </nav>
-    <div></div>
-  </header>
-
-  <div class="panel-container">
-    <h1>Mağaza Paneli</h1>
-    <p class="subtitle">Bir mağaza olarak sadece kendi siparişlerinizi görürsünüz — diğer mağazaların bilgisine erişemezsiniz.</p>
-
-    <select id="storeSelect" class="store-select"></select>
-
-    <div class="table-scroll">
-      <table>
-        <thead>
-          <tr>
-            <th>Alt Sipariş No</th>
-            <th>Ürünler</th>
-            <th>Ciro</th>
-            <th>Komisyon</th>
-            <th>Net Ödenecek</th>
-            <th>Durum</th>
-            <th>Dış Sipariş ID</th>
-          </tr>
-        </thead>
-        <tbody id="ordersBody"></tbody>
-      </table>
+  <div class="container" style="padding:40px 20px">
+    <div class="panel-block" style="max-width:560px;margin:0 auto;text-align:center">
+      <h3>⚠️ Bu panel artık kullanılmıyor</h3>
+      <p style="font-size:13.5px;color:var(--ty-gray);line-height:1.7;margin:12px 0 20px">
+        store.html, markabahçem'in eski/legacy mağaza panelidir. Yerini <strong>partner-dashboard.html</strong> almıştır.
+        Bu dosya sadece geçmiş referansı için repoda tutulmaktadır — yeni geliştirmeler partner-dashboard.html üzerinde yapılmalıdır.
+      </p>
+      <a href="partner-login.html" class="btn btn-primary">Güncel Mağaza Paneline Git</a>
     </div>
-    <p id="emptyMsg" class="hint" style="display:none;">Bu mağaza için henüz sipariş yok. Vitrinden alışveriş yapıp buraya geri dönün.</p>
   </div>
-
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-  <script src="store.js"></script>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/store.js"></script>
 </body>
 </html>

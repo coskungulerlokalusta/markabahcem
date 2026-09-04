@@ -1,62 +1,99 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>İade & İptal — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  .info-wrap { max-width: 800px; margin: 0 auto; padding: 40px 32px 60px; }
-  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
-  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 30px; }
-  .info-wrap h2 { font-size: 16px; margin: 24px 0 8px; }
-  .info-wrap p, .info-wrap li { font-size: 14px; line-height: 1.8; color: var(--ty-dark); }
-  .info-wrap ul { padding-left: 20px; margin-bottom: 14px; }
-  .step-list { counter-reset: step; list-style: none; padding: 0; margin: 16px 0; }
-  .step-list li { counter-increment: step; padding: 12px 0 12px 40px; position: relative; border-bottom: 1px solid var(--ty-border); }
-  .step-list li::before { content: counter(step); position: absolute; left: 0; top: 10px; width: 26px; height: 26px; background: var(--ty-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
-
-  @media (max-width: 600px) {
-    .info-wrap { padding: 24px 16px 40px; }
-    .info-wrap h1 { font-size: 21px; }
-  }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İade & İptal — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-
   <header class="ty-header">
-    <a href="index.html" class="ty-logo" style="text-decoration:none;">
-      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
-    </a>
-    <div style="flex:1;"></div>
-    <div class="ty-header-actions">
-      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
+      </div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
   </header>
-
-  <div class="info-wrap">
+  <div class="ty-static-page">
     <h1>İade & İptal</h1>
-    <p class="lead">Sipariş verdiğin her mağaza kendi iade sürecini yönetir; genel akış aşağıdaki gibidir.</p>
-
-    <h2>İade Süreci Nasıl İşler</h2>
-    <ol class="step-list">
-      <li>Sipariş detayından iade etmek istediğiniz ürünü ve mağazayı seçin.</li>
-      <li>İade nedeninizi belirtin (beden uymadı, hasarlı geldi, fikrim değişti vb.)</li>
-      <li>Kargo firması ürünü adresinizden alır ve ilgili mağazaya ulaştırır.</li>
-      <li>Mağaza ürünü kontrol ettikten sonra ücret iadeniz, ödeme yönteminize 3-7 iş günü içinde yansır.</li>
-    </ol>
-
-    <h2>İptal Koşulları</h2>
-    <p>Siparişiniz henüz kargoya verilmediyse, sipariş detay sayfasından tek tıkla iptal edebilirsiniz. Kargoya verildikten sonra iptal yerine iade süreci işletilir.</p>
-
-    <h2>Önemli Notlar</h2>
+    <p>markabahçem'de satılan her ürün, ilgili markanın kendi iade politikasına tabidir; çünkü stok ve kargo markanın kendi sorumluluğundadır.</p>
+    <h2>Genel Kurallar</h2>
     <ul>
-      <li>Bir siparişte birden fazla mağazadan ürün varsa, her mağaza için iade süreci ayrı ayrı yürütülür.</li>
-      <li>İç giyim, kozmetik gibi bazı ürün kategorilerinde hijyen nedeniyle iade kabul edilmeyebilir — bu bilgi ürün sayfasında belirtilir.</li>
-      <li>İade kargo ücreti, iade nedenine göre değişebilir.</li>
+      <li>Ürünler, teslim tarihinden itibaren 14 gün içinde iade edilebilir.</li>
+      <li>İade edilecek ürünün kullanılmamış ve orijinal ambalajında olması gerekir.</li>
+      <li>İade talebiniz, ilgili mağazanın onayına tabidir.</li>
     </ul>
+    <h2>İptal</h2>
+    <p>Sipariş, marka tarafından henüz kargoya verilmediyse iptal edilebilir. Kargoya verildikten sonra iade süreci işletilir.</p>
+    <p style="color:var(--ty-gray);font-size:13px">Not: Bu bir demo sitedir; gerçek bir iade/iptal işlemi gerçekleştirilmez.</p>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
+
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
 </body>
 </html>

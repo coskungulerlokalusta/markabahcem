@@ -1,93 +1,111 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Giriş Yap / Kayıt Ol — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  body { background: var(--ty-bg); }
-  .auth-wrap { max-width: 420px; margin: 60px auto; padding: 0 20px; }
-  @media (max-width: 480px) {
-    .auth-wrap { margin: 32px auto; }
-    .auth-panel { padding: 20px; }
-  }
-  .auth-logo { text-align: center; margin-bottom: 24px; }
-  .auth-logo .leaf { font-size: 32px; }
-  .auth-logo .name { font-weight: 800; font-size: 22px; color: var(--ty-orange); }
-
-  .auth-tabs { display: flex; background: white; border-radius: 8px 8px 0 0; overflow: hidden; border: 1px solid var(--ty-border); border-bottom: none; }
-  .auth-tab { flex: 1; text-align: center; padding: 14px; font-weight: 700; font-size: 13px; color: var(--ty-gray); cursor: pointer; }
-  .auth-tab.active { color: var(--ty-orange); border-bottom: 3px solid var(--ty-orange); }
-
-  .auth-panel { background: white; border: 1px solid var(--ty-border); border-radius: 0 0 10px 10px; padding: 28px; }
-  .auth-panel.hidden { display: none; }
-  .auth-field { margin-bottom: 14px; }
-  .auth-field label { display: block; font-size: 12px; font-weight: 700; color: var(--ty-gray); margin-bottom: 6px; }
-  .auth-field input {
-    width: 100%; padding: 12px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; box-sizing: border-box;
-  }
-  .auth-field input:focus { outline: none; border-color: var(--ty-orange); }
-
-  .auth-submit {
-    width: 100%; background: var(--ty-orange); color: white; border: none; padding: 14px;
-    border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; margin-top: 6px;
-  }
-  .auth-submit:hover { background: var(--ty-orange-dark); }
-  .auth-note { font-size: 11px; color: var(--ty-gray); margin-top: 14px; text-align: center; line-height: 1.5; }
-  .auth-back { display: block; text-align: center; margin-top: 16px; font-size: 12px; color: var(--ty-gray); }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giriş Yap — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-
-  <div class="auth-wrap">
-    <a href="index.html" style="text-decoration:none;">
-      <div class="auth-logo">
-        <div class="leaf">🌿</div>
-        <div class="name">markabahçem.com</div>
+  <header class="ty-header">
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
       </div>
-    </a>
-
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Giriş Yap</div>
-      <div class="auth-tab" id="tabRegister" onclick="switchTab('register')">Kayıt Ol</div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="ty-auth-box">
+      <h2>Hesabım</h2>
+      <p class="sub">markabahçem'e hoş geldiniz</p>
+      <div class="tab-row" style="justify-content:center" id="authTabs">
+        <button class="active" data-tab="login">Giriş Yap</button>
+        <button data-tab="register">Kayıt Ol</button>
+      </div>
 
-    <div class="auth-panel" id="panelLogin">
-      <div class="auth-field">
-        <label>E-posta</label>
-        <input type="email" id="loginEmail" placeholder="ornek@eposta.com" value="ahmet@example.com" />
-      </div>
-      <div class="auth-field">
-        <label>Şifre</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" value="demo1234" />
-      </div>
-      <button class="auth-submit" onclick="doLogin()">Giriş Yap</button>
-      <div class="auth-note">🔒 Bu bir prototiptir; şifreniz gerçekten doğrulanmaz, herhangi bir e-posta ile giriş yapabilirsiniz.</div>
+      <form id="loginForm">
+        <div class="ty-field"><label>E-posta</label><input type="email" id="loginEmail" required value="demo@markabahcem.com"></div>
+        <div class="ty-field"><label>Şifre</label><input type="password" id="loginPassword" required value="123456"></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Giriş Yap</button>
+        <p class="ty-hint" style="text-align:center;margin-top:12px">Demo hesap otomatik dolduruldu — doğrudan giriş yapabilirsiniz.</p>
+      </form>
+
+      <form id="registerForm" style="display:none">
+        <div class="ty-field"><label>Ad Soyad</label><input type="text" id="regName" required></div>
+        <div class="ty-field"><label>E-posta</label><input type="email" id="regEmail" required></div>
+        <div class="ty-field"><label>Şifre</label><input type="password" id="regPassword" required minlength="4"></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Hesap Oluştur</button>
+      </form>
     </div>
-
-    <div class="auth-panel hidden" id="panelRegister">
-      <div class="auth-field">
-        <label>Ad Soyad</label>
-        <input type="text" id="regName" placeholder="Ahmet Yılmaz" />
-      </div>
-      <div class="auth-field">
-        <label>E-posta</label>
-        <input type="email" id="regEmail" placeholder="ornek@eposta.com" />
-      </div>
-      <div class="auth-field">
-        <label>Şifre</label>
-        <input type="password" id="regPassword" placeholder="••••••••" />
-      </div>
-      <button class="auth-submit" onclick="doRegister()">Hesap Oluştur</button>
-      <div class="auth-note">🔒 Bu bir prototiptir; kayıt bilgileri yalnızca tarayıcınızda saklanır.</div>
-    </div>
-
-    <a href="index.html" class="auth-back">&larr; Alışverişe devam et</a>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
 
-  <script src="static-api.js"></script>
-  <script src="auth.js"></script>
-  <script src="loginPage.js"></script>
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
+  <script src="js/loginPage.js"></script>
 </body>
 </html>

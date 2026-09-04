@@ -1,35 +1,30 @@
-// markabahçem — statik siteyi Hostinger "Web Apps" (Node.js) hosting üzerinde
-// sunmak için minimal Express sunucusu. Site tamamen statik HTML/CSS/JS'ten
-// oluşuyor (gerçek bir backend yok, veriler tarayıcıda localStorage'da tutulur);
-// bu dosya sadece o statik dosyaları doğru şekilde HTTP üzerinden servis eder.
-
+/**
+ * server.js — markabahçem
+ *
+ * Bu, siteye hiçbir işlevsel katkısı olmayan minimal bir Express sunucusudur.
+ * Site tamamen istemci taraflı (statik HTML/CSS/JS) çalışır; gerçek backend
+ * mantığı js/static-api.js içindeki fetch-override ile tarayıcıda simüle edilir.
+ *
+ * Bu dosya SADECE, "Web Uygulaması / Node.js" bekleyen hosting ortamlarına
+ * (ör. Hostinger) uyum sağlamak için var — düz statik dosyaları servis eder.
+ *
+ * ⚠️ ÖNEMLİ: app.listen(PORT) YETERLİ DEĞİLDİR. Bazı hosting ortamlarının
+ * proxy'si uygulamaya sadece 0.0.0.0 üzerinden dinleniyorsa ulaşabilir;
+ * aksi halde "dinliyorum" derken bile 503 Service Unavailable ile
+ * sonuçlanan bir crash-loop oluşabilir. Bu yüzden aşağıda host olarak
+ * "0.0.0.0" açıkça belirtilmiştir.
+ */
 const express = require("express");
 const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Türkçe karakterlerin bozulmaması için doğru charset başlıkları
-app.use(
-  express.static(path.join(__dirname), {
-    extensions: ["html"],
-    setHeaders: (res, filePath) => {
-      if (filePath.endsWith(".html")) {
-        res.setHeader("Content-Type", "text/html; charset=UTF-8");
-      } else if (filePath.endsWith(".css")) {
-        res.setHeader("Content-Type", "text/css; charset=UTF-8");
-      } else if (filePath.endsWith(".js")) {
-        res.setHeader("Content-Type", "text/javascript; charset=UTF-8");
-      }
-    },
-  })
-);
+app.use(express.static(path.join(__dirname), { extensions: ["html"] }));
 
-// Bilinmeyen bir yol istenirse ana sayfaya yönlendir (404 yerine)
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, "index.html"));
-});
+// Basit health-check — hosting platformları için
+app.get("/healthz", (req, res) => res.status(200).send("ok"));
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`markabahçem ${PORT} portunda çalışıyor (0.0.0.0)`);
+  console.log(`markabahçem statik sunucusu çalışıyor: http://0.0.0.0:${PORT}`);
 });

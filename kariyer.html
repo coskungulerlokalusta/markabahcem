@@ -1,61 +1,97 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kariyer — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  .info-wrap { max-width: 800px; margin: 0 auto; padding: 40px 32px 60px; }
-  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
-  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 30px; }
-  .info-wrap p { font-size: 14px; line-height: 1.8; color: var(--ty-dark); margin-bottom: 14px; }
-  .job-card { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 18px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-  .job-card .title { font-weight: 700; font-size: 14px; }
-  .job-card .meta { font-size: 12px; color: var(--ty-gray); margin-top: 4px; }
-  .job-card .apply { background: var(--ty-orange); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; }
-
-  @media (max-width: 600px) {
-    .info-wrap { padding: 24px 16px 40px; }
-    .info-wrap h1 { font-size: 21px; }
-    .job-card { flex-wrap: wrap; gap: 10px; }
-    .job-card .apply { width: 100%; text-align: center; }
-  }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kariyer — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-
   <header class="ty-header">
-    <a href="index.html" class="ty-logo" style="text-decoration:none;">
-      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
-    </a>
-    <div style="flex:1;"></div>
-    <div class="ty-header-actions">
-      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
+      </div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
   </header>
-
-  <div class="info-wrap">
+  <div class="ty-static-page">
     <h1>Kariyer</h1>
-    <p class="lead">Büyüyen ekibimize katılmak ister misin?</p>
-    <p>markabahçem.com olarak teknoloji, operasyon ve iş geliştirme alanlarında büyüyen bir ekip kuruyoruz. Açık pozisyonlarımız aşağıda listelenmiştir.</p>
-
-    <div class="job-card">
-      <div><div class="title">Backend Geliştirici</div><div class="meta">İstanbul (Hibrit) · Tam Zamanlı</div></div>
-      <a class="apply" href="mailto:kariyer@markabahcem.com">Başvur</a>
-    </div>
-    <div class="job-card">
-      <div><div class="title">İş Geliştirme Uzmanı (Mağaza Ortaklıkları)</div><div class="meta">İstanbul · Tam Zamanlı</div></div>
-      <a class="apply" href="mailto:kariyer@markabahcem.com">Başvur</a>
-    </div>
-    <div class="job-card">
-      <div><div class="title">Ürün Tasarımcısı (UI/UX)</div><div class="meta">Uzaktan · Tam Zamanlı</div></div>
-      <a class="apply" href="mailto:kariyer@markabahcem.com">Başvur</a>
-    </div>
-
-    <p style="margin-top:24px;">Listelenen pozisyonlar dışında da özgeçmişini <a href="mailto:kariyer@markabahcem.com" style="color:var(--ty-orange);font-weight:700;">kariyer@markabahcem.com</a> adresine gönderebilirsin.</p>
+    <p>markabahçem büyüyen bir ekip kuruyor. Teknoloji, iş geliştirme ve marka ilişkileri alanlarında fırsatları takip etmek için bizimle iletişime geçebilirsiniz.</p>
+    <h2>Açık Pozisyonlar</h2>
+    <ul>
+      <li>Kıdemli Full-Stack Geliştirici</li>
+      <li>İş Geliştirme Uzmanı (Marka Ortaklıkları)</li>
+      <li>Ürün Tasarımcısı</li>
+    </ul>
+    <p>İlgileniyorsanız kariyer@markabahcem.com adresine özgeçmişinizi gönderebilirsiniz (demo iletişim adresi).</p>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
+
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
 </body>
 </html>

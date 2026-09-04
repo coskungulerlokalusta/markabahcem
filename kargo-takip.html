@@ -1,78 +1,100 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kargo Takip — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  .info-wrap { max-width: 600px; margin: 0 auto; padding: 40px 32px 60px; }
-  .info-wrap h1 { font-size: 26px; margin-bottom: 6px; }
-  .info-wrap .lead { color: var(--ty-gray); font-size: 14px; margin-bottom: 24px; }
-  .track-box { background: white; border: 1px solid var(--ty-border); border-radius: 12px; padding: 24px; }
-  .track-box input { width: 100%; padding: 12px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; margin-bottom: 12px; box-sizing: border-box; }
-  .track-box button { width: 100%; background: var(--ty-orange); color: white; border: none; padding: 13px; border-radius: 6px; font-weight: 800; font-size: 14px; cursor: pointer; }
-  .track-result { margin-top: 20px; padding: 16px; background: var(--ty-orange-light); border-radius: 8px; font-size: 13px; color: var(--ty-orange-dark); display: none; }
-  .track-note { font-size: 12px; color: var(--ty-gray); margin-top: 16px; line-height: 1.6; }
-
-  @media (max-width: 600px) {
-    .info-wrap { padding: 24px 16px 40px; }
-    .info-wrap h1 { font-size: 21px; }
-    .track-box { padding: 16px; }
-  }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kargo Takip — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-
   <header class="ty-header">
-    <a href="index.html" class="ty-logo" style="text-decoration:none;">
-      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
-    </a>
-    <div style="flex:1;"></div>
-    <div class="ty-header-actions">
-      <a href="index.html" class="action-item" style="cursor:pointer;">Ana Sayfaya Dön</a>
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
+      </div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
   </header>
-
-  <div class="info-wrap">
+  <div class="ty-static-page">
     <h1>Kargo Takip</h1>
-    <p class="lead">Sipariş numaranı gir, kargo durumunu görelim.</p>
-
-    <div class="track-box">
-      <input type="text" id="orderInput" placeholder="Sipariş No (örn: MB-2026-1001)" />
-      <button onclick="trackOrder()">Sorgula</button>
-      <div class="track-result" id="trackResult"></div>
+    <p>Siparişleriniz, her markanın kendi anlaşmalı kargo firması tarafından gönderilir. Sipariş numaranızla mağazanın size ilettiği takip numarasını kullanarak kargonuzu takip edebilirsiniz.</p>
+    <div class="ty-field" style="max-width:420px;margin-top:20px">
+      <label>Sipariş Numarası</label>
+      <input type="text" id="trackingInput" placeholder="örn. ord-abc123">
     </div>
-
-    <p class="track-note">Not: Siparişinizde birden fazla mağaza varsa, her mağaza için ayrı kargo takip numarası oluşur — burada tüm alt siparişlerinizin durumunu birlikte görürsünüz.</p>
+    <button class="btn btn-primary" id="trackBtn" style="margin-top:8px">Kargomu Sorgula</button>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
 
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
   <script>
-    async function trackOrder() {
-      const orderNumber = document.getElementById('orderInput').value.trim();
-      const resultBox = document.getElementById('trackResult');
-      if (!orderNumber) return;
-
-      try {
-        const res = await fetch(`/api/orders/${orderNumber}`);
-        if (!res.ok) {
-          resultBox.style.display = 'block';
-          resultBox.innerHTML = 'Bu sipariş numarasıyla bir kayıt bulunamadı.';
-          return;
-        }
-        const data = await res.json();
-        resultBox.style.display = 'block';
-        resultBox.innerHTML = `
-          <strong>Sipariş: ${data.order.orderNumber}</strong><br/><br/>
-          ${data.subOrders.map(so => `${so.storeName}: <strong>${so.status}</strong>`).join('<br/>')}
-        `;
-      } catch (e) {
-        resultBox.style.display = 'block';
-        resultBox.innerHTML = 'Sorgulama sırasında bir hata oluştu.';
-      }
-    }
+    document.getElementById("trackBtn").addEventListener("click", () => {
+      showToast("Bu bir demo sitedir — gerçek kargo takibi yapılmaz.");
+    });
   </script>
 </body>
 </html>

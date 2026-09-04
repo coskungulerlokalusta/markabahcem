@@ -1,92 +1,114 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kategori — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  .cat-wrap { max-width: 1200px; margin: 0 auto; padding: 20px 32px 60px; }
-  .cat-breadcrumb { font-size: 12px; color: var(--ty-gray); margin-bottom: 8px; }
-  .cat-breadcrumb a { color: var(--ty-gray); }
-  .cat-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  .cat-header .icon { font-size: 26px; }
-  .cat-header h1 { font-size: 22px; margin: 0; }
-  .cat-count { font-size: 13px; color: var(--ty-gray); margin-bottom: 20px; }
-
-  .cat-layout { display: grid; grid-template-columns: 220px 1fr; gap: 24px; align-items: start; }
-  .cat-sidebar { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 16px; position: sticky; top: 20px; }
-  .cat-sidebar h3 { font-size: 12px; text-transform: uppercase; color: var(--ty-gray); margin: 0 0 10px; }
-  .cat-sidebar a { display: block; font-size: 13px; padding: 7px 0; color: var(--ty-dark); border-bottom: 1px solid #f5f5f5; }
-  .cat-sidebar a.active { color: var(--ty-orange); font-weight: 700; }
-
-  .cat-empty { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 40px; text-align: center; }
-  .cat-empty .emoji { font-size: 40px; margin-bottom: 10px; }
-  .cat-empty p { color: var(--ty-gray); font-size: 13px; margin-bottom: 18px; }
-  .cat-empty a { color: var(--ty-orange); font-weight: 700; font-size: 13px; }
-
-  @media (max-width: 800px) {
-    .cat-wrap { padding: 16px 16px 40px; }
-    .cat-layout { grid-template-columns: 1fr; gap: 16px; }
-    .cat-sidebar { position: static; }
-  }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kategori — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
 </head>
 <body>
-
-  <div class="utility-bar">
-    <span><a href="partner-login.html" style="color:inherit;">İşletme Paneli</a></span>
-    <span><a href="admin.html" style="color:inherit;">Platform Özeti</a></span>
-    <span><a href="yardim.html" style="color:inherit;">Yardım & Destek</a></span>
-  </div>
-
   <header class="ty-header">
-    <a href="index.html" class="ty-logo" style="text-decoration:none;">
-      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
-    </a>
-    <div class="ty-search"><input type="text" id="searchInput" placeholder="Ürün, kategori veya marka ara" /><button id="searchBtn">🔍</button></div>
-    <div class="ty-header-actions">
-      <a href="index.html" class="action-item" style="cursor:pointer;">
-        <span class="icon">🛒<span class="ty-cart-count" id="cartCount">0</span></span>Sepetim
-      </a>
+    <div class="ty-header-top">
+      <a href="index.html" class="ty-logo"><span class="leaf">🌿</span><span>markabahçem<span class="brand">.com</span></span></a>
+      <form class="ty-searchbar" id="headerSearchForm">
+        <input type="text" id="headerSearchInput" placeholder="Marka, ürün veya kategori ara">
+        <button type="submit" aria-label="Ara">🔍</button>
+      </form>
+      <div class="ty-header-actions">
+        <a href="favorites.html"><span class="ico">♡</span>Favoriler</a>
+        <a href="login.html" id="accountLink"><span class="ico">👤</span>Hesabım</a>
+        <a href="#" id="cartOpenBtn" class="ty-cart-badge"><span class="ico">🛒</span>Sepetim<span class="count" id="cartCount">0</span></a>
+      </div>
     </div>
+    <nav class="ty-nav" style="position:relative">
+      <div class="ty-nav-inner">
+        <button class="megabtn" id="megaMenuBtn">☰ Kategoriler</button>
+        <a href="category.html?cat=kadin">Kadın</a>
+        <a href="category.html?cat=erkek">Erkek</a>
+        <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
+        <a href="category.html?cat=elektronik">Elektronik</a>
+        <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
+        <a href="category.html?cat=kozmetik">Kozmetik & Parfüm</a>
+        <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
+        <a href="category.html?cat=supermarket">Süpermarket & Kafe</a>
+        <a href="partner-apply.html" style="margin-left:auto; color:#f7a35c">markabahçem'de Satış Yap</a>
+      </div>
+      <div class="ty-megamenu" id="megaMenu"></div>
+    </nav>
   </header>
-
-  <nav class="ty-categories">
-    <a href="category.html?cat=kadin">Kadın</a>
-    <a href="category.html?cat=erkek">Erkek</a>
-    <a href="category.html?cat=anne-cocuk">Anne & Çocuk</a>
-    <a href="category.html?cat=ev-yasam">Ev & Yaşam</a>
-    <a href="category.html?cat=supermarket">Süpermarket</a>
-    <a href="category.html?cat=kozmetik">Kozmetik</a>
-    <a href="category.html?cat=ayakkabi-canta">Ayakkabı & Çanta</a>
-    <a href="category.html?cat=elektronik">Elektronik</a>
-    <a href="category.html?cat=saat-aksesuar">Saat & Aksesuar</a>
-    <a href="category.html?cat=spor-outdoor">Spor & Outdoor</a>
-  </nav>
-
-  <div class="cat-wrap">
-    <div class="cat-breadcrumb" id="breadcrumb">Ana Sayfa &rsaquo; ...</div>
-    <div class="cat-header"><span class="icon" id="catIcon"></span><h1 id="catTitle">Yükleniyor...</h1></div>
-    <div class="cat-count" id="catCount"></div>
-
-    <div class="cat-layout">
-      <aside class="cat-sidebar">
-        <h3>Alt Kategoriler</h3>
-        <div id="subcategoryList"></div>
+  <div class="container">
+    <div class="ty-breadcrumb"><a href="index.html">Ana Sayfa</a> / <span id="crumbCat">Kategori</span></div>
+    <div class="ty-catlayout">
+      <aside>
+        <div class="ty-filter-box">
+          <h4>Kategoriler</h4>
+          <div id="catFilterList"></div>
+        </div>
+        <div class="ty-filter-box">
+          <h4>Mağazalar</h4>
+          <div id="storeFilterList"></div>
+        </div>
       </aside>
       <div>
-        <div id="productGrid" class="ty-product-grid"></div>
-        <div id="emptyState" class="cat-empty" style="display:none;"></div>
+        <div class="ty-catlayout-top">
+          <h2 id="catTitle" style="font-size:20px">Kategori</h2>
+          <select id="sortSelect">
+            <option value="">Önerilen Sıralama</option>
+            <option value="price-asc">Fiyat: Düşükten Yükseğe</option>
+            <option value="price-desc">Fiyat: Yüksekten Düşüğe</option>
+            <option value="new">En Yeniler</option>
+          </select>
+        </div>
+        <div class="ty-grid" id="productGrid"></div>
       </div>
     </div>
   </div>
+  <footer class="ty-footer">
+    <div class="ty-footer-inner">
+      <div class="ty-footer-col">
+        <h4>markabahçem</h4>
+        <a href="hakkimizda.html">Hakkımızda</a>
+        <a href="kariyer.html">Kariyer</a>
+        <a href="partner-apply.html">markabahçem'de Satış Yap</a>
+        <a href="partner-login.html">Mağaza Girişi</a>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Müşteri Hizmetleri</h4>
+        <a href="yardim.html">Yardım Merkezi</a>
+        <a href="iade-iptal.html">İade & İptal</a>
+        <a href="kargo-takip.html">Kargo Takip</a>
+      </div>
+      <div class="ty-footer-col" id="footerStoreLinks">
+        <h4>Mağazalar</h4>
+      </div>
+      <div class="ty-footer-col">
+        <h4>Slogan</h4>
+        <p style="font-size:13px;color:var(--ty-gray);">"markabahçem — karmaşa yok, sadece bildiğin markalar."</p>
+      </div>
+    </div>
+    <div class="ty-footer-bottom">© 2026 markabahçem — Bu bir demo/prototip sitedir. Gerçek ödeme veya kargo yapılmaz.</div>
+  </footer>
 
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-  <script src="mockMeta.js"></script>
-  <script src="cartStore.js"></script>
-  <script src="headerSearch.js"></script>
-  <script src="category.js"></script>
+  <div class="ty-overlay" id="cartOverlay"></div>
+  <aside class="ty-cart-drawer" id="cartDrawer">
+    <div class="ty-cart-drawer-head">
+      <h3>Sepetim</h3>
+      <button id="cartCloseBtn" aria-label="Kapat">✕</button>
+    </div>
+    <div class="ty-cart-items" id="cartItemsWrap"></div>
+    <div class="ty-cart-drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <div class="ty-toast" id="toast"></div>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/headerSearch.js"></script>
+  <script src="js/megaMenu.js"></script>
+  <script src="js/category.js"></script>
 </body>
 </html>

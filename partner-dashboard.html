@@ -1,197 +1,44 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>İşletme Paneli — markabahçem.com</title>
-<link rel="stylesheet" href="trendyol-style.css" />
-<style>
-  .pd2-container { max-width: 1000px; margin: 24px auto; padding: 0 32px 60px; }
-  .pd2-storebar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-  .pd2-storebar h1 { font-size: 20px; margin: 0; }
-  .pd2-storebar .store-badge { font-size: 11px; color: var(--ty-gray); }
-  .pd2-logout { font-size: 12px; color: var(--ty-gray); cursor: pointer; }
-
-  .pd2-tabs { display: flex; gap: 0; background: white; border: 1px solid var(--ty-border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
-  .pd2-tab { flex: 1; text-align: center; padding: 14px; font-size: 13px; font-weight: 700; color: var(--ty-gray); cursor: pointer; border-bottom: 3px solid transparent; }
-  .pd2-tab.active { color: var(--ty-orange); border-bottom-color: var(--ty-orange); }
-
-  .pd2-panel { display: none; }
-  .pd2-panel.active { display: block; }
-
-  .pd2-summary-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 14px; margin-bottom: 20px; }
-  .pd2-summary-card { background: white; border: 1px solid var(--ty-border); border-radius: 10px; padding: 16px; }
-  .pd2-summary-card .label { font-size: 11px; color: var(--ty-gray); font-weight: 700; }
-  .pd2-summary-card .value { font-size: 20px; font-weight: 800; margin-top: 4px; color: var(--ty-orange); }
-
-  table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; border: 1px solid var(--ty-border); }
-  th, td { text-align: left; padding: 12px 14px; font-size: 13px; border-bottom: 1px solid var(--ty-border); }
-  th { background: #f7f7f7; font-weight: 700; color: var(--ty-gray); text-transform: uppercase; font-size: 10.5px; }
-  tr:last-child td { border-bottom: none; }
-
-  .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; background: #e6f4ec; color: var(--ty-green); }
-
-  .pd2-add-product-btn { background: var(--ty-orange); color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: 800; font-size: 13px; cursor: pointer; margin-bottom: 16px; }
-  .pd2-product-row-actions { display: flex; gap: 8px; }
-  .pd2-icon-btn { background: none; border: 1px solid var(--ty-border); border-radius: 6px; padding: 5px 9px; cursor: pointer; font-size: 12px; }
-  .pd2-icon-btn.danger { color: var(--ty-red); border-color: #f3c6cf; }
-
-  .pd2-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 300; }
-  .pd2-modal-overlay.open { display: flex; }
-  .pd2-modal { background: white; border-radius: 12px; padding: 24px; width: 400px; max-width: 92vw; }
-  .pd2-modal h3 { margin: 0 0 16px; font-size: 16px; }
-  .pd2-modal label { display: block; font-size: 12px; font-weight: 700; color: var(--ty-gray); margin-bottom: 6px; }
-  .pd2-modal input, .pd2-modal select { width: 100%; padding: 10px; border: 1.5px solid var(--ty-border); border-radius: 6px; font-size: 14px; margin-bottom: 14px; font-family: inherit; }
-  .pd2-modal-actions { display: flex; gap: 10px; }
-  .pd2-modal-actions button { flex: 1; padding: 11px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; border: none; }
-  .pd2-modal-save { background: var(--ty-orange); color: white; }
-  .pd2-modal-cancel { background: #f0f0f0; color: var(--ty-dark); }
-
-  .pd2-settings-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--ty-border); font-size: 13px; }
-  .pd2-settings-row:last-child { border-bottom: none; }
-  .pd2-settings-row .label { color: var(--ty-gray); }
-  .pd2-settings-row .val { font-weight: 700; }
-
-  .table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 10px; }
-  .table-scroll table { min-width: 560px; margin: 0; }
-
-  @media (max-width: 700px) {
-    .pd2-container { padding: 0 16px 50px; margin: 16px auto; }
-    .pd2-storebar { flex-wrap: wrap; gap: 10px; }
-    .pd2-storebar h1 { font-size: 17px; }
-    .pd2-tab { padding: 11px 6px; font-size: 12px; }
-    .pd2-summary-cards { grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 10px; }
-    .pd2-summary-card { padding: 12px; }
-    .pd2-summary-card .value { font-size: 17px; }
-    .pd2-modal { padding: 18px; }
-  }
-</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mağaza Paneli — markabahçem</title>
+<link rel="stylesheet" href="css/trendyol-style.css">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-  <header class="ty-header">
-    <a href="index.html" class="ty-logo" style="text-decoration:none;">
-      <span class="leaf">🌿</span><div>markabahçem<span class="sub">.com</span></div>
-    </a>
-    <div style="flex:1;"></div>
-    <div class="ty-header-actions">
-      <div class="action-item">🏬 İşletme Paneli</div>
-    </div>
-  </header>
-
-  <div class="pd2-container">
-    <div class="pd2-storebar">
-      <div>
-        <h1 id="storeName">Yükleniyor...</h1>
-        <div class="store-badge" id="storeBadge"></div>
+  <button class="mobile-menu-toggle" id="mobileMenuToggle">☰ Menü</button>
+  <div class="panel-shell">
+    <aside class="panel-sidebar" id="panelSidebar">
+      <div class="brand">🌿 markabahçem <span style="opacity:.6;font-weight:400;font-size:12px">Partner</span></div>
+      <nav id="sideNav">
+        <a href="#" data-tab="overview" class="active">📊 Genel Bakış</a>
+        <a href="#" data-tab="products">🏷️ Ürünlerim</a>
+        <a href="#" data-tab="orders">📦 Siparişler</a>
+        <a href="#" data-tab="profile">🏬 Mağaza Profili</a>
+        <a href="#" data-tab="settings">⚙️ Ayarlar</a>
+      </nav>
+      <div class="logout-link"><a href="#" id="partnerLogoutBtn">↩ Çıkış Yap</a></div>
+    </aside>
+    <main class="panel-main">
+      <div class="panel-topbar">
+        <h1 id="panelTitle">Genel Bakış</h1>
+        <div class="who" id="panelWho"></div>
       </div>
-      <a href="partner-login.html" class="pd2-logout">Çıkış Yap</a>
-    </div>
-
-    <div class="pd2-tabs">
-      <div class="pd2-tab active" data-tab="orders">Siparişler</div>
-      <div class="pd2-tab" data-tab="products">Ürünlerim</div>
-      <div class="pd2-tab" data-tab="settings">Ayarlar</div>
-    </div>
-
-    <!-- SİPARİŞLER -->
-    <div class="pd2-panel active" id="panel-orders">
-      <div class="pd2-summary-cards" id="orderSummaryCards"></div>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Alt Sipariş No</th><th>Ürünler</th><th>Ciro</th><th>Komisyon</th><th>Net Ödenecek</th><th>Durum</th></tr></thead>
-          <tbody id="ordersBody"></tbody>
-        </table>
-      </div>
-      <p id="emptyOrdersMsg" class="hint" style="display:none;color:var(--ty-gray);font-size:13px;">Henüz sipariş yok.</p>
-    </div>
-
-    <!-- ÜRÜNLERİM -->
-    <div class="pd2-panel" id="panel-products">
-      <div style="background:white;border:1px solid var(--ty-border);border-radius:10px;padding:18px;margin-bottom:18px;">
-        <h3 style="margin:0 0 6px;font-size:14px;">🔗 Kendi Web Sitenizden Ürün İçe Aktar</h3>
-        <p style="font-size:12px;color:var(--ty-gray);margin:0 0 12px;line-height:1.6;">
-          Kendi sitenizdeki bir ürünün linkini yapıştırın — mümkünse ürün adı ve görseli otomatik çekilir.
-          <strong>Fiyat çoğu sitede JavaScript ile yüklendiği için otomatik gelmeyebilir</strong>, açılan formda kontrol edip tamamlamanız gerekir.
-        </p>
-        <div style="display:flex;gap:8px;">
-          <input type="text" id="importUrlInput" placeholder="https://kendisiteniz.com/urun/ornek-urun" style="flex:1;padding:10px;border:1.5px solid var(--ty-border);border-radius:6px;font-size:13px;" />
-          <button class="pd2-add-product-btn" style="margin:0;white-space:nowrap;" onclick="importFromUrl()">Bilgileri Getir</button>
-        </div>
-        <div id="importStatus" style="font-size:12px;margin-top:10px;display:none;"></div>
-      </div>
-
-      <button class="pd2-add-product-btn" onclick="openProductModal()">+ Yeni Ürün Ekle (Elle)</button>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Görsel</th><th>Ürün Adı</th><th>Fiyat</th><th>Stok</th><th>İşlemler</th></tr></thead>
-          <tbody id="productsBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- AYARLAR -->
-    <div class="pd2-panel" id="panel-settings">
-      <table style="display:block;padding:20px;margin-bottom:20px;">
-        <div class="pd2-settings-row"><span class="label">İşletme Adı</span><span class="val" id="settingsName"></span></div>
-        <div class="pd2-settings-row"><span class="label">Yetkili</span><span class="val" id="settingsContact"></span></div>
-        <div class="pd2-settings-row"><span class="label">E-posta</span><span class="val" id="settingsEmail"></span></div>
-        <div class="pd2-settings-row"><span class="label">Komisyon Oranı</span><span class="val" id="settingsCommission"></span></div>
-        <div class="pd2-settings-row"><span class="label">Ödeme Alt Hesap Anahtarı (subMerchantKey)</span><span class="val" id="settingsSubmerchant" style="font-family:monospace;font-size:11px;"></span></div>
-        <div class="pd2-settings-row"><span class="label">Durum</span><span class="val" id="settingsStatus"></span></div>
-      </table>
-
-      <div style="background:white;border:1px solid var(--ty-border);border-radius:10px;padding:20px;margin-bottom:16px;">
-        <h3 style="margin:0 0 14px;font-size:14px;">🏪 Mağaza Profili (Müşterilerin Gördüğü Sayfa)</h3>
-
-        <label style="display:block;font-size:12px;font-weight:700;color:var(--ty-gray);margin-bottom:6px;">Mağaza Logosu</label>
-        <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
-          <div id="profileLogoPreview" style="width:60px;height:60px;border-radius:8px;overflow:hidden;background:#fafafa;border:1px solid var(--ty-border);display:flex;align-items:center;justify-content:center;font-size:24px;">🏪</div>
-          <input type="file" id="profileLogoFile" accept="image/*" onchange="handleProfileLogoUpload(event)" />
-        </div>
-
-        <label style="display:block;font-size:12px;font-weight:700;color:var(--ty-gray);margin-bottom:6px;">Mağaza Kapak Görseli (Banner)</label>
-        <div id="profilePromoPreview" style="width:100%;height:100px;border-radius:8px;overflow:hidden;background:#fafafa;border:1px solid var(--ty-border);margin-bottom:10px;background-size:cover;background-position:center;"></div>
-        <input type="file" id="profilePromoFile" accept="image/*" onchange="handleProfileBannerUpload(event)" style="margin-bottom:18px;" />
-
-        <label style="display:block;font-size:12px;font-weight:700;color:var(--ty-gray);margin-bottom:6px;">Mağaza Hakkında Açıklama</label>
-        <textarea id="profileDescription" rows="4" style="width:100%;padding:10px;border:1.5px solid var(--ty-border);border-radius:6px;font-size:13px;font-family:inherit;box-sizing:border-box;margin-bottom:14px;"></textarea>
-
-        <button class="pd2-add-product-btn" style="margin-bottom:0;" onclick="saveStoreProfile()">Profili Kaydet</button>
-        <a id="viewProfileLink" href="#" target="_blank" style="margin-left:12px;font-size:12px;color:var(--ty-orange);font-weight:700;">Mağaza sayfamı görüntüle &rsaquo;</a>
-      </div>
-    </div>
+      <div id="panelContent"></div>
+    </main>
   </div>
 
-  <!-- ÜRÜN EKLE/DÜZENLE MODAL -->
-  <div class="pd2-modal-overlay" id="productModal">
-    <div class="pd2-modal">
-      <h3 id="modalTitle">Yeni Ürün Ekle</h3>
-      <input type="hidden" id="editProductId" />
-      <label>Ürün Adı</label>
-      <input id="mName" type="text" placeholder="Örn: Slim Fit Tişört" />
-      <label>Fiyat (₺)</label>
-      <input id="mPrice" type="number" placeholder="890" />
-      <label>Stok Adedi</label>
-      <input id="mStock" type="number" placeholder="20" />
-      <label>Ürün Görseli</label>
-      <div id="mImagePreviewBox" style="width:70px;height:70px;border-radius:8px;overflow:hidden;background:#fafafa;border:1.5px solid var(--ty-border);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:10px;">📦</div>
-      <input type="file" id="mImageFile" accept="image/*" onchange="handleImageUpload(event)" style="margin-bottom:10px;" />
-      <label style="font-weight:400;font-size:11px;color:var(--ty-gray);">Fotoğraf yüklemek istemezsen emoji de girebilirsin:</label>
-      <input id="mImage" type="text" placeholder="👕" oninput="updateImagePreviewFromText()" />
-      <label>Kategori</label>
-      <select id="mCategory" onchange="renderSubcategoryOptions()"></select>
-      <label>Alt Kategori</label>
-      <select id="mSubcategory"></select>
-      <div class="pd2-modal-actions">
-        <button class="pd2-modal-cancel" onclick="closeProductModal()">Vazgeç</button>
-        <button class="pd2-modal-save" onclick="saveProduct()">Kaydet</button>
-      </div>
-    </div>
-  </div>
+  <div class="ty-toast" id="toast"></div>
 
-  <script src="static-api.js"></script>
-  <script src="siteBranding.js"></script>
-  <script src="partner-dashboard.js"></script>
+  <script src="js/static-api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cartStore.js"></script>
+  <script src="js/favoritesStore.js"></script>
+  <script src="js/siteBranding.js"></script>
+  <script src="js/mockMeta.js"></script>
+  <script src="js/uiCommon.js"></script>
+  <script src="js/partner-dashboard.js"></script>
 </body>
 </html>
