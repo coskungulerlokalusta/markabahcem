@@ -36,6 +36,16 @@ async function getOrCreateSettings(){
   return settings;
 }
 
+// .lean() sorguları Mongoose belgesi değil düz obje döndürür, bu yüzden
+// toJSON transform'ları otomatik uygulanmaz — hız için .lean() kullanılan
+// yerlerde aynı dönüşümü burada elle yapıyoruz.
+function formatStore(s){
+  return { ...s, id: s._id.toString(), _id: undefined, __v: undefined, loginPasswordHash: undefined };
+}
+function formatProduct(p){
+  return { ...p, id: p._id.toString(), storeId: p.storeId.toString(), createdAt: new Date(p.createdAt).getTime(), _id: undefined, __v: undefined };
+}
+
 // ---------------- Kategoriler ----------------
 router.get("/categories", (req, res) => res.json(CATEGORIES));
 
@@ -43,14 +53,14 @@ router.get("/categories", (req, res) => res.json(CATEGORIES));
 router.get("/stores", async (req, res) => {
   const filter = {};
   if(req.query.status) filter.status = req.query.status;
-  const stores = await Store.find(filter).sort({ name: 1 });
-  res.json(stores);
+  const stores = await Store.find(filter).sort({ name: 1 }).lean();
+  res.json(stores.map(formatStore));
 });
 
 router.get("/stores/:id", async (req, res) => {
-  const store = await Store.findById(req.params.id).catch(() => null);
+  const store = await Store.findById(req.params.id).lean().catch(() => null);
   if(!store) return res.status(404).json({ error: "Mağaza bulunamadı" });
-  res.json(store);
+  res.json(formatStore(store));
 });
 
 router.put("/stores/:id", async (req, res) => {
@@ -100,19 +110,19 @@ router.get("/products", async (req, res) => {
       { storeName: { $regex: q, $options: "i" } }
     ];
   }
-  let query = Product.find(filter);
+  let query = Product.find(filter).lean();
   if(req.query.sort === "price-asc") query = query.sort({ price: 1 });
   else if(req.query.sort === "price-desc") query = query.sort({ price: -1 });
   else if(req.query.sort === "new") query = query.sort({ createdAt: -1 });
   if(req.query.limit) query = query.limit(parseInt(req.query.limit, 10));
   const products = await query.exec();
-  res.json(products);
+  res.json(products.map(formatProduct));
 });
 
 router.get("/products/:id", async (req, res) => {
-  const product = await Product.findById(req.params.id).catch(() => null);
+  const product = await Product.findById(req.params.id).lean().catch(() => null);
   if(!product) return res.status(404).json({ error: "Ürün bulunamadı" });
-  res.json(product);
+  res.json(formatProduct(product));
 });
 
 router.post("/products", async (req, res) => {
@@ -233,7 +243,8 @@ router.get("/orders", async (req, res) => {
   const filter = {};
   if(req.query.userId) filter.userId = req.query.userId;
   if(req.query.storeId) filter["storeBreakdown.storeId"] = req.query.storeId;
-  res.json(await Order.find(filter).sort({ date: -1 }));
+  const orders = await Order.find(filter).sort({ date: -1 }).lean();
+  res.json(orders.map(o => ({ ...o, id: o._id.toString(), _id: undefined, __v: undefined })));
 });
 
 router.put("/orders/:id/status", async (req, res) => {

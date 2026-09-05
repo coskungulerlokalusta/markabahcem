@@ -15,6 +15,9 @@ const productSchema = new mongoose.Schema({
   stock: { type: Number, default: 10 }
 }, { timestamps: true });
 
+productSchema.index({ category: 1 });
+productSchema.index({ storeId: 1 });
+
 productSchema.set("toJSON", {
   transform: (doc, ret) => {
     ret.id = ret._id.toString();

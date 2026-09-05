@@ -41,13 +41,23 @@ function slugifyEmail(name){
 /**
  * Veritabanı boşsa (hiç mağaza yoksa) başlangıç verisini oluşturur.
  * Zaten veri varsa dokunmaz — güvenle birden çok kez çağrılabilir.
+ * Site ayarları/banner'lar ayrıca upsert edilir, çünkü sayfa ilk açıldığında
+ * GET /api/site-settings otomatik olarak boş bir varsayılan kayıt oluşturmuş
+ * olabilir — bu durumda "create" değil "upsert" kullanmak çakışmayı önler.
  * Dönüş değeri: { seeded: boolean, storeCount, productCount, log: string[] }
  */
 async function seedDatabase(){
   const log = [];
   const existingCount = await Store.countDocuments();
+
   if(existingCount > 0){
-    return { seeded: false, storeCount: existingCount, productCount: await Product.countDocuments(), log: [`Veritabanında zaten ${existingCount} mağaza var, seed atlandı.`] };
+    // Mağazalar zaten var; yine de site ayarları/banner'lar eksik ya da
+    // boşsa (ör. otomatik oluşan varsayılan kayıt) tamamla.
+    const settingsFixed = await ensureSiteSettings(log);
+    return {
+      seeded: false, storeCount: existingCount, productCount: await Product.countDocuments(),
+      log: settingsFixed ? log : [`Veritabanında zaten ${existingCount} mağaza var, seed atlandı.`]
+    };
   }
 
   const passwordHash = await bcrypt.hash("123456", 10);
@@ -82,19 +92,28 @@ async function seedDatabase(){
   }
   log.push(`${totalProducts} ürün oluşturuldu.`);
 
-  await SiteSettings.create({
-    singleton: "main",
-    siteName: "markabahçem.com",
-    brandsHeading: "Markalar",
-    banners: [
-      { id: "b1", title: "Sonbahar Koleksiyonu %30'a Varan İndirim", sub: "Beymen, Zara ve H&M'de seçili ürünlerde", cta: "Alışverişe Başla", link: "category.html?cat=kadin", color: "#f27a1a" },
-      { id: "b2", title: "Elektronikte Kampanya Zamanı", sub: "Media Markt'ta akıllı telefon ve laptoplarda fırsat", cta: "Ürünleri Gör", link: "category.html?cat=elektronik", color: "#24272b" },
-      { id: "b3", title: "Sadece Bildiğin Markalar, Karmaşa Yok", sub: "markabahçem'de yalnızca köklü, güvenilir markalar var", cta: "Markaları Keşfet", link: "index.html", color: "#1ba672" }
-    ]
-  });
-  log.push("Site ayarları ve banner'lar oluşturuldu.");
+  await ensureSiteSettings(log);
 
   return { seeded: true, storeCount: createdStores.length, productCount: totalProducts, log };
+}
+
+async function ensureSiteSettings(log){
+  const defaultBanners = [
+    { id: "b1", title: "Sonbahar Koleksiyonu %30'a Varan İndirim", sub: "Beymen, Zara ve H&M'de seçili ürünlerde", cta: "Alışverişe Başla", link: "category.html?cat=kadin", color: "#f27a1a" },
+    { id: "b2", title: "Elektronikte Kampanya Zamanı", sub: "Media Markt'ta akıllı telefon ve laptoplarda fırsat", cta: "Ürünleri Gör", link: "category.html?cat=elektronik", color: "#24272b" },
+    { id: "b3", title: "Sadece Bildiğin Markalar, Karmaşa Yok", sub: "markabahçem'de yalnızca köklü, güvenilir markalar var", cta: "Markaları Keşfet", link: "index.html", color: "#1ba672" }
+  ];
+  const existing = await SiteSettings.findOne({ singleton: "main" });
+  if(existing && existing.banners && existing.banners.length > 0){
+    return false; // zaten dolu, dokunma
+  }
+  await SiteSettings.findOneAndUpdate(
+    { singleton: "main" },
+    { singleton: "main", siteName: "markabahçem.com", brandsHeading: "Markalar", banners: defaultBanners },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+  log.push("Site ayarları ve banner'lar oluşturuldu/tamamlandı.");
+  return true;
 }
 
 module.exports = { seedDatabase };

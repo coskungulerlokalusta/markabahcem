@@ -20,7 +20,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Base64 görsel verisi içeren istekler için JSON limiti yükseltildi.
-app.use(express.json({ limit: "10mb" }));
+// type:()=>true → tarayıcının fetch() ile gönderdiği isteklerde Content-Type
+// başlığı otomatik "text/plain" gelebiliyor (JS'in varsayılan davranışı);
+// bu ayar olmadan express.json() bu istekleri ATLIYOR ve req.body boş
+// kalıyor — kaydetme işlemleri hatasız görünüp aslında hiçbir şey
+// kaydetmiyordu. Bu satır tüm istekleri JSON olarak ayrıştırmaya zorlar.
+app.use(express.json({ limit: "10mb", type: () => true }));
 
 app.use("/api", apiRoutes);
 

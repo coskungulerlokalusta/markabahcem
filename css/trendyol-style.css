@@ -284,15 +284,36 @@ h1,h2,h3,h4{ margin:0; font-weight:700; }
   .ty-footer-inner{ grid-template-columns: repeat(2,1fr); }
   .ty-megamenu-inner{ grid-template-columns: repeat(2,1fr); }
 }
+/* ---------- Mobil alt sekme çubuğu (uygulama görünümü) ---------- */
+.mobile-tabbar{
+  display:none;
+  position:fixed; bottom:0; left:0; right:0; z-index:120;
+  background:#fff; border-top:1px solid var(--ty-border);
+  padding:6px 0 max(6px, env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 10px rgba(0,0,0,.05);
+}
+.mobile-tabbar-inner{ display:flex; justify-content:space-around; align-items:center; }
+.mobile-tabbar a, .mobile-tabbar button{
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  font-size:10.5px; color: var(--ty-gray); background:none; border:none; padding:4px 6px; position:relative;
+}
+.mobile-tabbar .tab-ico{ font-size:21px; line-height:1; }
+.mobile-tabbar a.active, .mobile-tabbar button.active{ color: var(--ty-orange-dark); font-weight:700; }
+.mobile-tabbar .tab-badge{
+  position:absolute; top:-2px; right:0px; background: var(--ty-orange); color:#fff; font-size:9.5px;
+  border-radius:9px; min-width:15px; height:15px; display:flex; align-items:center; justify-content:center; padding:0 3px;
+}
+
 @media (max-width: 600px){
-  .ty-header-top{ flex-wrap:wrap; padding:10px 14px; gap:8px; row-gap:10px; }
+  .mobile-tabbar{ display:block; }
+  body{ padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
+  /* Sepet/Favoriler/Hesabım artık alt çubukta olduğu için üst bar sadeleşir */
+  .ty-header-actions{ display:none; }
+  .ty-header-top{ flex-wrap:wrap; padding:10px 14px; gap:8px; row-gap:10px; justify-content:flex-start; }
   .ty-logo{ order:1; font-size:15px; gap:5px; }
   .ty-logo .leaf{ font-size:17px; }
   .ty-logo img.site-logo{ height:26px; }
-  .ty-header-actions{ order:2; margin-left:auto; gap:14px; }
-  .ty-header-actions a{ min-width:38px; font-size:9.5px; gap:1px; }
-  .ty-header-actions a .ico{ font-size:16px; }
-  .ty-searchbar{ order:3; max-width:100%; width:100%; }
+  .ty-searchbar{ order:2; max-width:100%; width:100%; }
   .ty-nav-inner a, .ty-nav-inner button.megabtn{ font-size:12.5px; padding:10px 10px; }
   .ty-grid{ grid-template-columns: repeat(2, 1fr); gap:10px; }
   .ty-section, .ty-hero, .ty-brandstrip{ padding:0 12px; }

@@ -13,6 +13,19 @@ function showToast(msg){
 function updateCartBadge(){
   const badge = document.getElementById("cartCount");
   if(badge) badge.textContent = CartStore.count();
+  const tabBadge = document.getElementById("tabbarCartCount");
+  if(tabBadge) tabBadge.textContent = CartStore.count();
+}
+
+function setupMobileTabbar(){
+  const tabbar = document.getElementById("mobileTabbar");
+  if(!tabbar) return;
+  const currentPage = location.pathname.split("/").pop() || "index.html";
+  tabbar.querySelectorAll("a[data-page]").forEach(a => {
+    a.classList.toggle("active", a.dataset.page === currentPage);
+  });
+  const cartBtn = document.getElementById("tabbarCartBtn");
+  if(cartBtn) cartBtn.addEventListener("click", openCart);
 }
 
 function renderCartDrawer(){
@@ -141,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
   loadFooterStoreLinks();
   applySiteBranding();
+  setupMobileTabbar();
 
   const cartOpenBtn = document.getElementById("cartOpenBtn");
   const cartCloseBtn = document.getElementById("cartCloseBtn");

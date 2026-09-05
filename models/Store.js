@@ -20,6 +20,8 @@ const storeSchema = new mongoose.Schema({
   loginPasswordHash: { type: String, required: true }
 }, { timestamps: true });
 
+storeSchema.index({ status: 1 });
+
 storeSchema.set("toJSON", {
   virtuals: true,
   transform: (doc, ret) => {
