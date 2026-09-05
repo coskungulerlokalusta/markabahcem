@@ -331,7 +331,10 @@ async function renderBranding(wrap){
           </div>
         </div>
         <div class="ty-field"><label>Alt Yazı</label><input type="text" class="bannerSub" value="${b.sub || ""}"></div>
-        <div style="display:flex;gap:12px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;margin-bottom:10px">
+          <input type="checkbox" class="bannerShowBtn" ${b.cta ? "checked" : ""}> Bu banner'da buton göster
+        </label>
+        <div class="bannerBtnFields" style="display:${b.cta ? "flex" : "none"};gap:12px">
           <div class="ty-field" style="flex:1"><label>Buton Metni</label><input type="text" class="bannerCta" value="${b.cta || ""}"></div>
           <div class="ty-field" style="flex:1">
             <label>Bağlantı</label>
@@ -474,17 +477,25 @@ async function renderBranding(wrap){
       imgBox.innerHTML = `<span>🖼️ Görsel yüklemek için tıklayın</span>`;
       removeImgBtn.style.display = "none";
     });
+    const showBtnCheck = row.querySelector(".bannerShowBtn");
+    const btnFields = row.querySelector(".bannerBtnFields");
+    showBtnCheck.addEventListener("change", () => {
+      btnFields.style.display = showBtnCheck.checked ? "flex" : "none";
+    });
   }
   function collectBannersFromDOM(){
-    return Array.from(document.querySelectorAll(".bannerRow")).map(row => ({
-      id: row.dataset.id,
-      title: row.querySelector(".bannerTitle").value,
-      sub: row.querySelector(".bannerSub").value,
-      cta: row.querySelector(".bannerCta").value,
-      link: row.querySelector(".bannerLink").value,
-      color: row.querySelector(".bannerColor").value,
-      image: row.dataset.image || null
-    }));
+    return Array.from(document.querySelectorAll(".bannerRow")).map(row => {
+      const showBtn = row.querySelector(".bannerShowBtn").checked;
+      return {
+        id: row.dataset.id,
+        title: row.querySelector(".bannerTitle").value,
+        sub: row.querySelector(".bannerSub").value,
+        cta: showBtn ? row.querySelector(".bannerCta").value : "",
+        link: row.querySelector(".bannerLink").value,
+        color: row.querySelector(".bannerColor").value,
+        image: row.dataset.image || null
+      };
+    });
   }
 }
 
