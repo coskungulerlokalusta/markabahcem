@@ -48,7 +48,23 @@ async function renderOverview(wrap){
 
 async function renderProducts(wrap){
   const products = await (await fetch("/api/products?store=" + PD_STORE.id)).json();
+  const freshStore = await (await fetch("/api/stores/" + PD_STORE.id)).json();
+  PD_STORE.stories = freshStore.stories || [];
   wrap.innerHTML = `
+    <div class="panel-block">
+      <h3 style="margin-bottom:12px">📸 Aktif Hikayeleriniz (${PD_STORE.stories.length})</h3>
+      ${PD_STORE.stories.length === 0
+        ? `<p class="ty-hint">Henüz hikaye eklemediniz. Aşağıdaki ürün listesinde bir ürünün yanındaki "📸 Hikayeye Ekle" butonuna basarak ekleyebilirsiniz. Hikayeniz olduğunda ana sayfada marka ikonunuz belirir.</p>`
+        : `<div style="display:flex;gap:12px;flex-wrap:wrap">
+            ${PD_STORE.stories.map(st => `
+              <div style="position:relative;width:74px" data-story-id="${st._id}">
+                <div style="width:74px;height:74px;border-radius:8px;overflow:hidden;background:var(--ty-orange-light);display:flex;align-items:center;justify-content:center;font-size:28px">${productImageTag(st.image, "hikaye")}</div>
+                <button class="removeStoryBtn" title="Hikayeyi kaldır" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--ty-danger);color:#fff;border:2px solid #fff;font-size:12px;line-height:1;cursor:pointer">✕</button>
+              </div>
+            `).join("")}
+          </div>`
+      }
+    </div>
     <div class="panel-block">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <h3 style="margin:0">Ürünlerim (${products.length})</h3>
@@ -73,6 +89,14 @@ async function renderProducts(wrap){
     </div>
     <div class="panel-block" id="productFormBlock" style="display:none"></div>
   `;
+  wrap.querySelectorAll(".removeStoryBtn").forEach(btn => btn.addEventListener("click", async (e) => {
+    const storyId = e.target.closest("[data-story-id]").dataset.storyId;
+    if(!confirm("Bu hikayeyi kaldırmak istediğinize emin misiniz?")) return;
+    await fetch(`/api/stores/${PD_STORE.id}/stories/${storyId}`, { method: "DELETE" });
+    showToast("Hikaye kaldırıldı.");
+    renderProducts(wrap);
+  }));
+
   wrap.querySelectorAll(".upload-preview").forEach(img => { img.style.width="34px"; img.style.height="34px"; img.style.borderRadius="6px"; });
   document.getElementById("newProductBtn").addEventListener("click", () => showProductForm(null));
   wrap.querySelectorAll(".editP").forEach(btn => btn.addEventListener("click", (e) => {
@@ -98,6 +122,7 @@ async function renderProducts(wrap){
       body: JSON.stringify({ image: product.image || null, link: `product.html?id=${product.id}` })
     });
     showToast("Hikayeye eklendi! Ana sayfadaki marka ikonunuzda görünecek.");
+    renderProducts(wrap);
   }));
 }
 
