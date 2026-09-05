@@ -1,13 +1,17 @@
 {
   "name": "markabahcem",
-  "version": "1.0.0",
-  "description": "markabahçem — sadece bildiğin markaların bir araya geldiği, küratörlü çok-markalı alışveriş platformu demosu (istemci taraflı statik prototip).",
+  "version": "2.0.0",
+  "description": "markabahçem — sadece bildiğin markaların bir araya geldiği, küratörlü çok-markalı alışveriş platformu. Express + MongoDB ile gerçek backend.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "seed": "node seed.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "mongoose": "^8.5.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5"
   },
   "engines": {
     "node": ">=18"

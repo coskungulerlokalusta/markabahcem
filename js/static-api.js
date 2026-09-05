@@ -1,11 +1,12 @@
 /* ============================================================
-   markabahçem — static-api.js
-   Gerçek bir backend YOKTUR. Bu dosya window.fetch()'i override
-   ederek /api/... isteklerine sahte cevaplar üretir. Tüm veri
-   tarayıcının localStorage'ında tek bir JSON nesnesi olarak
-   tutulur (anahtar: markabahcem_static_db). Bu nedenle veriler
-   SADECE bu tarayıcı/cihazda görünür; iki farklı kullanıcı
-   birbirinin sepetini/siparişini/logosunu ASLA göremez.
+   markabahçem — static-api.js  [ARTIK KULLANILMIYOR / DEPRECATED]
+   ============================================================
+   ⚠️ Bu dosya artık hiçbir sayfada yüklenmiyor. Proje gerçek bir
+   backend'e (Express + MongoDB, bkz. server.js + routes/api.js)
+   geçirildiği için bu dosyadaki localStorage tabanlı sahte backend
+   devre dışı bırakıldı. Sadece geçmiş referansı / eski demo
+   mimarisini anlamak için repoda tutulmaktadır — store.js (legacy
+   mağaza paneli) ile aynı mantıkla saklanmıştır.
    ============================================================ */
 (function(){
   const DB_KEY = "markabahcem_static_db";
@@ -79,7 +80,7 @@
       { id: "b2", title: "Elektronikte Kampanya Zamanı", sub: "Media Markt'ta akıllı telefon ve laptoplarda fırsat", cta: "Ürünleri Gör", link: "category.html?cat=elektronik", color: "#24272b" },
       { id: "b3", title: "Sadece Bildiğin Markalar, Karmaşa Yok", sub: "markabahçem'de yalnızca köklü, güvenilir markalar var", cta: "Markaları Keşfet", link: "index.html", color: "#1ba672" }
     ],
-    siteSettings: { logo: null, siteName: "markabahçem.com", fontFamily: "", updatedAt: null },
+    siteSettings: { logo: null, siteName: "markabahçem.com", fontFamily: "", brandsHeading: "Markalar", flashProductIds: [], updatedAt: null },
     orders: [],
     users: [
       { id: "u-demo", name: "Demo Kullanıcı", email: "demo@markabahcem.com", password: "123456" }

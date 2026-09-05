@@ -4,31 +4,88 @@
 
 Trendyol gibi platformlarda herkesin dükkân açabilmesi karmaşa ve güven
 sorunu yaratıyor. **markabahçem**, sadece gerçek, bilinen, köklü markaların
-(Beymen, Vakko, Koton, Adil Işık, Altınyıldız Classics, LC Waikiki, Arçelik,
-Media Markt, Zara, H&M, Atasay, Atasun Optik, Starbucks, Kahve Dünyası gibi)
 yer aldığı, kürasyonlu, çok-markalı bir alışveriş platformu fikridir
 (Farfetch benzeri bir model: markalar kendi ürününü listeler, kendi
 kargosunu gönderir, platform sadece komisyon alır).
 
-## ⚠️ Bu bir statik demo/prototiptir
+## ✅ Artık gerçek bir backend'i var
 
-Bu repo **tamamen istemci taraflı (client-side)** çalışan bir HTML/CSS/JS
-prototipidir. Gerçek bir backend, veritabanı ya da ödeme altyapısı **yoktur**.
+Bu proje **Express + MongoDB (Mongoose)** ile çalışan gerçek bir backend'e
+sahiptir. Admin panelinden yapılan her değişiklik (yeni ürün, banner,
+onaylanan başvuru, logo, hikaye vb.) **herkeste ve her cihazda** anında
+görünür — artık tarayıcıya özel localStorage sınırlaması yoktur.
 
-- `js/static-api.js`, tarayıcının `window.fetch()` fonksiyonunu override
-  ederek `/api/...` isteklerine sahte cevaplar üretir.
-- Tüm "veritabanı" tarayıcının **localStorage**'ında tutulur
-  (anahtar: `markabahcem_static_db`).
-- Sonuç olarak veriler **sadece o an kullandığınız tarayıcı/cihazda**
-  görünür. Farklı bir cihaz/tarayıcı sitesi sıfırdan (seed) veriyle başlar.
-  İki farklı kullanıcı birbirinin sepetini, siparişini ya da yüklediği
-  logoyu **asla göremez**.
-- Demoyu sıfırlamak için tarayıcı konsoluna `resetMarkabahcemDemo()` yazın.
+Görseller (ürün fotoğrafı, logo, banner) basitlik için doğrudan veritabanında
+sıkıştırılmış base64 metin olarak saklanır; ayrı bir görsel depolama
+servisine (S3, Cloudinary vb.) ihtiyaç yoktur.
 
-Gerçek, çok kullanıcılı bir platforma dönüştürmek için bu mimarinin
-(localStorage + fetch override) yerine gerçek bir backend + veritabanı +
-gerçek ödeme entegrasyonu (iyzico Pazaryeri / PayTR Pazaryeri gibi
-sub-merchant destekli bir sağlayıcı) konması gerekir.
+Eski mimari (localStorage + `js/static-api.js` fetch-override) artık
+**kullanılmıyor** ama geçmiş referansı için repoda bırakıldı.
+
+## Kurulum
+
+### 1) MongoDB Atlas (ücretsiz)
+
+1. [mongodb.com/cloud/atlas/register](https://mongodb.com/cloud/atlas/register) üzerinden ücretsiz kayıt olun.
+2. Ücretsiz **M0** cluster oluşturun.
+3. Bir veritabanı kullanıcısı (kullanıcı adı/şifre) oluşturun.
+4. **Network Access** → "Allow Access from Anywhere" (0.0.0.0/0) ekleyin.
+5. **Connect → Drivers** üzerinden bağlantı adresini (connection string) kopyalayın.
+
+### 2) Ortam değişkenleri
+
+`.env.example` dosyasını `.env` olarak kopyalayıp doldurun (yerelde test
+ederken) **ya da** Hostinger panelinde **"Ortam değişkenleri"** bölümüne
+aynı değerleri girin:
+
+```
+MONGODB_URI=mongodb+srv://kullanici:sifre@cluster0.xxxxx.mongodb.net/markabahcem?retryWrites=true&w=majority
+ADMIN_EMAIL=admin@markabahcem.com
+ADMIN_PASSWORD=admin123
+SEED_KEY=kendi-belirleyeceğiniz-gizli-bir-anahtar
+PORT=3000
+```
+
+`.env` dosyası `.gitignore` içinde olduğu için GitHub'a asla yüklenmez —
+sırlarınız güvende kalır.
+
+### 3) Veritabanını başlangıç verisiyle doldurma (seed)
+
+**Terminal/SSH erişiminiz varsa:**
+```bash
+npm install
+npm run seed
+```
+
+**SSH erişiminiz yoksa** (çoğu paylaşımlı hosting planında bu geçerlidir),
+deploy tamamlandıktan sonra tarayıcıdan şu adresi ziyaret edin:
+
+```
+https://markabahcem.com/kurulum/seed?key=SEED_KEY_degeriniz
+```
+
+Bu adres veritabanı boşsa 14 marka, ürünleri, banner'ları ve site
+ayarlarını otomatik oluşturur. Veritabanı zaten doluysa hiçbir şeye
+dokunmadan bunu bildirir — güvenle birden fazla kez ziyaret edebilirsiniz.
+
+### 4) Yerelde çalıştırma
+
+```bash
+npm install
+npm run seed
+npm start
+```
+
+Sonra `http://localhost:3000` adresini açın.
+
+## Demo hesaplar
+
+- **Müşteri:** kayıt ol ekranından yeni bir hesap oluşturun (artık gerçek kayıt).
+- **Mağaza:** her markanın girişi `{marka-slug}@markabahcem.com` / `123456`
+  (örn. `beymen@markabahcem.com`, `zara@markabahcem.com`) — tam listeyi
+  seed çıktısında veya `/kurulum/seed` sayfasının sonucunda görebilirsiniz.
+- **Admin:** `.env`'de belirlediğiniz `ADMIN_EMAIL` / `ADMIN_PASSWORD`
+  (varsayılan: `admin@markabahcem.com` / `admin123`).
 
 ## Sayfalar
 
@@ -39,66 +96,38 @@ sub-merchant destekli bir sağlayıcı) konması gerekir.
 | `product.html` | Ürün detay sayfası |
 | `search.html` | Arama sonuçları |
 | `favorites.html` | Favoriler |
-| `checkout.html` | Sepet → adres → ödeme → onay (gerçek ödeme yok) |
-| `login.html` | Müşteri girişi/kaydı (demo) |
+| `checkout.html` | Sepet → adres → ödeme → onay (ödeme yine simüle edilir) |
+| `login.html` | Müşteri girişi/kaydı (artık gerçek) |
 | `store-profile.html` | Mağaza vitrin sayfası |
 | `partner-apply.html` | Marka/mağaza başvuru formu |
 | `partner-login.html` | Mağaza sahibi girişi |
 | `partner-dashboard.html` | Mağaza paneli (ürün, sipariş, profil, ayarlar) |
-| `admin.html` | Platform yönetici paneli |
+| `admin.html` | Platform yönetici paneli (tüm mağazaları buradan da yönetebilirsiniz) |
 | `hakkimizda.html`, `kariyer.html`, `yardim.html`, `iade-iptal.html`, `kargo-takip.html` | Bilgi/destek sayfaları |
-| `store.html` | Eski/legacy mağaza paneli (artık kullanılmıyor, bkz. `partner-dashboard.html`) |
+| `store.html` | Eski/legacy mağaza paneli (artık kullanılmıyor) |
 
-## Demo hesaplar
+## Backend dosya yapısı
 
-- **Müşteri:** `demo@markabahcem.com` / `123456`
-- **Mağaza (Beymen):** `beymen@markabahcem.com` / `123456`
-- **Mağaza (Koton):** `koton@markabahcem.com` / `123456`
-- **Admin:** `admin@markabahcem.com` / `admin123`
+| Dosya/Klasör | Açıklama |
+|---|---|
+| `server.js` | Express sunucusu, statik dosyalar + API + `/kurulum/seed` |
+| `config/db.js` | MongoDB bağlantısı |
+| `models/` | Mongoose şemaları (Store, Product, Order, Application, User, SiteSettings) |
+| `routes/api.js` | Tüm `/api/...` uç noktaları |
+| `utils/seedData.js` | Başlangıç verisi mantığı (CLI ve `/kurulum/seed` ortak kullanır) |
+| `seed.js` | Terminalden `npm run seed` ile çalıştırılan script |
+| `js/static-api.js` | **[Artık kullanılmıyor]** eski localStorage tabanlı sahte backend |
 
-## Yerelde çalıştırma
+## Bilinen sınırlamalar
 
-Bu proje saf HTML/CSS/JS olduğu için herhangi bir statik dosya sunucusuyla
-çalışır. En basit yol, `index.html`'i doğrudan tarayıcıda açmaktır (bazı
-tarayıcılarda `file://` kısıtları olabileceğinden basit bir sunucu tercih
-edilir):
-
-```bash
-npx serve .
-# veya
-python3 -m http.server 8000
-```
-
-Node.js gerektiren bir hosting ortamına (ör. Hostinger "Web Uygulaması")
-deploy edecekseniz, depoda bulunan Express sunucusu kullanılabilir:
-
-```bash
-npm install
-npm start
-```
-
-## Hosting notları (Hostinger'da yaşanan dersler)
-
-1. Bazı hosting platformları düz statik HTML kabul etmez, `package.json` +
-   çalışan bir Node.js süreci bekler — bu yüzden `server.js` eklendi.
-2. `app.listen(PORT)` yeterli değildir; `app.listen(PORT, "0.0.0.0", ...)`
-   gerekir, aksi halde proxy uygulamaya ulaşamaz (503 crash-loop).
-3. GitHub entegrasyonlarında platformun kendi kopyaladığı repo'yu takip
-   ettiğinden emin olun — orijinal repo'yu güncellemek yeterli olmayabilir.
-4. Deploy sonrası CDN önbelleği nedeniyle bazı isteklerde eski içerik
-   görülebilir; birkaç dakika içinde/purge ile düzelir.
-
-Daha basit ve öngörülebilir bir deploy için Netlify, Vercel veya GitHub
-Pages gibi Node.js gerektirmeyen statik hosting seçenekleri de
-değerlendirilebilir.
-
-## Bilinen eksikler
-
-- Gerçek, paylaşılan bir backend + veritabanı yok.
 - Gerçek ödeme entegrasyonu yok (split payment için sub-merchant destekli
   bir sağlayıcı — iyzico/PayTR Pazaryeri — gerekir).
-- Gerçek kullanıcı kimlik doğrulama yok (tamamen demo amaçlı).
-- Gerçek dosya/görsel depolama yok (base64 + localStorage, ölçeklenmez).
+- Oturum yönetimi basittir (JWT/güvenli session yok) — bu bir prototip,
+  üretime almadan önce güvenlik sertleştirmesi (rate limiting, JWT,
+  HTTPS-only cookie vb.) yapılmalıdır.
+- Görseller veritabanında base64 olarak saklanıyor; çok büyük ürün
+  kataloglarında bu verimsizleşebilir, o noktada Cloudinary/S3 gibi bir
+  servise geçilmesi önerilir.
 - ETBİS kaydı ve ilgili hukuki/mali danışmanlık gerekir (bu doküman hukuki
   tavsiye değildir).
 
