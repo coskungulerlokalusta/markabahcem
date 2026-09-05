@@ -15,7 +15,7 @@ async function loadHero(){
       <div class="ty-hero-slide-content">
         <h2>${b.title || ""}</h2>
         ${b.sub ? `<p>${b.sub}</p>` : ""}
-        ${b.cta ? `<a href="${b.link || "index.html"}" class="btn btn-primary">${b.cta}</a>` : ""}
+        <a href="${b.link || "index.html"}" class="btn btn-primary">${b.cta || "İncele"}</a>
       </div>
     </div>
   `).join("") + `

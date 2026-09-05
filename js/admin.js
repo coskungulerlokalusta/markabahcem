@@ -443,7 +443,7 @@ async function renderBranding(wrap){
 
   document.getElementById("addBannerBtn").addEventListener("click", () => {
     const list = document.getElementById("bannerList");
-    const newBanner = { id: "b" + Date.now(), title: "Yeni Banner Başlığı", sub: "", cta: "", link: "index.html", color: "#f27a1a" };
+    const newBanner = { id: "b" + Date.now(), title: "Yeni Banner Başlığı", sub: "", cta: "İncele", link: "index.html", color: "#f27a1a" };
     const div = document.createElement("div");
     div.innerHTML = renderBannerEditRow(newBanner, list.children.length);
     const row = div.firstElementChild;
