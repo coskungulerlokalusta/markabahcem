@@ -101,7 +101,7 @@ async function ensureSiteSettings(log){
   const defaultBanners = [
     { id: "b1", title: "Sonbahar Koleksiyonu %30'a Varan İndirim", sub: "Beymen, Zara ve H&M'de seçili ürünlerde", cta: "Alışverişe Başla", link: "category.html?cat=kadin", color: "#f27a1a" },
     { id: "b2", title: "Elektronikte Kampanya Zamanı", sub: "Media Markt'ta akıllı telefon ve laptoplarda fırsat", cta: "Ürünleri Gör", link: "category.html?cat=elektronik", color: "#24272b" },
-    { id: "b3", title: "Sadece Bildiğin Markalar, Karmaşa Yok", sub: "markabahçem'de yalnızca köklü, güvenilir markalar var", cta: "Markaları Keşfet", link: "index.html", color: "#1ba672" }
+    { id: "b3", title: "Sadece Bildiğin Markalar, Karmaşa Yok", sub: "markabahçem'de yalnızca köklü, güvenilir markalar var", cta: "Markaları Keşfet", link: "index.html", color: "#1ba672", image: null }
   ];
   const defaultDiscountCards = [
     { id: "d1", label: "%50'ye varan", title: "Kadın Modası", color: "#f27a1a", link: "category.html?cat=kadin" },

@@ -19,12 +19,8 @@ async function loadHero(){
       </div>
     </div>
   `).join("") + `
-    <button class="ty-hero-arrow prev" aria-label="Önceki">‹</button>
-    <button class="ty-hero-arrow next" aria-label="Sonraki">›</button>
     <div class="ty-hero-dots">${banners.map((_,i)=>`<button class="${i===0?"active":""}" data-i="${i}"></button>`).join("")}</div>
   `;
-  track.querySelector(".prev").addEventListener("click", () => goHero(heroIndex-1));
-  track.querySelector(".next").addEventListener("click", () => goHero(heroIndex+1));
   track.querySelectorAll(".ty-hero-dots button").forEach(btn => btn.addEventListener("click", () => goHero(parseInt(btn.dataset.i,10))));
   heroTimer = setInterval(() => goHero(heroIndex+1), 5000);
 }

@@ -125,8 +125,6 @@ h1,h2,h3,h4{ margin:0; font-weight:700; }
 .ty-hero-dots{ position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:7px; }
 .ty-hero-dots button{ width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.55); border:none; padding:0; }
 .ty-hero-dots button.active{ background:#fff; width:22px; border-radius:5px; }
-.ty-hero-arrow{ position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.85); border:none; width:36px; height:36px; border-radius:50%; font-size:16px; }
-.ty-hero-arrow.prev{ left:14px; } .ty-hero-arrow.next{ right:14px; }
 
 /* ---------- Brand strip ---------- */
 .ty-brandstrip{ max-width: var(--ty-maxw); margin: 30px auto 0; padding:0 20px; }
@@ -357,8 +355,10 @@ h1,h2,h3,h4{ margin:0; font-weight:700; }
   .ty-nav-inner a, .ty-nav-inner button.megabtn{ font-size:12.5px; padding:10px 10px; }
   .ty-grid{ grid-template-columns: repeat(2, 1fr); gap:10px; }
   .ty-section, .ty-hero, .ty-brandstrip{ padding:0 12px; }
-  .ty-hero-slide{ padding:0 24px; }
-  .ty-hero-slide h2{ font-size:18px; }
+  .ty-hero-slide{ padding:0 22px; }
+  .ty-hero-track{ aspect-ratio: 4/3.1; }
+  .ty-hero-slide h2{ font-size:19px; line-height:1.3; }
+  .ty-hero-dots{ bottom:10px; }
   .ty-hero-slide p{ display:none; }
   .ty-cart-drawer{ width:100%; max-width:100%; }
   .ty-discount-card{ flex:0 0 140px; min-height:80px; padding:14px; }
