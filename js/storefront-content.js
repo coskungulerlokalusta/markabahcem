@@ -9,16 +9,19 @@ async function loadHero(){
   const res = await fetch("/api/banners");
   const banners = await res.json();
   heroSlideCount = banners.length;
-  track.innerHTML = banners.map((b,i) => `
+  track.innerHTML = banners.map((b,i) => {
+    const hasOverlayText = !!(b.title || b.sub);
+    return `
     <div class="ty-hero-slide ${i===0?"active":""}" style="background:${b.color || "#f27a1a"}" data-i="${i}">
-      ${b.image ? `<div class="ty-hero-bg" style="background-image:url('${b.image}')"></div><div class="ty-hero-overlay"></div>` : ""}
+      ${b.image ? `<div class="ty-hero-bg" style="background-image:url('${b.image}')"></div>${hasOverlayText ? '<div class="ty-hero-overlay"></div>' : ""}` : ""}
       <div class="ty-hero-slide-content">
         <h2>${b.title || ""}</h2>
         ${b.sub ? `<p>${b.sub}</p>` : ""}
         ${b.cta ? `<a href="${b.link || "index.html"}" class="btn btn-primary">${b.cta}</a>` : ""}
       </div>
     </div>
-  `).join("") + `
+  `;
+  }).join("") + `
     <div class="ty-hero-dots">${banners.map((_,i)=>`<button class="${i===0?"active":""}" data-i="${i}"></button>`).join("")}</div>
   `;
   track.querySelectorAll(".ty-hero-dots button").forEach(btn => btn.addEventListener("click", () => goHero(parseInt(btn.dataset.i,10))));
