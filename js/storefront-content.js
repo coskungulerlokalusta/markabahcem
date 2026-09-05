@@ -42,9 +42,6 @@ async function loadBrandStrip(){
     fetch("/api/stores?status=active").then(r=>r.json()),
     fetch("/api/site-settings").then(r=>r.json())
   ]);
-  const params = new URLSearchParams(location.search);
-  const activeStore = params.get("store");
-
   const headingEl = document.getElementById("brandsHeadingText");
   if(headingEl && settings.brandsHeading) headingEl.textContent = settings.brandsHeading;
 
@@ -57,23 +54,20 @@ async function loadBrandStrip(){
   }
   const withStory = stores.filter(s => s.stories && s.stories.length > 0)
     .sort((a,b) => lastStoryTime(b) - lastStoryTime(a));
-  const withoutStory = stores.filter(s => !s.stories || s.stories.length === 0);
-  const orderedStores = [...withStory, ...withoutStory];
 
-  wrap.innerHTML = `
-    <a href="index.html" class="ty-brand-pill">
-      <div class="circle" style="${!activeStore ? "border-color:var(--ty-orange)" : ""}">${productImageTag(settings.allBrandsIcon || "🏬", "Tümü")}</div>
-      <span>Tümü</span>
-    </a>
-  ` + orderedStores.map(s => {
-    const hasStory = s.stories && s.stories.length > 0;
+  // Instagram mantığı: bu bölüm artık sadece aktif hikayesi olan markaları
+  // gösterir. Hiç hikaye yoksa bölümün tamamı gizlenir.
+  const section = wrap.closest(".ty-brandstrip");
+  if(withStory.length === 0){
+    if(section) section.style.display = "none";
+    return;
+  }
+  if(section) section.style.display = "";
+
+  wrap.innerHTML = withStory.map(s => {
     const circleInner = `${productImageTag(s.logo || s.emoji, s.name)}`;
-    const circle = hasStory
-      ? `<button type="button" class="circle has-story" data-store-id="${s.id}">${circleInner}</button>`
-      : `<div class="circle" style="${activeStore===s.id ? "border-color:var(--ty-orange)" : ""}">${circleInner}</div>`;
-    return hasStory
-      ? `<div class="ty-brand-pill">${circle}<a href="index.html?store=${s.id}"><span>${s.name}</span></a></div>`
-      : `<a href="index.html?store=${s.id}" class="ty-brand-pill">${circle}<span>${s.name}</span></a>`;
+    const circle = `<button type="button" class="circle has-story" data-store-id="${s.id}">${circleInner}</button>`;
+    return `<div class="ty-brand-pill">${circle}<a href="index.html?store=${s.id}"><span>${s.name}</span></a></div>`;
   }).join("");
 
   // Şeritte görünme sırasıyla aynı: bir markanın hikayesi bitince

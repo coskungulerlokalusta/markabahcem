@@ -255,10 +255,8 @@ async function renderBranding(wrap){
     <div class="panel-block">
       <h3>"Markalar" Bölümü</h3>
       <div class="ty-field"><label>Bölüm Başlığı</label><input type="text" id="brandsHeadingInput" value="${settings.brandsHeading || "Markalar"}"></div>
-      <label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">"Tümü" İkonu (opsiyonel görsel)</label>
-      <div class="upload-box" id="allBrandsIconBox">${settings.allBrandsIcon ? `<img class="upload-preview" src="${settings.allBrandsIcon}">` : `<span>🏬 Varsayılan ikon kullanılıyor, değiştirmek için tıklayın</span>`}</div>
-      <input type="file" id="allBrandsIconInput" accept="image/*" style="display:none">
-      <button class="btn btn-primary" id="saveBrandsBtn" style="margin-top:12px">Bu Bölümü Kaydet</button>
+      <button class="btn btn-primary" id="saveBrandsBtn">Bu Bölümü Kaydet</button>
+      <p class="ty-hint">Bu bölümde artık sadece hikaye paylaşan markalar görünür (Instagram mantığı). Bir markanın görünmesi için partner panelinden bir ürününe "Hikayeye Ekle" demeniz yeterli.</p>
     </div>
     <div class="panel-block">
       <h3>"Kategorilerde İndirim" Bölümü</h3>
@@ -391,16 +389,9 @@ async function renderBranding(wrap){
   });
 
   // --- "Markalar" bölümü ---
-  let pendingAllBrandsIcon = settings.allBrandsIcon;
-  document.getElementById("allBrandsIconBox").addEventListener("click", () => document.getElementById("allBrandsIconInput").click());
-  document.getElementById("allBrandsIconInput").addEventListener("change", async (e) => {
-    if(!e.target.files[0]) return;
-    pendingAllBrandsIcon = await compressImage(e.target.files[0], 200, 0.8);
-    document.getElementById("allBrandsIconBox").innerHTML = `<img class="upload-preview" src="${pendingAllBrandsIcon}">`;
-  });
   document.getElementById("saveBrandsBtn").addEventListener("click", async () => {
     const brandsHeading = document.getElementById("brandsHeadingInput").value.trim();
-    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ brandsHeading, allBrandsIcon: pendingAllBrandsIcon }) });
+    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ brandsHeading }) });
     showToast("\"Markalar\" bölümü güncellendi.");
   });
 
