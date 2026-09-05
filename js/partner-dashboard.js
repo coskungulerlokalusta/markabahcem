@@ -64,7 +64,7 @@ async function renderProducts(wrap){
                 <td>${p.category}</td>
                 <td>${p.price.toLocaleString("tr-TR")} ₺</td>
                 <td>${p.stock}</td>
-                <td class="icon-btn-row"><button class="editP">Düzenle</button><button class="no delP">Sil</button></td>
+                <td class="icon-btn-row"><button class="storyBtn">📸 Hikayeye Ekle</button><button class="editP">Düzenle</button><button class="no delP">Sil</button></td>
               </tr>
             `).join("") || `<tr><td colspan="5" style="text-align:center;color:var(--ty-gray)">Henüz ürün eklenmedi.</td></tr>`}
           </tbody>
@@ -85,6 +85,19 @@ async function renderProducts(wrap){
     await fetch("/api/products/" + id, { method:"DELETE" });
     showToast("Ürün silindi.");
     renderProducts(wrap);
+  }));
+  wrap.querySelectorAll(".storyBtn").forEach(btn => btn.addEventListener("click", async (e) => {
+    const id = e.target.closest("tr").dataset.id;
+    const product = products.find(p => p.id === id);
+    if(!product) return;
+    if(!product.image){
+      if(!confirm("Bu ürünün gerçek bir görseli yok (sadece emoji var). Yine de hikayeye eklemek ister misiniz?")) return;
+    }
+    await fetch(`/api/stores/${PD_STORE.id}/stories`, {
+      method: "POST",
+      body: JSON.stringify({ image: product.image || null, link: `product.html?id=${product.id}` })
+    });
+    showToast("Hikayeye eklendi! Ana sayfadaki marka ikonunuzda görünecek.");
   }));
 }
 
@@ -121,7 +134,7 @@ function showProductForm(product){
         <input type="url" id="fImportUrl" placeholder="https://...">
         <button class="btn btn-outline" id="fImportBtn" type="button">İçe Aktar</button>
       </div>
-      <p class="ty-hint">⚠️ Bu özellik deneysel ve kırılgandır; sayfa yapısına göre çalışmayabilir.</p>
+      <p class="ty-hint">⚠️ Sunucu üzerinden denenir, çoğu sitede işe yarar ama JavaScript ile yüklenen sayfalarda çalışmayabilir — bulunan bilgileri her zaman kontrol edin.</p>
     </div>
     <div style="display:flex;gap:10px">
       <button class="btn btn-outline" id="cancelProductBtn" type="button">İptal</button>
@@ -143,15 +156,21 @@ function showProductForm(product){
   document.getElementById("fImportBtn").addEventListener("click", async () => {
     const url = document.getElementById("fImportUrl").value;
     if(!url) return;
-    showToast("URL'den içe aktarma deneniyor (deneysel özellik)...");
+    showToast("Ürün bilgisi alınmaya çalışılıyor...");
     try{
-      const res = await fetch(url);
-      const html = await res.text();
-      const match = html.match(/<title>(.*?)<\/title>/i);
-      if(match) document.getElementById("fName").value = match[1].slice(0,80);
-      showToast("Sayfa başlığı bulunduysa ürün adına yazıldı. Diğer alanları elle kontrol edin.");
+      const res = await fetch("/api/products/import-from-url", { method: "POST", body: JSON.stringify({ url }) });
+      const data = await res.json();
+      if(!res.ok){ showToast(data.error || "İçe aktarma başarısız oldu."); return; }
+      if(data.name) document.getElementById("fName").value = data.name;
+      if(data.description) document.getElementById("fDesc").value = data.description;
+      if(data.price) document.getElementById("fPrice").value = data.price;
+      if(data.image){
+        pendingImage = data.image;
+        document.getElementById("fImageBox").innerHTML = `<img class="upload-preview" src="${data.image}">`;
+      }
+      showToast("Bulunan bilgiler dolduruldu — lütfen kontrol edip gerekirse düzenleyin.");
     }catch(e){
-      showToast("İçe aktarma başarısız oldu — bu özellik her sitede çalışmaz.");
+      showToast("İçe aktarma başarısız oldu — bu özellik her sitede çalışmayabilir.");
     }
   });
 

@@ -41,18 +41,18 @@
   </section>
 
   <section class="ty-brandstrip">
-    <h3>Markalar</h3>
+    <h3 id="brandsHeadingText">Markalar</h3>
     <div class="ty-brandstrip-row" id="brandStrip"></div>
   </section>
 
   <section class="ty-section">
-    <div class="ty-section-head"><h3>Kategorilerde İndirim</h3></div>
+    <div class="ty-section-head"><h3 id="discountHeadingText">Kategorilerde İndirim</h3></div>
     <div class="ty-discount-row" id="discountRow"></div>
   </section>
 
   <section class="ty-section">
     <div class="ty-flash">
-      <div><strong>⚡ Flaş Ürünler</strong> — Fırsatlar sona ermeden yakala</div>
+      <div><strong id="flashHeadingText">⚡ Flaş Ürünler</strong> — <span id="flashSloganText">Fırsatlar sona ermeden yakala</span></div>
       <div class="ty-flash-timer" id="flashTimer">
         <div class="box" id="flashH">08</div><div class="box" id="flashM">24</div><div class="box" id="flashS">10</div>
       </div>
@@ -104,6 +104,22 @@
   </aside>
 
   <div class="ty-toast" id="toast"></div>
+  <div class="story-overlay" id="storyOverlay">
+    <div class="story-frame">
+      <div class="story-progress-row" id="storyProgressRow"></div>
+      <div class="story-header">
+        <div class="store-name" id="storyStoreName"><span class="avatar" id="storyAvatar"></span><span id="storyStoreNameText"></span></div>
+        <button class="story-close" id="storyCloseBtn">✕</button>
+      </div>
+      <div class="story-media" id="storyMedia"></div>
+      <div class="story-zones">
+        <button class="zone zone-prev" id="storyZonePrev" aria-label="Önceki"></button>
+        <button class="zone zone-center" id="storyZoneCenter" aria-label="Ürüne git"></button>
+        <button class="zone zone-next" id="storyZoneNext" aria-label="Sonraki"></button>
+      </div>
+      <div class="story-cta">Ürüne gitmek için ortaya dokun</div>
+    </div>
+  </div>
   <nav class="mobile-tabbar" id="mobileTabbar">
     <div class="mobile-tabbar-inner">
       <a href="index.html" data-page="index.html"><span class="tab-ico">🏠</span>Anasayfa</a>
@@ -123,6 +139,7 @@
   <script src="js/headerSearch.js"></script>
   <script src="js/megaMenu.js"></script>
   <script src="js/storefront-content.js"></script>
+  <script src="js/storyViewer.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

@@ -103,17 +103,34 @@ async function ensureSiteSettings(log){
     { id: "b2", title: "Elektronikte Kampanya Zamanı", sub: "Media Markt'ta akıllı telefon ve laptoplarda fırsat", cta: "Ürünleri Gör", link: "category.html?cat=elektronik", color: "#24272b" },
     { id: "b3", title: "Sadece Bildiğin Markalar, Karmaşa Yok", sub: "markabahçem'de yalnızca köklü, güvenilir markalar var", cta: "Markaları Keşfet", link: "index.html", color: "#1ba672" }
   ];
-  const existing = await SiteSettings.findOne({ singleton: "main" });
-  if(existing && existing.banners && existing.banners.length > 0){
-    return false; // zaten dolu, dokunma
+  const defaultDiscountCards = [
+    { id: "d1", label: "%50'ye varan", title: "Kadın Modası", color: "#f27a1a", link: "category.html?cat=kadin" },
+    { id: "d2", label: "%40'a varan", title: "Erkek Giyim", color: "#24272b", link: "category.html?cat=erkek" },
+    { id: "d3", label: "%30'a varan", title: "Elektronik", color: "#1ba672", link: "category.html?cat=elektronik" },
+    { id: "d4", label: "%35'e varan", title: "Ayakkabı & Çanta", color: "#c2410c", link: "category.html?cat=ayakkabi-canta" },
+    { id: "d5", label: "%25'e varan", title: "Kozmetik", color: "#a3195b", link: "category.html?cat=kozmetik" },
+    { id: "d6", label: "%20'ye varan", title: "Ev & Yaşam", color: "#2554c7", link: "category.html?cat=ev-yasam" }
+  ];
+  let existing = await SiteSettings.findOne({ singleton: "main" });
+  if(!existing){
+    await SiteSettings.create({
+      singleton: "main", siteName: "markabahçem.com", brandsHeading: "Markalar",
+      banners: defaultBanners, discountCards: defaultDiscountCards
+    });
+    log.push("Site ayarları, banner'lar ve indirim kartları oluşturuldu.");
+    return true;
   }
-  await SiteSettings.findOneAndUpdate(
-    { singleton: "main" },
-    { singleton: "main", siteName: "markabahçem.com", brandsHeading: "Markalar", banners: defaultBanners },
-    { upsert: true, new: true, setDefaultsOnInsert: true }
-  );
-  log.push("Site ayarları ve banner'lar oluşturuldu/tamamlandı.");
-  return true;
+  // Zaten bir kayıt var; sadece eksik olan alt grupları tamamla (mevcut
+  // özelleştirmelere dokunmadan) — böylece eski bir kurulumdan gelenler de
+  // yeni eklenen alanları (indirim kartları vb.) kaybetmez.
+  let changed = false;
+  if(!existing.banners || existing.banners.length === 0){ existing.banners = defaultBanners; changed = true; }
+  if(!existing.discountCards || existing.discountCards.length === 0){ existing.discountCards = defaultDiscountCards; changed = true; }
+  if(changed){
+    await existing.save();
+    log.push("Eksik site ayarları (banner/indirim kartı) tamamlandı.");
+  }
+  return changed;
 }
 
 module.exports = { seedDatabase };

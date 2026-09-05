@@ -31,7 +31,7 @@ function renderLoginGate(){
 function switchTab(tab){
   ADM_TAB = tab;
   document.querySelectorAll("#sideNav a").forEach(a => a.classList.toggle("active", a.dataset.tab === tab));
-  const titles = { overview:"Genel Bakış", applications:"Başvurular", stores:"Mağazalar", branding:"Site Ayarları" };
+  const titles = { overview:"Genel Bakış", applications:"Başvurular", stores:"Mağazalar", vitrin:"Vitrin Ürünleri", branding:"Site Ayarları" };
   document.getElementById("panelTitle").textContent = titles[tab];
   document.getElementById("panelSidebar").classList.remove("open");
   render();
@@ -42,6 +42,7 @@ async function render(){
   if(ADM_TAB === "overview") return renderOverview(wrap);
   if(ADM_TAB === "applications") return renderApplications(wrap);
   if(ADM_TAB === "stores") return renderStores(wrap);
+  if(ADM_TAB === "vitrin") return renderVitrin(wrap);
   if(ADM_TAB === "branding") return renderBranding(wrap);
 }
 
@@ -171,6 +172,54 @@ async function renderStores(wrap){
   }));
 }
 
+async function renderVitrin(wrap){
+  const [products, settings] = await Promise.all([
+    fetch("/api/products").then(r=>r.json()),
+    fetch("/api/site-settings").then(r=>r.json())
+  ]);
+  const selectedIds = settings.flashProductIds || [];
+  const groups = {};
+  products.forEach(p => {
+    if(!groups[p.storeName]) groups[p.storeName] = [];
+    groups[p.storeName].push(p);
+  });
+
+  wrap.innerHTML = `
+    <div class="panel-block">
+      <h3>Flaş Ürünler Bölümünde Gösterilecek Ürünler</h3>
+      <p class="ty-hint" style="margin-bottom:14px">Aşağıdan istediğiniz kadar ürün seçin. Hiç seçim yapmazsanız, sistem otomatik olarak indirimli ürünlerden bir seçki gösterir.</p>
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <button class="btn btn-primary" id="saveVitrinBtn">Seçimi Kaydet</button>
+        <span id="vitrinCount" style="align-self:center;font-size:12.5px;color:var(--ty-gray)">${selectedIds.length} ürün seçili</span>
+      </div>
+      <div class="table-scroll">
+        ${Object.keys(groups).map(storeName => `
+          <h4 style="font-size:13.5px;margin:16px 0 8px;color:var(--ty-orange-dark)">${storeName}</h4>
+          <table class="data-table" style="margin-bottom:10px">
+            <tbody>
+              ${groups[storeName].map(p => `
+                <tr>
+                  <td style="width:34px"><input type="checkbox" class="vitrinCheck" value="${p.id}" ${selectedIds.includes(p.id) ? "checked" : ""}></td>
+                  <td style="display:flex;align-items:center;gap:8px">${productImageTag(p.image||p.emoji, p.name, "upload-preview")}${p.name}</td>
+                  <td>${p.price.toLocaleString("tr-TR")} ₺${p.oldPrice ? ` <span style="color:var(--ty-gray);text-decoration:line-through">${p.oldPrice.toLocaleString("tr-TR")} ₺</span>` : ""}</td>
+                </tr>
+              `).join("")}
+            </tbody>
+          </table>
+        `).join("")}
+      </div>
+    </div>
+  `;
+  wrap.querySelectorAll(".upload-preview").forEach(img => { img.style.width="30px"; img.style.height="30px"; img.style.borderRadius="6px"; });
+
+  document.getElementById("saveVitrinBtn").addEventListener("click", async () => {
+    const flashProductIds = Array.from(wrap.querySelectorAll(".vitrinCheck:checked")).map(c => c.value);
+    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ flashProductIds }) });
+    showToast("Vitrin ürünleri güncellendi.");
+    document.getElementById("vitrinCount").textContent = flashProductIds.length + " ürün seçili";
+  });
+}
+
 async function renderBranding(wrap){
   const settings = await (await fetch("/api/site-settings")).json();
   const banners = await (await fetch("/api/banners")).json();
@@ -201,6 +250,33 @@ async function renderBranding(wrap){
         <button class="btn btn-primary" id="saveLogoBtn">Logoyu Kaydet</button>
         ${settings.logo ? `<button class="btn btn-outline" id="removeLogoBtn">Logoyu Kaldır</button>` : ""}
       </div>
+      <p class="ty-hint">Önerilen ölçü: en az <strong>200 × 60 piksel</strong>, şeffaf arka planlı (PNG) yatay bir logo header'da en iyi görünür.</p>
+    </div>
+    <div class="panel-block">
+      <h3>"Markalar" Bölümü</h3>
+      <div class="ty-field"><label>Bölüm Başlığı</label><input type="text" id="brandsHeadingInput" value="${settings.brandsHeading || "Markalar"}"></div>
+      <label style="display:block;font-size:12.5px;font-weight:600;margin-bottom:6px">"Tümü" İkonu (opsiyonel görsel)</label>
+      <div class="upload-box" id="allBrandsIconBox">${settings.allBrandsIcon ? `<img class="upload-preview" src="${settings.allBrandsIcon}">` : `<span>🏬 Varsayılan ikon kullanılıyor, değiştirmek için tıklayın</span>`}</div>
+      <input type="file" id="allBrandsIconInput" accept="image/*" style="display:none">
+      <button class="btn btn-primary" id="saveBrandsBtn" style="margin-top:12px">Bu Bölümü Kaydet</button>
+    </div>
+    <div class="panel-block">
+      <h3>"Kategorilerde İndirim" Bölümü</h3>
+      <div class="ty-field"><label>Bölüm Başlığı</label><input type="text" id="discountHeadingInput" value="${settings.discountHeading || "Kategorilerde İndirim"}"></div>
+      <div id="discountCardList">
+        ${(settings.discountCards || []).map((c,i) => renderDiscountCardEditRow(c,i)).join("")}
+      </div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn btn-outline" id="addDiscountCardBtn">+ Yeni Kart Ekle</button>
+        <button class="btn btn-primary" id="saveDiscountBtn">Bu Bölümü Kaydet</button>
+      </div>
+    </div>
+    <div class="panel-block">
+      <h3>"Flaş Ürünler" Bölümü</h3>
+      <div class="ty-field"><label>Bölüm Başlığı</label><input type="text" id="flashHeadingInput" value="${settings.flashHeading || "⚡ Flaş Ürünler"}"></div>
+      <div class="ty-field"><label>Slogan (başlığın yanında görünür)</label><input type="text" id="flashSloganInput" value="${settings.flashSlogan || "Fırsatlar sona ermeden yakala"}"></div>
+      <button class="btn btn-primary" id="saveFlashTextBtn">Bu Bölümü Kaydet</button>
+      <p class="ty-hint">Flaş Ürünler bölümünde hangi ürünlerin görüneceğini seçmek için sol menüden <strong>🌟 Vitrin Ürünleri</strong> sekmesine gidin.</p>
     </div>
     <div class="panel-block">
       <h3>Ana Sayfa Banner'ları</h3>
@@ -214,12 +290,47 @@ async function renderBranding(wrap){
     </div>
   `;
 
+  function renderDiscountCardEditRow(c, i){
+    return `
+      <div style="border:1px solid var(--ty-border);border-radius:8px;padding:14px;margin-bottom:10px" data-id="${c.id || ("d"+i)}" class="discountRow">
+        <div style="display:flex;gap:12px">
+          <div class="ty-field" style="flex:1"><label>Etiket (küçük yazı)</label><input type="text" class="discountLabel" value="${c.label || ""}" placeholder="örn. %30'a varan"></div>
+          <div class="ty-field" style="flex:1"><label>Başlık</label><input type="text" class="discountTitle" value="${c.title || ""}" placeholder="örn. Kadın Modası"></div>
+          <div class="ty-field" style="width:90px"><label>Renk</label><input type="color" class="discountColor" value="${c.color || "#f27a1a"}" style="width:100%;height:38px;padding:2px;border:1px solid var(--ty-border);border-radius:6px"></div>
+        </div>
+        <div class="ty-field">
+          <label>Bağlantı</label>
+          <select class="discountLink">
+            <option value="category.html?cat=kadin" ${c.link==="category.html?cat=kadin"?"selected":""}>Kadın Kategorisi</option>
+            <option value="category.html?cat=erkek" ${c.link==="category.html?cat=erkek"?"selected":""}>Erkek Kategorisi</option>
+            <option value="category.html?cat=ayakkabi-canta" ${c.link==="category.html?cat=ayakkabi-canta"?"selected":""}>Ayakkabı & Çanta</option>
+            <option value="category.html?cat=elektronik" ${c.link==="category.html?cat=elektronik"?"selected":""}>Elektronik Kategorisi</option>
+            <option value="category.html?cat=ev-yasam" ${c.link==="category.html?cat=ev-yasam"?"selected":""}>Ev & Yaşam</option>
+            <option value="category.html?cat=kozmetik" ${c.link==="category.html?cat=kozmetik"?"selected":""}>Kozmetik & Parfüm</option>
+            <option value="category.html?cat=saat-aksesuar" ${c.link==="category.html?cat=saat-aksesuar"?"selected":""}>Saat & Aksesuar</option>
+            <option value="category.html?cat=supermarket" ${c.link==="category.html?cat=supermarket"?"selected":""}>Süpermarket & Kafe</option>
+          </select>
+        </div>
+        <button class="no removeDiscountBtn" style="margin-top:6px;padding:6px 11px;font-size:12px;border-radius:6px;border:1px solid #f5c6bd;background:#fff;color:var(--ty-danger);font-weight:600">Bu Kartı Sil</button>
+      </div>
+    `;
+  }
+
   function renderBannerEditRow(b, i){
     return `
-      <div style="border:1px solid var(--ty-border);border-radius:8px;padding:14px;margin-bottom:10px" data-i="${i}" data-id="${b.id || ("b"+i)}" class="bannerRow">
+      <div style="border:1px solid var(--ty-border);border-radius:8px;padding:14px;margin-bottom:10px" data-i="${i}" data-id="${b.id || ("b"+i)}" data-image="${b.image || ""}" class="bannerRow">
         <div style="display:flex;gap:12px">
           <div class="ty-field" style="flex:1"><label>Başlık</label><input type="text" class="bannerTitle" value="${b.title}"></div>
-          <div class="ty-field" style="width:110px"><label>Renk</label><input type="color" class="bannerColor" value="${b.color || "#f27a1a"}" style="width:100%;height:38px;padding:2px;border:1px solid var(--ty-border);border-radius:6px"></div>
+          <div class="ty-field" style="width:110px"><label>Renk (görsel yoksa/altında kullanılır)</label><input type="color" class="bannerColor" value="${b.color || "#f27a1a"}" style="width:100%;height:38px;padding:2px;border:1px solid var(--ty-border);border-radius:6px"></div>
+        </div>
+        <div class="ty-field">
+          <label>Banner Görseli (opsiyonel)</label>
+          <div class="upload-box bannerImageBox">${b.image ? `<img class="upload-preview" src="${b.image}" style="width:100%;height:90px;object-fit:cover">` : `<span>🖼️ Görsel yüklemek için tıklayın</span>`}</div>
+          <input type="file" class="bannerImageInput" accept="image/*" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:10px">
+            <p class="ty-hint" style="margin:0">Önerilen ölçü: <strong>1600 × 500 piksel</strong> (yatay, geniş bir görsel — 16:5 oranında). Farklı ölçü de yüklenebilir ama kenarlardan kırpılabilir.</p>
+            <button type="button" class="removeBannerImageBtn" style="padding:5px 10px;font-size:11px;border-radius:6px;border:1px solid var(--ty-border);background:#fff;white-space:nowrap;display:${b.image ? "inline-block" : "none"}">Kaldır</button>
+          </div>
         </div>
         <div class="ty-field"><label>Alt Yazı</label><input type="text" class="bannerSub" value="${b.sub || ""}"></div>
         <div style="display:flex;gap:12px">
@@ -279,6 +390,59 @@ async function renderBranding(wrap){
     renderBranding(wrap);
   });
 
+  // --- "Markalar" bölümü ---
+  let pendingAllBrandsIcon = settings.allBrandsIcon;
+  document.getElementById("allBrandsIconBox").addEventListener("click", () => document.getElementById("allBrandsIconInput").click());
+  document.getElementById("allBrandsIconInput").addEventListener("change", async (e) => {
+    if(!e.target.files[0]) return;
+    pendingAllBrandsIcon = await compressImage(e.target.files[0], 200, 0.8);
+    document.getElementById("allBrandsIconBox").innerHTML = `<img class="upload-preview" src="${pendingAllBrandsIcon}">`;
+  });
+  document.getElementById("saveBrandsBtn").addEventListener("click", async () => {
+    const brandsHeading = document.getElementById("brandsHeadingInput").value.trim();
+    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ brandsHeading, allBrandsIcon: pendingAllBrandsIcon }) });
+    showToast("\"Markalar\" bölümü güncellendi.");
+  });
+
+  // --- "Kategorilerde İndirim" bölümü ---
+  wrap.querySelectorAll(".discountRow").forEach(wireDiscountRow);
+  function wireDiscountRow(row){
+    row.querySelector(".removeDiscountBtn").addEventListener("click", () => {
+      if(document.querySelectorAll(".discountRow").length <= 1){ showToast("En az bir kart kalmalı."); return; }
+      row.remove();
+    });
+  }
+  document.getElementById("addDiscountCardBtn").addEventListener("click", () => {
+    const list = document.getElementById("discountCardList");
+    const newCard = { id: "d" + Date.now(), label: "%20'ye varan", title: "Yeni Kategori", color: "#f27a1a", link: "category.html?cat=kadin" };
+    const div = document.createElement("div");
+    div.innerHTML = renderDiscountCardEditRow(newCard, list.children.length);
+    const row = div.firstElementChild;
+    list.appendChild(row);
+    wireDiscountRow(row);
+  });
+  document.getElementById("saveDiscountBtn").addEventListener("click", async () => {
+    const discountHeading = document.getElementById("discountHeadingInput").value.trim();
+    const discountCards = Array.from(document.querySelectorAll(".discountRow")).map(row => ({
+      id: row.dataset.id,
+      label: row.querySelector(".discountLabel").value,
+      title: row.querySelector(".discountTitle").value,
+      color: row.querySelector(".discountColor").value,
+      link: row.querySelector(".discountLink").value
+    }));
+    if(discountCards.length === 0){ showToast("En az bir kart olmalı."); return; }
+    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ discountHeading, discountCards }) });
+    showToast("\"Kategorilerde İndirim\" bölümü güncellendi.");
+  });
+
+  // --- "Flaş Ürünler" bölümü (metin) ---
+  document.getElementById("saveFlashTextBtn").addEventListener("click", async () => {
+    const flashHeading = document.getElementById("flashHeadingInput").value.trim();
+    const flashSlogan = document.getElementById("flashSloganInput").value.trim();
+    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ flashHeading, flashSlogan }) });
+    showToast("\"Flaş Ürünler\" bölümü güncellendi.");
+  });
+
   document.getElementById("saveBannersBtn").addEventListener("click", async () => {
     const newBanners = collectBannersFromDOM();
     if(newBanners.length === 0){ showToast("En az bir banner kalmalı."); return; }
@@ -303,6 +467,22 @@ async function renderBranding(wrap){
       if(document.querySelectorAll(".bannerRow").length <= 1){ showToast("En az bir banner kalmalı."); return; }
       row.remove();
     });
+    const imgBox = row.querySelector(".bannerImageBox");
+    const imgInput = row.querySelector(".bannerImageInput");
+    const removeImgBtn = row.querySelector(".removeBannerImageBtn");
+    imgBox.addEventListener("click", () => imgInput.click());
+    imgInput.addEventListener("change", async (e) => {
+      if(!e.target.files[0]) return;
+      const compressed = await compressImage(e.target.files[0], 1600, 0.75);
+      row.dataset.image = compressed;
+      imgBox.innerHTML = `<img class="upload-preview" src="${compressed}" style="width:100%;height:90px;object-fit:cover">`;
+      removeImgBtn.style.display = "inline-block";
+    });
+    removeImgBtn.addEventListener("click", () => {
+      row.dataset.image = "";
+      imgBox.innerHTML = `<span>🖼️ Görsel yüklemek için tıklayın</span>`;
+      removeImgBtn.style.display = "none";
+    });
   }
   function collectBannersFromDOM(){
     return Array.from(document.querySelectorAll(".bannerRow")).map(row => ({
@@ -311,7 +491,8 @@ async function renderBranding(wrap){
       sub: row.querySelector(".bannerSub").value,
       cta: row.querySelector(".bannerCta").value,
       link: row.querySelector(".bannerLink").value,
-      color: row.querySelector(".bannerColor").value
+      color: row.querySelector(".bannerColor").value,
+      image: row.dataset.image || null
     }));
   }
 }

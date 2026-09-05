@@ -40,8 +40,8 @@ function compressImage(file, maxDim, quality){
 function productImageTag(imageOrEmoji, altText, className){
   className = className || "";
   altText = (altText || "").replace(/"/g, "&quot;");
-  if(imageOrEmoji && typeof imageOrEmoji === "string" && imageOrEmoji.startsWith("data:")){
-    return `<img class="${className}" src="${imageOrEmoji}" alt="${altText}">`;
+  if(imageOrEmoji && typeof imageOrEmoji === "string" && (imageOrEmoji.startsWith("data:") || imageOrEmoji.startsWith("http"))){
+    return `<img class="${className}" src="${imageOrEmoji}" alt="${altText}" loading="lazy">`;
   }
   return `<span class="emoji-fallback">${imageOrEmoji || "🛍️"}</span>`;
 }

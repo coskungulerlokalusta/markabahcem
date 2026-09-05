@@ -11,7 +11,8 @@ async function loadHero(){
   heroSlideCount = banners.length;
   track.innerHTML = banners.map((b,i) => `
     <div class="ty-hero-slide ${i===0?"active":""}" style="background:${b.color || "#f27a1a"}" data-i="${i}">
-      <div>
+      ${b.image ? `<div class="ty-hero-bg" style="background-image:url('${b.image}')"></div><div class="ty-hero-overlay"></div>` : ""}
+      <div class="ty-hero-slide-content">
         <h2>${b.title || ""}</h2>
         ${b.sub ? `<p>${b.sub}</p>` : ""}
         <a href="${b.link || "index.html"}" class="btn btn-primary">${b.cta || "İncele"}</a>
@@ -37,37 +38,52 @@ function goHero(i){
 async function loadBrandStrip(){
   const wrap = document.getElementById("brandStrip");
   if(!wrap) return;
-  const res = await fetch("/api/stores?status=active");
-  const stores = await res.json();
+  const [stores, settings] = await Promise.all([
+    fetch("/api/stores?status=active").then(r=>r.json()),
+    fetch("/api/site-settings").then(r=>r.json())
+  ]);
   const params = new URLSearchParams(location.search);
   const activeStore = params.get("store");
+
+  const headingEl = document.getElementById("brandsHeadingText");
+  if(headingEl && settings.brandsHeading) headingEl.textContent = settings.brandsHeading;
+
   wrap.innerHTML = `
     <a href="index.html" class="ty-brand-pill">
-      <div class="circle" style="${!activeStore ? "border-color:var(--ty-orange)" : ""}">🏬</div>
+      <div class="circle" style="${!activeStore ? "border-color:var(--ty-orange)" : ""}">${productImageTag(settings.allBrandsIcon || "🏬", "Tümü")}</div>
       <span>Tümü</span>
     </a>
-  ` + stores.map(s => `
-    <a href="index.html?store=${s.id}" class="ty-brand-pill">
-      <div class="circle" style="${activeStore===s.id ? "border-color:var(--ty-orange)" : ""}">${productImageTag(s.logo || s.emoji, s.name)}</div>
-      <span>${s.name}</span>
-    </a>
-  `).join("");
+  ` + stores.map(s => {
+    const hasStory = s.stories && s.stories.length > 0;
+    const circleInner = `${productImageTag(s.logo || s.emoji, s.name)}`;
+    const circle = hasStory
+      ? `<button type="button" class="circle has-story" data-store-id="${s.id}">${circleInner}</button>`
+      : `<div class="circle" style="${activeStore===s.id ? "border-color:var(--ty-orange)" : ""}">${circleInner}</div>`;
+    return hasStory
+      ? `<div class="ty-brand-pill">${circle}<a href="index.html?store=${s.id}"><span>${s.name}</span></a></div>`
+      : `<a href="index.html?store=${s.id}" class="ty-brand-pill">${circle}<span>${s.name}</span></a>`;
+  }).join("");
+
+  wrap.querySelectorAll(".circle.has-story").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const store = stores.find(s => s.id === btn.dataset.storeId);
+      if(!store) return;
+      const items = store.stories.map(st => ({ image: st.image, link: st.link }));
+      openStoryViewer(store.name, store.logo || store.emoji, items);
+    });
+  });
 }
 
-const DISCOUNT_CARDS = [
-  { label: "%50'ye varan", title: "Kadın Modası", color: "#f27a1a", cat: "kadin" },
-  { label: "%40'a varan", title: "Erkek Giyim", color: "#24272b", cat: "erkek" },
-  { label: "%30'a varan", title: "Elektronik", color: "#1ba672", cat: "elektronik" },
-  { label: "%35'e varan", title: "Ayakkabı & Çanta", color: "#c2410c", cat: "ayakkabi-canta" },
-  { label: "%25'e varan", title: "Kozmetik", color: "#a3195b", cat: "kozmetik" },
-  { label: "%20'ye varan", title: "Ev & Yaşam", color: "#2554c7", cat: "ev-yasam" }
-];
-function loadDiscountRow(){
+async function loadDiscountRow(){
   const wrap = document.getElementById("discountRow");
   if(!wrap) return;
-  wrap.innerHTML = DISCOUNT_CARDS.map(c => `
-    <a class="ty-discount-card" href="category.html?cat=${c.cat}" style="background:${c.color}">
-      <small>${c.label}</small>${c.title}
+  const settings = await fetch("/api/site-settings").then(r=>r.json());
+  const headingEl = document.getElementById("discountHeadingText");
+  if(headingEl && settings.discountHeading) headingEl.textContent = settings.discountHeading;
+  const cards = (settings.discountCards && settings.discountCards.length) ? settings.discountCards : [];
+  wrap.innerHTML = cards.map(c => `
+    <a class="ty-discount-card" href="${c.link || "index.html"}" style="background:${c.color || "#f27a1a"}">
+      <small>${c.label || ""}</small>${c.title || ""}
     </a>
   `).join("");
 }

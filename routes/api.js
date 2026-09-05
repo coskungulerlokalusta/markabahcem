@@ -253,4 +253,29 @@ router.put("/orders/:id/status", async (req, res) => {
   res.json(order);
 });
 
+router.post("/products/import-from-url", async (req, res) => {
+  const url = req.body.url;
+  if(!url) return res.status(400).json({ error: "URL gerekli" });
+  try{
+    const response = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (compatible; markabahcemBot/1.0)" } });
+    const html = await response.text();
+    const pick = (regex) => { const m = html.match(regex); return m ? m[1].trim() : null; };
+    const title = pick(/<title[^>]*>([^<]*)<\/title>/i);
+    const ogImage = pick(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+      || pick(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    const ogDesc = pick(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i)
+      || pick(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i);
+    const priceMatch = html.match(/(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?)\s*(?:₺|TL|TRY)/i);
+    const price = priceMatch ? parseFloat(priceMatch[1].replace(/\./g, "").replace(",", ".")) : null;
+    res.json({
+      name: title ? title.replace(/\s+/g, " ").slice(0, 120) : null,
+      image: ogImage || null,
+      description: ogDesc || null,
+      price
+    });
+  }catch(err){
+    res.status(500).json({ error: "Sayfa alınamadı: " + err.message });
+  }
+});
+
 module.exports = router;
