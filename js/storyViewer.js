@@ -1,52 +1,68 @@
-/* storyViewer.js — Instagram tarzı tam ekran hikaye izleyici (sadece ana sayfada kullanılır) */
-let STORY_ITEMS = [];
-let STORY_INDEX = 0;
+/* storyViewer.js — Instagram tarzı tam ekran hikaye izleyici (sadece ana sayfada kullanılır).
+   Birden fazla mağazanın hikayelerini art arda gösterebilir: bir mağazanın
+   hikayeleri bitince otomatik olarak sıradaki mağazanın hikayesine geçer. */
+let STORY_GROUPS = [];   // [{ storeName, storeAvatar, items:[{image,link}] }, ...]
+let STORY_GROUP_INDEX = 0;
+let STORY_ITEM_INDEX = 0;
 let STORY_TIMER = null;
 const STORY_DURATION = 4000;
 
-function openStoryViewer(storeName, storeAvatar, items){
-  if(!items || items.length === 0) return;
-  STORY_ITEMS = items;
-  document.getElementById("storyStoreNameText").textContent = storeName;
-  document.getElementById("storyAvatar").innerHTML = productImageTag(storeAvatar, storeName);
+/** groups: sırayla gösterilecek mağaza hikaye grupları. startIndex: hangi gruptan başlanacağı. */
+function openStoryViewer(groups, startIndex){
+  if(!groups || groups.length === 0) return;
+  STORY_GROUPS = groups;
   document.getElementById("storyOverlay").classList.add("open");
-  renderStoryProgress();
+  showGroup(startIndex || 0);
+}
+
+function showGroup(groupIndex){
+  if(groupIndex < 0 || groupIndex >= STORY_GROUPS.length){ closeStoryViewer(); return; }
+  STORY_GROUP_INDEX = groupIndex;
+  const group = STORY_GROUPS[groupIndex];
+  document.getElementById("storyStoreNameText").textContent = group.storeName;
+  document.getElementById("storyAvatar").innerHTML = productImageTag(group.storeAvatar, group.storeName);
+  renderStoryProgress(group.items.length);
   showStory(0);
 }
 
-function renderStoryProgress(){
+function renderStoryProgress(count){
   const row = document.getElementById("storyProgressRow");
-  row.innerHTML = STORY_ITEMS.map((_, i) => `<div class="story-seg"><div class="story-seg-fill" id="storySeg${i}"></div></div>`).join("");
+  row.innerHTML = Array.from({ length: count }).map((_, i) => `<div class="story-seg"><div class="story-seg-fill" id="storySeg${i}"></div></div>`).join("");
 }
 
-function showStory(i){
+function showStory(itemIndex){
   clearTimeout(STORY_TIMER);
-  STORY_ITEMS.forEach((_, idx) => {
+  const group = STORY_GROUPS[STORY_GROUP_INDEX];
+  group.items.forEach((_, idx) => {
     const fill = document.getElementById("storySeg" + idx);
     if(!fill) return;
     fill.style.transition = "none";
-    fill.style.width = idx < i ? "100%" : "0%";
+    fill.style.width = idx < itemIndex ? "100%" : "0%";
   });
-  STORY_INDEX = i;
-  const item = STORY_ITEMS[i];
+  STORY_ITEM_INDEX = itemIndex;
+  const item = group.items[itemIndex];
   document.getElementById("storyMedia").innerHTML = productImageTag(item.image, "hikaye");
   requestAnimationFrame(() => {
-    const fill = document.getElementById("storySeg" + i);
+    const fill = document.getElementById("storySeg" + itemIndex);
     if(fill){ fill.style.transition = `width ${STORY_DURATION}ms linear`; fill.style.width = "100%"; }
   });
   STORY_TIMER = setTimeout(nextStory, STORY_DURATION);
 }
 
 function nextStory(){
-  if(STORY_INDEX < STORY_ITEMS.length - 1) showStory(STORY_INDEX + 1);
-  else closeStoryViewer();
+  const group = STORY_GROUPS[STORY_GROUP_INDEX];
+  if(STORY_ITEM_INDEX < group.items.length - 1) showStory(STORY_ITEM_INDEX + 1);
+  else showGroup(STORY_GROUP_INDEX + 1); // sıradaki markanın hikayesine geç, yoksa kapanır
 }
 function prevStory(){
-  showStory(STORY_INDEX > 0 ? STORY_INDEX - 1 : 0);
+  if(STORY_ITEM_INDEX > 0) showStory(STORY_ITEM_INDEX - 1);
+  else if(STORY_GROUP_INDEX > 0) showGroup(STORY_GROUP_INDEX - 1);
+  else showStory(0);
 }
 function closeStoryViewer(){
   clearTimeout(STORY_TIMER);
-  document.getElementById("storyOverlay").classList.remove("open");
+  const overlay = document.getElementById("storyOverlay");
+  if(overlay) overlay.classList.remove("open");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -56,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("storyZonePrev").addEventListener("click", prevStory);
   document.getElementById("storyZoneNext").addEventListener("click", nextStory);
   document.getElementById("storyZoneCenter").addEventListener("click", () => {
-    const item = STORY_ITEMS[STORY_INDEX];
+    const item = STORY_GROUPS[STORY_GROUP_INDEX].items[STORY_ITEM_INDEX];
     if(item && item.link) location.href = item.link;
   });
 });

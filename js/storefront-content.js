@@ -48,12 +48,24 @@ async function loadBrandStrip(){
   const headingEl = document.getElementById("brandsHeadingText");
   if(headingEl && settings.brandsHeading) headingEl.textContent = settings.brandsHeading;
 
+  // Instagram mantığı: hikayesi olan markalar öne alınır, en son hikaye
+  // paylaşan en başta görünür. Hikayesi olmayan markalar sıralamayı
+  // değiştirmeden (isim sırasıyla) arkadan gelir.
+  function lastStoryTime(s){
+    if(!s.stories || s.stories.length === 0) return null;
+    return Math.max(...s.stories.map(st => new Date(st.createdAt).getTime()));
+  }
+  const withStory = stores.filter(s => s.stories && s.stories.length > 0)
+    .sort((a,b) => lastStoryTime(b) - lastStoryTime(a));
+  const withoutStory = stores.filter(s => !s.stories || s.stories.length === 0);
+  const orderedStores = [...withStory, ...withoutStory];
+
   wrap.innerHTML = `
     <a href="index.html" class="ty-brand-pill">
       <div class="circle" style="${!activeStore ? "border-color:var(--ty-orange)" : ""}">${productImageTag(settings.allBrandsIcon || "🏬", "Tümü")}</div>
       <span>Tümü</span>
     </a>
-  ` + stores.map(s => {
+  ` + orderedStores.map(s => {
     const hasStory = s.stories && s.stories.length > 0;
     const circleInner = `${productImageTag(s.logo || s.emoji, s.name)}`;
     const circle = hasStory
@@ -64,12 +76,17 @@ async function loadBrandStrip(){
       : `<a href="index.html?store=${s.id}" class="ty-brand-pill">${circle}<span>${s.name}</span></a>`;
   }).join("");
 
+  // Şeritte görünme sırasıyla aynı: bir markanın hikayesi bitince
+  // otomatik olarak sıradaki markanın hikayesine geçer.
+  const storyGroups = withStory.map(s => ({
+    storeName: s.name,
+    storeAvatar: s.logo || s.emoji,
+    items: s.stories.map(st => ({ image: st.image, link: st.link }))
+  }));
   wrap.querySelectorAll(".circle.has-story").forEach(btn => {
     btn.addEventListener("click", () => {
-      const store = stores.find(s => s.id === btn.dataset.storeId);
-      if(!store) return;
-      const items = store.stories.map(st => ({ image: st.image, link: st.link }));
-      openStoryViewer(store.name, store.logo || store.emoji, items);
+      const startIndex = withStory.findIndex(s => s.id === btn.dataset.storeId);
+      openStoryViewer(storyGroups, startIndex === -1 ? 0 : startIndex);
     });
   });
 }
