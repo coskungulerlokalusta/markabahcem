@@ -85,7 +85,7 @@ router.put("/stores/:id/commission", async (req, res) => {
 router.post("/stores/:id/stories", async (req, res) => {
   const store = await Store.findById(req.params.id).catch(() => null);
   if(!store) return res.status(404).json({ error: "Mağaza bulunamadı" });
-  store.stories.push({ image: req.body.image || null, link: req.body.link || "index.html" });
+  store.stories.push({ image: req.body.image || null, link: req.body.link || "index.html", caption: req.body.caption || "" });
   await store.save();
   res.status(201).json(store);
 });

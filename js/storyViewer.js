@@ -30,6 +30,12 @@ function renderStoryProgress(count){
   row.innerHTML = Array.from({ length: count }).map((_, i) => `<div class="story-seg"><div class="story-seg-fill" id="storySeg${i}"></div></div>`).join("");
 }
 
+function escapeHtml(str){
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function showStory(itemIndex){
   clearTimeout(STORY_TIMER);
   const group = STORY_GROUPS[STORY_GROUP_INDEX];
@@ -41,7 +47,10 @@ function showStory(itemIndex){
   });
   STORY_ITEM_INDEX = itemIndex;
   const item = group.items[itemIndex];
-  document.getElementById("storyMedia").innerHTML = productImageTag(item.image, "hikaye");
+  const captionHtml = item.caption
+    ? `<div class="story-caption">${escapeHtml(item.caption).replace(/\n/g, "<br>")}</div>`
+    : "";
+  document.getElementById("storyMedia").innerHTML = productImageTag(item.image, "hikaye") + captionHtml;
   requestAnimationFrame(() => {
     const fill = document.getElementById("storySeg" + itemIndex);
     if(fill){ fill.style.transition = `width ${STORY_DURATION}ms linear`; fill.style.width = "100%"; }

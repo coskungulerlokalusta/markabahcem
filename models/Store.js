@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const storySchema = new mongoose.Schema({
   image: { type: String, default: null },
   link: { type: String, default: "index.html" },
+  caption: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now }
 });
 

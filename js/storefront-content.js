@@ -75,7 +75,7 @@ async function loadBrandStrip(){
   const storyGroups = withStory.map(s => ({
     storeName: s.name,
     storeAvatar: s.logo || s.emoji,
-    items: s.stories.map(st => ({ image: st.image, link: st.link }))
+    items: s.stories.map(st => ({ image: st.image, link: st.link, caption: st.caption }))
   }));
   wrap.querySelectorAll(".circle.has-story").forEach(btn => {
     btn.addEventListener("click", () => {

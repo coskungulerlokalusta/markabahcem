@@ -1,3 +1,31 @@
+/* askStoryCaption — hikaye üzerinde görünecek metni (indirim/kampanya vb.)
+   sormak için küçük bir pencere açar. İptal edilirse null döner. */
+function askStoryCaption(defaultText){
+  return new Promise(resolve => {
+    const overlay = document.createElement("div");
+    overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px";
+    overlay.innerHTML = `
+      <div style="background:#fff;border-radius:10px;padding:22px;max-width:400px;width:100%">
+        <h3 style="margin-bottom:6px;font-size:16px">Hikaye Metni</h3>
+        <p style="font-size:12.5px;color:var(--ty-gray);margin-bottom:12px">Bu yazı, hikayenin üzerinde büyük ve okunaklı şekilde görünecek (örn. indirim, kampanya). İnsanların satın almak istemesini sağlayacak kısa bir mesaj yazın. Boş bırakabilirsiniz.</p>
+        <textarea id="storyCaptionTA" rows="3" style="width:100%;padding:10px;border:1px solid var(--ty-border);border-radius:6px;font-family:inherit;font-size:14px;resize:vertical"></textarea>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <button id="storyCaptionCancel" class="btn btn-outline" style="flex:1">İptal</button>
+          <button id="storyCaptionOk" class="btn btn-primary" style="flex:1">Hikayeye Ekle</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+    document.getElementById("storyCaptionTA").value = defaultText || "";
+    document.getElementById("storyCaptionCancel").addEventListener("click", () => { overlay.remove(); resolve(null); });
+    document.getElementById("storyCaptionOk").addEventListener("click", () => {
+      const val = document.getElementById("storyCaptionTA").value.trim();
+      overlay.remove();
+      resolve(val);
+    });
+  });
+}
+
 /* partner-dashboard.js — Mağaza paneli mantığı */
 let PD_STORE = null;
 let PD_TAB = "overview";
@@ -117,9 +145,16 @@ async function renderProducts(wrap){
     if(!product.image){
       if(!confirm("Bu ürünün gerçek bir görseli yok (sadece emoji var). Yine de hikayeye eklemek ister misiniz?")) return;
     }
+    let defaultCaption = "";
+    if(product.oldPrice && product.oldPrice > product.price){
+      const pct = Math.round((1 - product.price / product.oldPrice) * 100);
+      defaultCaption = `${product.oldPrice.toLocaleString("tr-TR")} TL yerine ${product.price.toLocaleString("tr-TR")} TL!\n%${pct} İNDİRİM`;
+    }
+    const caption = await askStoryCaption(defaultCaption);
+    if(caption === null) return; // iptal edildi
     await fetch(`/api/stores/${PD_STORE.id}/stories`, {
       method: "POST",
-      body: JSON.stringify({ image: product.image || null, link: `product.html?id=${product.id}` })
+      body: JSON.stringify({ image: product.image || null, link: `product.html?id=${product.id}`, caption })
     });
     showToast("Hikayeye eklendi! Ana sayfadaki marka ikonunuzda görünecek.");
     renderProducts(wrap);
