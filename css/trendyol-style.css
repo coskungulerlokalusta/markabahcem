@@ -285,9 +285,13 @@ h1,h2,h3,h4{ margin:0; font-weight:700; }
   .ty-megamenu-inner{ grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width: 600px){
-  .ty-header-top{ flex-wrap:wrap; padding:10px 14px; gap:10px; }
-  .ty-logo{ order:1; }
+  .ty-header-top{ flex-wrap:wrap; padding:10px 14px; gap:8px; row-gap:10px; }
+  .ty-logo{ order:1; font-size:15px; gap:5px; }
+  .ty-logo .leaf{ font-size:17px; }
+  .ty-logo img.site-logo{ height:26px; }
   .ty-header-actions{ order:2; margin-left:auto; gap:14px; }
+  .ty-header-actions a{ min-width:38px; font-size:9.5px; gap:1px; }
+  .ty-header-actions a .ico{ font-size:16px; }
   .ty-searchbar{ order:3; max-width:100%; width:100%; }
   .ty-nav-inner a, .ty-nav-inner button.megabtn{ font-size:12.5px; padding:10px 10px; }
   .ty-grid{ grid-template-columns: repeat(2, 1fr); gap:10px; }

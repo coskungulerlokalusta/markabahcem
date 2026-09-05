@@ -79,7 +79,7 @@
       { id: "b2", title: "Elektronikte Kampanya Zamanı", sub: "Media Markt'ta akıllı telefon ve laptoplarda fırsat", cta: "Ürünleri Gör", link: "category.html?cat=elektronik", color: "#24272b" },
       { id: "b3", title: "Sadece Bildiğin Markalar, Karmaşa Yok", sub: "markabahçem'de yalnızca köklü, güvenilir markalar var", cta: "Markaları Keşfet", link: "index.html", color: "#1ba672" }
     ],
-    siteSettings: { logo: null, updatedAt: null },
+    siteSettings: { logo: null, siteName: "markabahçem.com", fontFamily: "", updatedAt: null },
     orders: [],
     users: [
       { id: "u-demo", name: "Demo Kullanıcı", email: "demo@markabahcem.com", password: "123456" }
@@ -189,6 +189,13 @@
             if(!s.status){ s.status = "active"; healed = true; }
             if(!s.emoji){ s.emoji = "🏬"; healed = true; }
             if(!s.desc){ s.desc = ""; healed = true; }
+          });
+        }
+        // siteSettings içinde eksik alan varsa (ör. eski veride siteName/fontFamily
+        // hiç olmayabilir) varsayılanlarla tamamlar.
+        if(parsed.siteSettings && typeof parsed.siteSettings === "object"){
+          Object.keys(defaults.siteSettings).forEach(key => {
+            if(parsed.siteSettings[key] === undefined){ parsed.siteSettings[key] = defaults.siteSettings[key]; healed = true; }
           });
         }
         if(healed) saveDB(parsed);

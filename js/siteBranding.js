@@ -46,20 +46,48 @@ function productImageTag(imageOrEmoji, altText, className){
   return `<span class="emoji-fallback">${imageOrEmoji || "🛍️"}</span>`;
 }
 
-/** Admin panelden bir site logosu yüklenmişse header'daki emoji-logoyu görsel ile değiştirir. */
-async function applySiteLogo(){
+/** Admin panelden yapılan özelleştirmeleri (logo, site adı metni, yazı karakteri)
+ * her sayfada header'a uygular. Google Fonts'tan yüklenebilen bir font seçildiyse
+ * ilgili <link> etiketini sayfaya dinamik olarak ekler. */
+const GOOGLE_FONTS = ["Poppins", "Montserrat", "Playfair Display", "Quicksand", "Pacifico"];
+
+function ensureGoogleFontLoaded(fontName){
+  if(!GOOGLE_FONTS.includes(fontName)) return;
+  const linkId = "gfont-" + fontName.replace(/\s+/g, "-").toLowerCase();
+  if(document.getElementById(linkId)) return;
+  const link = document.createElement("link");
+  link.id = linkId;
+  link.rel = "stylesheet";
+  link.href = "https://fonts.googleapis.com/css2?family=" + encodeURIComponent(fontName).replace(/%20/g, "+") + ":wght@400;700&display=swap";
+  document.head.appendChild(link);
+}
+
+async function applySiteBranding(){
   try{
     const res = await fetch("/api/site-settings");
     const settings = await res.json();
-    if(settings && settings.logo){
-      document.querySelectorAll(".ty-logo").forEach(el => {
-        el.querySelectorAll(".leaf, .brand").forEach(n => n.style.display = "none");
+    if(!settings) return;
+    if(settings.fontFamily) ensureGoogleFontLoaded(settings.fontFamily);
+    document.querySelectorAll(".ty-logo").forEach(el => {
+      if(settings.logo){
+        el.querySelectorAll(".leaf, #siteNameText").forEach(n => n.style.display = "none");
         if(!el.querySelector("img.site-logo")){
           const img = document.createElement("img");
           img.src = settings.logo; img.className = "site-logo"; img.alt = "markabahçem";
           el.prepend(img);
         }
-      });
-    }
+      }
+      const nameEl = el.querySelector("#siteNameText");
+      if(nameEl){
+        if(settings.siteName && settings.siteName.trim()){
+          nameEl.textContent = settings.siteName; // özel isimde iki renkli ".com" efekti kalkar
+        }
+        if(settings.fontFamily){
+          nameEl.style.fontFamily = `"${settings.fontFamily}", var(--font)`;
+        }
+      }
+    });
   }catch(e){ /* sessizce geç — demo ortamı */ }
 }
+// Geriye dönük uyumluluk için eski isim
+function applySiteLogo(){ return applySiteBranding(); }

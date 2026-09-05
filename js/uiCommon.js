@@ -140,7 +140,7 @@ function renderProductGrid(container, products){
 document.addEventListener("DOMContentLoaded", () => {
   updateCartBadge();
   loadFooterStoreLinks();
-  applySiteLogo();
+  applySiteBranding();
 
   const cartOpenBtn = document.getElementById("cartOpenBtn");
   const cartCloseBtn = document.getElementById("cartCloseBtn");

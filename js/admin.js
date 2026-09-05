@@ -176,22 +176,91 @@ async function renderBranding(wrap){
   const banners = await (await fetch("/api/banners")).json();
   wrap.innerHTML = `
     <div class="panel-block">
+      <h3>Site Adı & Yazı Karakteri</h3>
+      <div class="ty-field"><label>Görünen İsim</label><input type="text" id="siteNameInput" value="${settings.siteName || "markabahçem.com"}" placeholder="markabahçem.com"></div>
+      <div class="ty-field">
+        <label>Yazı Karakteri</label>
+        <select id="fontSelect">
+          <option value="">Varsayılan (Sistem Yazı Tipi)</option>
+          <option value="Poppins">Poppins</option>
+          <option value="Montserrat">Montserrat</option>
+          <option value="Playfair Display">Playfair Display (Şık/Klasik)</option>
+          <option value="Quicksand">Quicksand (Yuvarlak/Modern)</option>
+          <option value="Pacifico">Pacifico (El Yazısı)</option>
+        </select>
+      </div>
+      <div id="fontPreview" style="font-size:22px;font-weight:800;margin:10px 0 16px;padding:14px;background:var(--ty-bg);border-radius:8px"></div>
+      <button class="btn btn-primary" id="saveNameBtn">İsim & Fontu Kaydet</button>
+      <p class="ty-hint">Not: Özel bir isim girildiğinde varsayılan iki renkli "markabahçem.com" görünümü kalkar, tek renkli görünür. Bir logo yüklerseniz (aşağıda) isim/font ayarı header'da görünmez, logo görseli öncelikli olur.</p>
+    </div>
+    <div class="panel-block">
       <h3>Site Logosu</h3>
       <div class="upload-box" id="siteLogoBox">${settings.logo ? `<img class="upload-preview" src="${settings.logo}">` : `<span>📷 Logo yüklemek için tıklayın (header'da 🌿 yerine görünür)</span>`}</div>
       <input type="file" id="siteLogoInput" accept="image/*" style="display:none">
-      <button class="btn btn-primary" id="saveLogoBtn" style="margin-top:12px">Logoyu Kaydet</button>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-primary" id="saveLogoBtn">Logoyu Kaydet</button>
+        ${settings.logo ? `<button class="btn btn-outline" id="removeLogoBtn">Logoyu Kaldır</button>` : ""}
+      </div>
     </div>
     <div class="panel-block">
       <h3>Ana Sayfa Banner'ları</h3>
-      ${banners.map((b,i) => `
-        <div style="border:1px solid var(--ty-border);border-radius:8px;padding:14px;margin-bottom:10px">
-          <div class="ty-field"><label>Başlık</label><input type="text" class="bannerTitle" data-i="${i}" value="${b.title}"></div>
-          <div class="ty-field"><label>Alt Yazı</label><input type="text" class="bannerSub" data-i="${i}" value="${b.sub}"></div>
-        </div>
-      `).join("")}
-      <button class="btn btn-primary" id="saveBannersBtn">Banner'ları Kaydet</button>
+      <div id="bannerList">
+        ${banners.map((b,i) => renderBannerEditRow(b,i)).join("")}
+      </div>
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <button class="btn btn-outline" id="addBannerBtn">+ Yeni Banner Ekle</button>
+        <button class="btn btn-primary" id="saveBannersBtn">Banner'ları Kaydet</button>
+      </div>
     </div>
   `;
+
+  function renderBannerEditRow(b, i){
+    return `
+      <div style="border:1px solid var(--ty-border);border-radius:8px;padding:14px;margin-bottom:10px" data-i="${i}" data-id="${b.id || ("b"+i)}" class="bannerRow">
+        <div style="display:flex;gap:12px">
+          <div class="ty-field" style="flex:1"><label>Başlık</label><input type="text" class="bannerTitle" value="${b.title}"></div>
+          <div class="ty-field" style="width:110px"><label>Renk</label><input type="color" class="bannerColor" value="${b.color || "#f27a1a"}" style="width:100%;height:38px;padding:2px;border:1px solid var(--ty-border);border-radius:6px"></div>
+        </div>
+        <div class="ty-field"><label>Alt Yazı</label><input type="text" class="bannerSub" value="${b.sub || ""}"></div>
+        <div style="display:flex;gap:12px">
+          <div class="ty-field" style="flex:1"><label>Buton Metni</label><input type="text" class="bannerCta" value="${b.cta || ""}"></div>
+          <div class="ty-field" style="flex:1">
+            <label>Bağlantı</label>
+            <select class="bannerLink">
+              <option value="index.html" ${b.link==="index.html"?"selected":""}>Ana Sayfa</option>
+              <option value="category.html?cat=kadin" ${b.link==="category.html?cat=kadin"?"selected":""}>Kadın Kategorisi</option>
+              <option value="category.html?cat=erkek" ${b.link==="category.html?cat=erkek"?"selected":""}>Erkek Kategorisi</option>
+              <option value="category.html?cat=elektronik" ${b.link==="category.html?cat=elektronik"?"selected":""}>Elektronik Kategorisi</option>
+              <option value="category.html?cat=ayakkabi-canta" ${b.link==="category.html?cat=ayakkabi-canta"?"selected":""}>Ayakkabı & Çanta</option>
+              <option value="category.html?cat=ev-yasam" ${b.link==="category.html?cat=ev-yasam"?"selected":""}>Ev & Yaşam</option>
+              <option value="category.html?cat=kozmetik" ${b.link==="category.html?cat=kozmetik"?"selected":""}>Kozmetik & Parfüm</option>
+              <option value="category.html?cat=saat-aksesuar" ${b.link==="category.html?cat=saat-aksesuar"?"selected":""}>Saat & Aksesuar</option>
+              <option value="category.html?cat=supermarket" ${b.link==="category.html?cat=supermarket"?"selected":""}>Süpermarket & Kafe</option>
+            </select>
+          </div>
+        </div>
+        <button class="no removeBannerBtn" style="margin-top:6px;padding:6px 11px;font-size:12px;border-radius:6px;border:1px solid #f5c6bd;background:#fff;color:var(--ty-danger);font-weight:600">Bu Banner'ı Sil</button>
+      </div>
+    `;
+  }
+
+  const nameInput = document.getElementById("siteNameInput");
+  const fontSelect = document.getElementById("fontSelect");
+  const preview = document.getElementById("fontPreview");
+  fontSelect.value = settings.fontFamily || "";
+  function updatePreview(){
+    preview.textContent = nameInput.value || "markabahçem.com";
+    preview.style.fontFamily = fontSelect.value ? `"${fontSelect.value}", var(--font)` : "var(--font)";
+    if(fontSelect.value) ensureGoogleFontLoaded(fontSelect.value);
+  }
+  updatePreview();
+  nameInput.addEventListener("input", updatePreview);
+  fontSelect.addEventListener("change", updatePreview);
+  document.getElementById("saveNameBtn").addEventListener("click", async () => {
+    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ siteName: nameInput.value.trim(), fontFamily: fontSelect.value }) });
+    showToast("Site adı ve yazı karakteri güncellendi.");
+  });
+
   let pendingLogo = settings.logo;
   document.getElementById("siteLogoBox").addEventListener("click", () => document.getElementById("siteLogoInput").click());
   document.getElementById("siteLogoInput").addEventListener("change", async (e) => {
@@ -203,15 +272,48 @@ async function renderBranding(wrap){
     await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ logo: pendingLogo }) });
     showToast("Site logosu güncellendi.");
   });
+  const removeBtn = document.getElementById("removeLogoBtn");
+  if(removeBtn) removeBtn.addEventListener("click", async () => {
+    await fetch("/api/site-settings", { method:"PUT", body: JSON.stringify({ logo: null }) });
+    showToast("Logo kaldırıldı, isim/font tekrar görünecek.");
+    renderBranding(wrap);
+  });
+
   document.getElementById("saveBannersBtn").addEventListener("click", async () => {
-    const newBanners = banners.map((b,i) => ({
-      ...b,
-      title: wrap.querySelector(`.bannerTitle[data-i="${i}"]`).value,
-      sub: wrap.querySelector(`.bannerSub[data-i="${i}"]`).value
-    }));
+    const newBanners = collectBannersFromDOM();
+    if(newBanners.length === 0){ showToast("En az bir banner kalmalı."); return; }
     await fetch("/api/banners", { method:"PUT", body: JSON.stringify({ banners: newBanners }) });
     showToast("Banner içerikleri güncellendi.");
   });
+
+  document.getElementById("addBannerBtn").addEventListener("click", () => {
+    const list = document.getElementById("bannerList");
+    const newBanner = { id: "b" + Date.now(), title: "Yeni Banner Başlığı", sub: "", cta: "İncele", link: "index.html", color: "#f27a1a" };
+    const div = document.createElement("div");
+    div.innerHTML = renderBannerEditRow(newBanner, list.children.length);
+    const row = div.firstElementChild;
+    list.appendChild(row);
+    wireBannerRow(row);
+  });
+
+  wrap.querySelectorAll(".bannerRow").forEach(wireBannerRow);
+  function wireBannerRow(row){
+    const removeBtn = row.querySelector(".removeBannerBtn");
+    removeBtn.addEventListener("click", () => {
+      if(document.querySelectorAll(".bannerRow").length <= 1){ showToast("En az bir banner kalmalı."); return; }
+      row.remove();
+    });
+  }
+  function collectBannersFromDOM(){
+    return Array.from(document.querySelectorAll(".bannerRow")).map(row => ({
+      id: row.dataset.id,
+      title: row.querySelector(".bannerTitle").value,
+      sub: row.querySelector(".bannerSub").value,
+      cta: row.querySelector(".bannerCta").value,
+      link: row.querySelector(".bannerLink").value,
+      color: row.querySelector(".bannerColor").value
+    }));
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
