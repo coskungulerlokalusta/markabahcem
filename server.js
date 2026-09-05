@@ -27,6 +27,14 @@ const PORT = process.env.PORT || 3000;
 // kaydetmiyordu. Bu satır tüm istekleri JSON olarak ayrıştırmaya zorlar.
 app.use(express.json({ limit: "10mb", type: () => true }));
 
+// Hostinger'ın CDN'i bazı GET isteklerini önbelleğe alabiliyor; API
+// cevapları her zaman güncel veriyi yansıtmalı, bu yüzden önbelleklemeyi
+// açıkça kapatıyoruz (admin panelinden kaydedilen değişikliklerin
+// "kaydedildi ama sitede görünmüyor" gibi görünmesini engeller).
+app.use("/api", (req, res, next) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate");
+  next();
+});
 app.use("/api", apiRoutes);
 
 // Tek seferlik kurulum: veritabanı boşsa başlangıç verisini (mağazalar,
