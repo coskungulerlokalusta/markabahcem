@@ -18,6 +18,25 @@ const SiteSettings = require("../models/SiteSettings");
 
 const router = express.Router();
 
+// ÖNEMLİ GÜVENLİK AĞI: Express 4'te bir async route içinde oluşan hata
+// (ör. MongoDB'ye anlık bağlantı sorunu) yakalanmazsa istemciye HİÇBİR
+// cevap dönülmez ve sayfa sonsuza kadar "yükleniyor" gibi görünür — tam
+// da yaşanan "hep bekliyor" sorununun sebebi budur. Bunu kalıcı olarak
+// önlemek için router'ın tüm metodlarını, her handler'ı otomatik olarak
+// try/catch'e alıp hataları merkezi hata middleware'ine yönlendirecek
+// şekilde sarıyoruz — tek tek her route'a dokunmaya gerek kalmaz.
+["get", "post", "put", "delete"].forEach(method => {
+  const original = router[method].bind(router);
+  router[method] = (path, ...handlers) => {
+    const wrapped = handlers.map(h =>
+      (typeof h === "function")
+        ? (req, res, next) => Promise.resolve(h(req, res, next)).catch(next)
+        : h
+    );
+    return original(path, ...wrapped);
+  };
+});
+
 // Sabit kategori listesi (nadiren değişir, veritabanında tutmaya gerek yok)
 const CATEGORIES = [
   { id: "kadin", name: "Kadın", emoji: "👗" },
