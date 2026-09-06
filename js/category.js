@@ -4,7 +4,7 @@ let CAT_STATE = { cat: null, store: null, sort: "" };
 async function loadCategoryFilters(){
   const [cats, stores] = await Promise.all([
     fetch("/api/categories").then(r=>r.json()),
-    fetch("/api/stores?status=active").then(r=>r.json())
+    fetch("/api/stores?status=active&light=true").then(r=>r.json())
   ]);
 
   const catList = document.getElementById("catFilterList");

@@ -86,7 +86,7 @@ async function loadFooterStoreLinks(){
   const wrap = document.getElementById("footerStoreLinks");
   if(!wrap) return;
   try{
-    const res = await fetch("/api/stores?status=active");
+    const res = await fetch("/api/stores?status=active&light=true");
     const stores = await res.json();
     wrap.innerHTML = "<h4>Mağazalar</h4>" + stores.slice(0,8).map(s =>
       `<a href="store-profile.html?store=${s.id}">${s.name}</a>`).join("");

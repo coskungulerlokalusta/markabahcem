@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if(!btn || !menu) return;
 
   try{
-    const [catsRes, storesRes] = await Promise.all([fetch("/api/categories"), fetch("/api/stores")]);
+    const [catsRes, storesRes] = await Promise.all([fetch("/api/categories"), fetch("/api/stores?light=true")]);
     const cats = await catsRes.json();
     const stores = await storesRes.json();
 

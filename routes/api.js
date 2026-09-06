@@ -53,7 +53,12 @@ router.get("/categories", (req, res) => res.json(CATEGORIES));
 router.get("/stores", async (req, res) => {
   const filter = {};
   if(req.query.status) filter.status = req.query.status;
-  const stores = await Store.find(filter).sort({ name: 1 }).lean();
+  let query = Store.find(filter).sort({ name: 1 }).lean();
+  // Performans: logo/banner gibi ağır base64 alanlarına ihtiyaç duymayan
+  // çağrılar (footer linkleri, mega menü, kategori filtreleri) bu alanları
+  // hiç indirmesin diye "light=true" ile hafif bir sürüm istenebilir.
+  if(req.query.light === "true") query = query.select("name status categories");
+  const stores = await query.exec();
   res.json(stores.map(formatStore));
 });
 
@@ -103,6 +108,11 @@ router.get("/products", async (req, res) => {
   const filter = {};
   if(req.query.category) filter.category = req.query.category;
   if(req.query.store) filter.storeId = req.query.store;
+  if(req.query.discounted === "true") filter.oldPrice = { $ne: null };
+  if(req.query.ids){
+    const idList = req.query.ids.split(",").filter(Boolean);
+    filter._id = { $in: idList };
+  }
   if(req.query.q){
     const q = req.query.q;
     filter.$or = [

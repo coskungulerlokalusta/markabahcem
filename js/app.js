@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const params = new URLSearchParams(location.search);
   const storeId = params.get("store");
+  const storeQS = storeId ? "&store=" + storeId : "";
 
   const settings = await fetch("/api/site-settings").then(r=>r.json());
   const flashHeadingEl = document.getElementById("flashHeadingText");
@@ -14,15 +15,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   const flashSloganEl = document.getElementById("flashSloganText");
   if(flashSloganEl && settings.flashSlogan) flashSloganEl.textContent = settings.flashSlogan;
 
-  // Flaş ürünler: admin'in özellikle seçtiği ürünler varsa onlar gösterilir;
-  // hiç seçim yapılmadıysa indirimli ürünlerden otomatik bir seçki yapılır.
-  const allRes = await fetch("/api/products" + (storeId ? "?store=" + storeId : ""));
-  const all = await allRes.json();
+  // Performans: tüm katalogu indirmek yerine (yavaş mobil bağlantılarda
+  // çok zaman alır) sadece gösterilecek kadar ürünü sunucudan çekiyoruz.
+
+  // Flaş ürünler: admin'in özellikle seçtiği ürünler varsa onlar gösterilir
+  // (sadece o birkaç ürün tek tek çekilir); hiç seçim yapılmadıysa
+  // indirimli ürünlerden sunucu tarafında sınırlı bir seçki istenir.
   let flashItems;
   if(settings.flashProductIds && settings.flashProductIds.length > 0){
-    flashItems = settings.flashProductIds.map(id => all.find(p => p.id === id)).filter(Boolean);
+    const ids = settings.flashProductIds.join(",");
+    flashItems = await fetch("/api/products?ids=" + ids).then(r=>r.json());
   }else{
-    flashItems = all.filter(p => p.oldPrice).slice(0, 6);
+    flashItems = await fetch("/api/products?discounted=true&limit=6" + storeQS).then(r=>r.json());
   }
   renderProductGrid(document.getElementById("flashGrid"), flashItems);
 
@@ -33,5 +37,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       if(gridTitle) gridTitle.textContent = s.name + " Ürünleri";
     }catch(e){}
   }
-  renderProductGrid(document.getElementById("productGrid"), all.slice(0, 24));
+  const generalProducts = await fetch("/api/products?limit=24" + storeQS).then(r=>r.json());
+  renderProductGrid(document.getElementById("productGrid"), generalProducts);
 });
