@@ -18,25 +18,6 @@ const SiteSettings = require("../models/SiteSettings");
 
 const router = express.Router();
 
-// ÖNEMLİ GÜVENLİK AĞI: Express 4'te bir async route içinde oluşan hata
-// (ör. MongoDB'ye anlık bağlantı sorunu) yakalanmazsa istemciye HİÇBİR
-// cevap dönülmez ve sayfa sonsuza kadar "yükleniyor" gibi görünür — tam
-// da yaşanan "hep bekliyor" sorununun sebebi budur. Bunu kalıcı olarak
-// önlemek için router'ın tüm metodlarını, her handler'ı otomatik olarak
-// try/catch'e alıp hataları merkezi hata middleware'ine yönlendirecek
-// şekilde sarıyoruz — tek tek her route'a dokunmaya gerek kalmaz.
-["get", "post", "put", "delete"].forEach(method => {
-  const original = router[method].bind(router);
-  router[method] = (path, ...handlers) => {
-    const wrapped = handlers.map(h =>
-      (typeof h === "function")
-        ? (req, res, next) => Promise.resolve(h(req, res, next)).catch(next)
-        : h
-    );
-    return original(path, ...wrapped);
-  };
-});
-
 // Sabit kategori listesi (nadiren değişir, veritabanında tutmaya gerek yok)
 const CATEGORIES = [
   { id: "kadin", name: "Kadın", emoji: "👗" },
@@ -72,12 +53,7 @@ router.get("/categories", (req, res) => res.json(CATEGORIES));
 router.get("/stores", async (req, res) => {
   const filter = {};
   if(req.query.status) filter.status = req.query.status;
-  let query = Store.find(filter).sort({ name: 1 }).lean();
-  // Performans: logo/banner gibi ağır base64 alanlarına ihtiyaç duymayan
-  // çağrılar (footer linkleri, mega menü, kategori filtreleri) bu alanları
-  // hiç indirmesin diye "light=true" ile hafif bir sürüm istenebilir.
-  if(req.query.light === "true") query = query.select("name status categories");
-  const stores = await query.exec();
+  const stores = await Store.find(filter).sort({ name: 1 }).lean();
   res.json(stores.map(formatStore));
 });
 
@@ -127,11 +103,6 @@ router.get("/products", async (req, res) => {
   const filter = {};
   if(req.query.category) filter.category = req.query.category;
   if(req.query.store) filter.storeId = req.query.store;
-  if(req.query.discounted === "true") filter.oldPrice = { $ne: null };
-  if(req.query.ids){
-    const idList = req.query.ids.split(",").filter(Boolean);
-    filter._id = { $in: idList };
-  }
   if(req.query.q){
     const q = req.query.q;
     filter.$or = [

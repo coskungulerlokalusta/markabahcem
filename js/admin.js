@@ -326,7 +326,7 @@ async function renderBranding(wrap){
           <div class="upload-box bannerImageBox">${b.image ? `<img class="upload-preview" src="${b.image}" style="width:100%;height:90px;object-fit:cover">` : `<span>🖼️ Görsel yüklemek için tıklayın</span>`}</div>
           <input type="file" class="bannerImageInput" accept="image/*" style="display:none">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;gap:10px">
-            <p class="ty-hint" style="margin:0">Önerilen ölçü: <strong>1000 × 310 piksel</strong> (yatay, 16:5 oranında). Mobilde hızlı açılması için yüklediğiniz görsel otomatik olarak bu boyuta küçültülür.</p>
+            <p class="ty-hint" style="margin:0">Önerilen ölçü: <strong>1600 × 500 piksel</strong> (yatay, geniş bir görsel — 16:5 oranında). Farklı ölçü de yüklenebilir ama kenarlardan kırpılabilir.</p>
             <button type="button" class="removeBannerImageBtn" style="padding:5px 10px;font-size:11px;border-radius:6px;border:1px solid var(--ty-border);background:#fff;white-space:nowrap;display:${b.image ? "inline-block" : "none"}">Kaldır</button>
           </div>
         </div>
@@ -467,7 +467,7 @@ async function renderBranding(wrap){
     imgBox.addEventListener("click", () => imgInput.click());
     imgInput.addEventListener("change", async (e) => {
       if(!e.target.files[0]) return;
-      const compressed = await compressImage(e.target.files[0], 1000, 0.7);
+      const compressed = await compressImage(e.target.files[0], 1600, 0.75);
       row.dataset.image = compressed;
       imgBox.innerHTML = `<img class="upload-preview" src="${compressed}" style="width:100%;height:90px;object-fit:cover">`;
       removeImgBtn.style.display = "inline-block";

@@ -37,16 +37,6 @@ app.use("/api", (req, res, next) => {
 });
 app.use("/api", apiRoutes);
 
-// Merkezi hata yönetimi: yukarıdaki güvenlik ağı bir hatayı yakalayıp
-// buraya yönlendirdiğinde, istemciye MUTLAKA bir cevap dönülür — sayfanın
-// sonsuza kadar "yükleniyor" görünmesi yerine, en azından anlaşılır bir
-// hata mesajı alınır.
-app.use("/api", (err, req, res, next) => {
-  console.error("API hatası:", err);
-  if(res.headersSent) return next(err);
-  res.status(500).json({ error: "Sunucu hatası, lütfen tekrar deneyin. (" + (err && err.message ? err.message : "bilinmeyen hata") + ")" });
-});
-
 // Tek seferlik kurulum: veritabanı boşsa başlangıç verisini (mağazalar,
 // ürünler, banner'lar) oluşturur. Terminal/SSH erişimi olmayanlar için
 // tarayıcıdan bir kez ziyaret edilerek çalıştırılabilir. SEED_KEY ortam

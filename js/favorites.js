@@ -6,7 +6,8 @@ async function loadFavoritesPage(){
     grid.innerHTML = `<div class="ty-page-empty" style="grid-column:1/-1"><div class="big">♡</div><p>Henüz favori ürününüz yok.</p><a href="index.html" class="btn btn-primary">Alışverişe Başla</a></div>`;
     return;
   }
-  const favProducts = await (await fetch("/api/products?ids=" + ids.join(","))).json();
+  const all = await (await fetch("/api/products")).json();
+  const favProducts = all.filter(p => ids.includes(p.id));
   renderProductGrid(grid, favProducts);
 }
 document.addEventListener("DOMContentLoaded", loadFavoritesPage);
