@@ -11,9 +11,13 @@ async function loadHero(){
   heroSlideCount = banners.length;
   track.innerHTML = banners.map((b,i) => {
     const hasOverlayText = !!(b.title || b.sub);
+    // Performans: sadece ilk (görünen) slaytın görseli hemen yüklenir.
+    // Diğerlerinin görseli data-img'de bekler, sıraya geldiğinde goHero()
+    // tarafından atanır — böylece telefon aynı anda görünmeyen banner
+    // görsellerini de indirip çözmek zorunda kalmaz.
     return `
     <div class="ty-hero-slide ${i===0?"active":""}" style="background:${b.color || "#f27a1a"}" data-i="${i}">
-      ${b.image ? `<div class="ty-hero-bg" style="background-image:url('${b.image}')"></div>${hasOverlayText ? '<div class="ty-hero-overlay"></div>' : ""}` : ""}
+      ${b.image ? `<div class="ty-hero-bg" ${i===0?`style="background-image:url('${b.image}')"`:""} data-img="${b.image}"></div>${hasOverlayText ? '<div class="ty-hero-overlay"></div>' : ""}` : ""}
       <div class="ty-hero-slide-content">
         <h2>${b.title || ""}</h2>
         ${b.sub ? `<p>${b.sub}</p>` : ""}
@@ -30,7 +34,13 @@ async function loadHero(){
 function goHero(i){
   const track = document.getElementById("heroTrack");
   heroIndex = (i + heroSlideCount) % heroSlideCount;
-  track.querySelectorAll(".ty-hero-slide").forEach((el,idx) => el.classList.toggle("active", idx===heroIndex));
+  track.querySelectorAll(".ty-hero-slide").forEach((el,idx) => {
+    el.classList.toggle("active", idx===heroIndex);
+    if(idx===heroIndex){
+      const bg = el.querySelector(".ty-hero-bg[data-img]");
+      if(bg && !bg.style.backgroundImage) bg.style.backgroundImage = `url('${bg.dataset.img}')`;
+    }
+  });
   track.querySelectorAll(".ty-hero-dots button").forEach((el,idx) => el.classList.toggle("active", idx===heroIndex));
 }
 
